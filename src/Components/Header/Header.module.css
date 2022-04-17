@@ -1,0 +1,63 @@
+.header{
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+
+    background-color: rgba(73, 72, 72, 0.288);
+
+    padding: 6px 2px;
+}
+
+.dropdown{
+    display: flex;
+    flex-direction: column;
+
+    float: right;
+
+    position: relative;
+}
+
+.profile-details{
+
+    font-style: inherit;
+    font-weight: lighter;
+    font-family: Arial, Helvetica, sans-serif;
+
+    padding: 10px;
+
+    letter-spacing: 2px;
+
+    text-align: left;
+
+    display: none;
+}
+
+.profile-details h2{
+    font-size: 1.2rem;
+}
+
+.profile-details h3{
+    font-size: 0.8rem;
+
+    padding-top: 5px;
+}
+
+.option__first-child{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+@media (max-width: 767.98px){
+    .header{
+        padding: 3px 1px;
+    }
+
+    .profile-details{
+        display: block;
+    }
+
+    .option__first-child{
+        border-radius: 0px;
+    }
+}
