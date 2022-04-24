@@ -1,8 +1,12 @@
 import React from "react";
-
 import Header from "./Components/Header/Header.js";
-
 import "./App.css";
+import NavBar from "./Components/Header/NavBarComponent/NavBarComponent";
+import Search from "./Components/EmployeeSearchComponent/SearchComponent/SearchComponent";
+import {DEPARTMENT} from "./shared/department";
+import EmployeeSearch from "./Components/EmployeeSearchComponent/EmployeeSearchComponent";
+import {EMPLOYEE} from "./shared/employee";
+import {TYPE} from "./shared/employeeType";
 
 function App() {
   const companyDetails = {
@@ -20,7 +24,7 @@ function App() {
 
   return (
     <div>
-      <Header companyDetails={companyDetails} profileDetails={profileDetails}/>
+      <EmployeeSearch employees={EMPLOYEE} type={TYPE} companyDetails={companyDetails} profileDetails={profileDetails} departments={DEPARTMENT}/>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import ProfileCard from "./ProfileCard/ProfileCard.js";
 import styles from "./Header.module.css";
 import Dropdown from "../UI/Dropdown/Dropdown.js";
 import Option from "../UI/Dropdown/Option.js";
+import NavBar from "./NavBarComponent/NavBarComponent";
 
 // icon imports
 import { FiLogOut, FiSettings } from "react-icons/fi";
