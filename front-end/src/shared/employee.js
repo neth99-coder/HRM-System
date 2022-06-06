@@ -7,7 +7,8 @@ export const EMPLOYEE =
             last_name: "Jayakodi",
             email: "nethmi.19@cse.mrt.ac.lk",
             dept_id: 0,
-            type_id: 0
+            type_id: 0,
+            profile_picture: "../public/assets/profile_picture/AD-0001.JPG"
         },
         {
             emp_id: "AD-0002",
