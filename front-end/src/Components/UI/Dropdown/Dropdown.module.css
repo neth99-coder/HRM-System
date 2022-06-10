@@ -1,0 +1,12 @@
+.dropdown{
+
+    background-color: rgba(0, 0, 0, 0.795);
+
+    color: white;
+
+    width: fit-content;
+
+    border-radius: 5px;
+
+    margin: 5px 10px;
+}
