@@ -44,27 +44,27 @@ class EditProfile extends Component{
                         <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
                             <div className="card h-100">
                                 <div className="card-body">
-                                    <div className="account-settings">
-                                        <div className="user-profile">
-                                            <div className="user-avatar">
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                                                     alt="Maxwell Admin"/>
+                                    <div className={Styles["account-settings"]}>
+                                        <div className={Styles["user-profile"]}>
+                                            <div className={Styles["user-avatar"]}>
+                                                {/*{"../../../public"+this.state.employee.profile_picture}*/}
+                                                <img className={Styles["profile-dp"]} src={require(`../../${this.state.employee.profile_picture}`)}
+                                                     alt={this.state.employee.first_name + " " + this.state.employee.last_name}/>
                                             </div>
-                                            <h5 className="user-name">Yuki Hayashi</h5>
-                                            <h6 className="user-email">yuki@Maxwell.com</h6>
+                                            <h5 className="user-name">{this.state.employee.first_name + " " + this.state.employee.last_name}</h5>
+                                            <h6 className="user-email">{this.state.employee.email}</h6>
                                         </div>
-                                        <div className="about">
+                                        <div className={Styles["about"]}>
                                             <h5>About</h5>
-                                            <p>I'm Yuki. Full Stack Designer I enjoy creating user-centric, delightful
-                                                and human experiences.</p>
+                                            <p>sample about</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-                            <Card className="h-100">
-                                <div className="card-body">
+                            <Card>
+                                <CardBody>
                                     <div className="row gutters">
                                         <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                             <h6 className="mb-2 text-primary">Personal Details</h6>
@@ -143,7 +143,7 @@ class EditProfile extends Component{
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </CardBody>
                             </Card>
                         </div>
                     </div>
