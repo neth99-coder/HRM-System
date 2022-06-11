@@ -1,79 +1,58 @@
 import { React, useState, useEffect } from "react";
 import { BsPlusLg } from "react-icons/bs";
-import { Form, Modal } from "react-bootstrap";
+import { Form, Modal, Spinner } from "react-bootstrap";
+import Axios from "axios";
 
 import styles from "./RequestPage.module.css";
 import RequestCard from "./RequestCard";
 
 const RequestPage = () => {
-  const [types, setTypes] = useState(["All"]); //reason types          ----> this should not be reasons as now
+  const [types, setTypes] = useState([{ leave_id: 0, type: "All" }]); //reason types          ----> this should not be reasons as now
   const [requests, setRequests] = useState([]); //requests array
   const [newRequest, setNewRequest] = useState({
     emp_id: "190253K",
-    superviser_name: "Poorna Cooray",
-    type: "",
+    supervisor_id: "190110V",
+    leave_id: "",
+    state_id: 3,
     reason: "",
     leave_begin: "",
-    leave_end: "",
+    leave_end: ""
   });
-  const [validated, setValidated] = useState(false);   //form validation
+  const [arr1, setArr1] = useState([]);
+  const [validated, setValidated] = useState(false); //form validation
 
-  const [show, setShow] = useState(false);    //maodal show
-  const handleClose = () => setShow(false);  //handle modal close
-  const handleShow = () => setShow(true);    //handle modal show
-
-  var arr1 = [
-    {
-      state_id: 0,
-      leave_begin: "06-04-2022",
-      type: "Full Day",
-      reason: "Sick",
-    },
-    {
-      state_id: 0,
-      leave_begin: "06-04-2022",
-      type: "Full Day",
-      reason: "Sick",
-    },
-    {
-      state_id: 1,
-      leave_begin: "06-04-2022",
-      type: "Full Day",
-      reason: "Casual",
-    },
-    {
-      state_id: 0,
-      leave_begin: "06-04-2022",
-      type: "Hlaf Day",
-      reason: "Sick",
-    },
-    {
-      state_id: -1,
-      leave_begin: "06-04-2022",
-      type: "Full Day",
-      reason: "Sick",
-    },
-    {
-      state_id: 0,
-      leave_begin: "06-04-2022",
-      type: "Half Day",
-      reason: "Casual",
-    },
-    {
-      state_id: 0,
-      leave_begin: "06-04-2022",
-      type: "Full Day",
-      reason: "Sick",
-    },
-  ];
-
-  const arr2 = ["Sick", "Casual"];
-  arr2.unshift("All"); //adding all to reasons
+  const [isLoading, setIsLoading] = useState(false);
+  const [show, setShow] = useState(false); //maodal show
+  const handleClose = () => setShow(false); //handle modal close
+  const handleShow = () => setShow(true); //handle modal show
 
   useEffect(() => {
-    setTypes(arr2);
+    //setTypes(arr2);
+    const getTypes = async () => {
+      setIsLoading(true);
+      await Axios.get("http://localhost:3001/api/employee/getLeaveTypes").then(
+        (res) => {
+          //console.log(res.data.result);
+          setTypes((prevVal) => {
+            return [prevVal[0], ...res.data.result];
+          });
+        }
+      );
+    };
+    getTypes();
 
-    setRequests(arr1);
+    const getRequests = async () => {
+      await Axios.get(
+        "http://localhost:3001/api/employee/getLeaveRequests/190253K"
+      ).then((res) => {
+        //console.log(res.data.result);
+        setArr1(res.data.result);
+        setRequests(res.data.result);
+        setIsLoading(false);
+      });
+
+    };
+    getRequests();
 
     document.getElementById("All-li").classList.add("active"); //default select
 
@@ -97,7 +76,7 @@ const RequestPage = () => {
     if (id !== "All") {
       setRequests(
         arr1.filter((request) => {
-          return id === request.reason;
+          return id === request.type;
         })
       );
     } else {
@@ -121,7 +100,26 @@ const RequestPage = () => {
       newRequest.leave_begin !== "" &&
       newRequest.leave_end !== ""
     ) {
-      window.location.reload(false);   //refresh page
+      Axios.post(
+        "http://localhost:3001/api/employee/addLeaveRequest",
+        newRequest
+      ).then((res) => {
+        if (!res.data.success) {
+          alert("Error occured !!");
+        } else {
+          setNewRequest({
+            emp_id: "190253K",
+            superviser_id: "190110V",
+            leave_id: "",
+            state_id: 3,
+            reason: "",
+            leave_begin: "",
+            leave_end: ""
+          });
+          handleClose();
+          window.location.reload(false); //refresh page
+        }
+      });
     }
   }
 
@@ -148,13 +146,22 @@ const RequestPage = () => {
   //function to handle select options
   function handleSelect(e) {
     const type = e.target.value;
+    const temp = types.filter((cur) => {
+      return cur.type === type;
+    });
     setNewRequest((prevVal) => {
-      return { ...prevVal, type: type };
+      return { ...prevVal, leave_id: temp[0].leave_id };
     });
   }
 
   return (
     <div>
+            {isLoading ? (
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      ) : (
+      <>  
       <div className="row">
         <div className={`${styles["topic"]} col align-self-start h1`}>
           LEAVES
@@ -170,10 +177,10 @@ const RequestPage = () => {
                   <li
                     className={`${styles["sort-el"]} page-item`}
                     onClick={handleSort}
-                    id={cur + "-li"}
+                    id={cur.type + "-li"}
                   >
-                    <p className="page-link" id={cur}>
-                      {cur}
+                    <p className="page-link" id={cur.type}>
+                      {cur.type}
                     </p>
                   </li>
                 );
@@ -232,15 +239,15 @@ const RequestPage = () => {
 
             <div className="form-group row">
               <label for="sup-name" className="col-sm-3 col-form-label">
-                Supervisor Name
+                Supervisor ID
               </label>
               <div className="col-sm-8">
                 <Form.Control
                   type="text"
                   className={`${styles["mb-1"]} form-control`}
-                  name="sup-name"
+                  name="sup-id"
                   required
-                  value={newRequest.superviser_name}
+                  value={newRequest.superviser_id}
                   readOnly
                 />
               </div>
@@ -261,7 +268,7 @@ const RequestPage = () => {
                     Select
                   </option>
                   {types.map((cur) => {
-                    return <option> {cur} </option>;
+                    return cur.type !== "All" && <option> {cur.type} </option>;
                   })}
                 </Form.Select>
               </div>
@@ -330,6 +337,7 @@ const RequestPage = () => {
           </Modal.Footer>
         </Form>
       </Modal>
+      </>)}
     </div>
   );
 };
