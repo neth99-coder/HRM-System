@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from "./adminFront.module.css";
+import Profile from "../Components/Profile/profile.js";
 
 function adminFront() {
     return ( 
@@ -19,12 +20,23 @@ function adminFront() {
                 <div className={`${styles["employee-heading"]}`}>
                     <h1>Employees</h1>
                 </div>
-                <div className={`${styles["employee-profiles"]}`}>
+                {/* <div className={`${styles["employee-profiles"]}`}>
                     <div className={`${styles["employee-img-container"]}`}>
                         <i className={`${styles["employee-img"]} bx bx-user`}></i>
                     </div>
                     <div className = {`${styles["employee-message"]}`}>
                         <p>No employees are added yet.</p>
+                    </div>
+                </div> */}
+                <div className={`${styles["profiles"]}`}>
+                    <div className={`${styles["profile"]}`}>
+                        <Profile />
+                    </div>
+                    <div className={`${styles["profile"]}`}>
+                        <Profile />
+                    </div>
+                    <div className={`${styles["profile"]}`}>
+                        <Profile />
                     </div>
                 </div>
             </div> 

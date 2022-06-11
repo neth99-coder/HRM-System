@@ -119,3 +119,20 @@
 .employee-info{
     padding-right:23px;
 }
+
+.profile{
+    width: 220px;
+    background-color: #eee;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.5s;
+    margin-top:40px;
+    margin-left:35px;
+    padding-bottom: 10px;
+    float: left;
+    margin-bottom: 30px;
+}
+
+.profile:hover {
+    transform: scale(1.1);
+  }
