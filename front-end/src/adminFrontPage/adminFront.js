@@ -33,18 +33,66 @@ function adminFront() {
             <div className="modal fade" id="addHRManager" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalLongTitle">Add HR Manager</h5>
+                    <div className="modal-header" style={{backgroundColor:"black"}}>
+                        <h5 className="modal-title" id="exampleModalLongTitle" style={{color:"white",fontWeight:"bold"}}>Add HR Manager</h5>
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div className="modal-body">
-                        ...
+                        <form>
+                            <div className={`${styles["field-container"]} row`}>
+                                <div className = {`${styles["profile-img"]} col-lg-4`}>
+                                    <p style={{fontWeight:"bold"}}>Profile Image</p>
+                                    <hr/>
+                                    {/* <input type="file" className={`${styles["img-container"]}`}/> */}
+                                    <button className={`${styles["img-container"]}`}> + </button>
+                                </div>
+                                <div className = {`${styles["basic-info"]} col-lg-6`}>
+                                    <p style={{fontWeight:"bold"}}>Basic Information</p>
+                                    <hr/>
+                                    <div className = {`${styles["form-field"]}`}>
+                                        <input id="name" type="text" className={`${styles["input-text"]}`}/>
+                                        <label for="name" className={`${styles["label"]}`}>Name </label>
+                                    </div>
+                                    <div className = {`${styles["form-field"]}`}>
+                                        <input id="address" type="text" className={`${styles["input-text"]}`}/>
+                                        <label for="address" className={`${styles["label"]}`}>Address</label>
+                                    </div>
+                                    <div className = {`${styles["form-field"]}`}>
+                                        <input id="nic" type="text" className={`${styles["input-text"]}`}/>
+                                        <label for="nic" className={`${styles["label"]}`}>NIC</label>
+                                    </div>
+                                    <div className = {`${styles["form-field"]}`}>
+                                        <input id="bday" type="text" className={`${styles["input-text"]}`}/>
+                                        <label for="bday" className={`${styles["label"]}`}>BirthDay</label>
+                                    </div>
+                                    <div className = {`${styles["form-field"]}`}>
+                                        <input id="maritial" type="text" className={`${styles["input-text"]}`}/>
+                                        <label for="maritial" className={`${styles["label"]}`}>Maritial Status</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className = {`${styles["employee-info"]} col-12`}>
+                                <p style={{fontWeight:"bold"}}>Employee Information</p>
+                                <hr/>
+                                <div className = {`${styles["form-field"]}`}>
+                                    <input id="empid" type="text" className={`${styles["input-text"]}`}/>
+                                    <label for="empid" className={`${styles["label"]}`}>Employee ID</label>
+                                </div>
+                                <div className = {`${styles["form-field"]}`}>
+                                    <input id="recdate" type="text" className={`${styles["input-text"]}`}/>
+                                    <label for="recdate" className={`${styles["label"]}`}>Recruited Date</label>
+                                </div>
+                                <div className = {`${styles["form-field"]}`}>
+                                    <input id="paygrade" type="text" className={`${styles["input-text"]}`}/>
+                                    <label for="paygrade" className={`${styles["label"]}`}>Paygrade</label>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" className="btn btn-primary">Save changes</button>
+                    <div className="modal-footer" style={{backgroundColor:"black"}}>
+                        <button type="button" className="btn btn-secondary" data-dismiss="modal" style={{fontWeight:"bold"}}>Close</button>
+                        <button type="button" className="btn btn-light" style={{fontWeight:"bolder"}}>ADD</button>
                     </div>
                     </div>
                 </div>
