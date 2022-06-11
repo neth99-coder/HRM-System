@@ -1,5 +1,5 @@
 import React from "react";
-
+import { BrowserRouter as Router, Routes , Route } from 'react-router-dom';
 import Header from "./Components/Header/Header.js";
 import AdminFront from "./adminFrontPage/adminFront.js";
 
@@ -21,8 +21,12 @@ function App() {
 
   return (
     <div>
-      <Header companyDetails={companyDetails} profileDetails={profileDetails}/>
-      <AdminFront />
+      <Router>
+        <Header companyDetails={companyDetails} profileDetails={profileDetails}/>
+        <Routes>
+          <Route path="/" exact element = {<AdminFront />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
