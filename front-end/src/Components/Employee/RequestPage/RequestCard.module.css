@@ -1,0 +1,21 @@
+.card{
+    margin: 5px;
+    height: 150px;
+    border-radius: 25px;
+    align-items: center;
+    
+}
+
+.first-row{
+    align-items: center;
+    padding: 5px;
+}
+
+.color{
+    background-color: red;
+}
+
+mark{
+    border-radius: 8px;
+    letter-spacing: 3px;
+}

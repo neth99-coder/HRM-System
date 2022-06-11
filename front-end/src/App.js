@@ -1,6 +1,7 @@
 import React from "react";
 
 import Header from "./Components/Header/Header.js";
+import RequestPage from "./Components/Employee/RequestPage/RequestPage.jsx";
 
 import "./App.css";
 
@@ -14,13 +15,14 @@ function App() {
 
   const profileDetails = {
     dp: "profile-pic.JPG",
-    name: "Poorna Jayakodi",
+    name: "Nethmi Jayakody",
     post: "Admin",
   };
 
   return (
     <div>
       <Header companyDetails={companyDetails} profileDetails={profileDetails}/>
+      <RequestPage/>
     </div>
   );
 }
