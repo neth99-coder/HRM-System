@@ -33,8 +33,58 @@ const getEmployee = async (req,res) =>{
       });
     });
   };
+  const getLeaveTypes = async (req,res) =>{
+    await employeeModal
+    .getLeaveTypes()
+    .then((result)=>{
+      res.json({
+        success: true,
+        result,
+      });
+    })
+    .catch((err)=>{
+      res.json({
+        success: false,
+        err,
+      });
+    });
+  };
+
+  const getLeaveRequests = async (req,res) =>{
+    await employeeModal
+    .getLeaveRequests(req.params.empId)
+    .then((result)=>{
+      res.json({
+        success: true,
+        result,
+      });
+    })
+    .catch((err)=>{
+      res.json({
+        success: false,
+        err,
+      });
+    });
+  };
+
+  const addLeaveRequest = async (req,res)=>{
+    await employeeModal
+    .addLeaveRequest(req.body)
+    .then((result) => {
+      res.json({ success: true, result });
+    })
+    .catch((err) => {
+      res.json({
+        success: false,
+        err,
+      });
+    });  
+  }
 
   module.exports = {
       getEmployee,
-      getEmployees
+      getEmployees,
+      getLeaveTypes,
+      getLeaveRequests,
+      addLeaveRequest
   }
