@@ -6,7 +6,7 @@ function adminFront() {
     return ( 
         <div className={`${styles["admin-container"]}`}>
             <div className={`${styles["admin-heading"]}`}>
-                <h1>Staff</h1>
+                <h1>Our Staff</h1>
             </div>
             <div className={`${styles["hrmanager-container"]}`}>
                 <div className={`${styles["hrmanager-heading"]}`}>
@@ -45,7 +45,7 @@ function adminFront() {
             <div className="modal fade" id="addHRManager" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
-                    <div className="modal-header" style={{backgroundColor:"black"}}>
+                    <div className="modal-header" style={{border:"1px white solid",backgroundColor:"black"}}>
                         <h5 className="modal-title" id="exampleModalLongTitle" style={{color:"white",fontWeight:"bold"}}>Add HR Manager</h5>
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                         </button>
@@ -102,7 +102,7 @@ function adminFront() {
                             </div>
                         </form>
                     </div>
-                    <div className="modal-footer" style={{backgroundColor:"black"}}>
+                    <div className="modal-footer" style={{border:"1px white solid",backgroundColor:"black"}}>
                         <button type="button" className="btn btn-secondary" data-dismiss="modal" style={{fontWeight:"bold"}}>Close</button>
                         <button type="button" className="btn btn-light" style={{fontWeight:"bolder"}}>ADD</button>
                     </div>

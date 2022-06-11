@@ -1,5 +1,5 @@
 .admin-container{
-    padding: 40px;
+    margin: 100px;
 }
 
 .admin-heading h1{
@@ -102,9 +102,11 @@
 .label{
     position: absolute;
     letter-spacing: 2px;
+    font-weight: bold;
     left:0px;
     bottom:-5px;
     line-height:24px;
+    font-size: 0.8em;
     color:rgb(128, 122, 122);
     cursor: text;
     text-transform: capitalize;
