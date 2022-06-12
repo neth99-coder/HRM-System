@@ -1,8 +1,7 @@
 import React from "react";
 
-import AppRouter from "./Router";
-
-import ReactDOM from "react-dom/client";
+import Header from "./Components/Header/Header.js";
+import RequestPage from "./Components/Employee/RequestPage/RequestPage.jsx";
 
 import "./App.css";
 
@@ -22,12 +21,10 @@ function App() {
 
   return (
     <div>
-      <AppRouter/>
+      <Header companyDetails={companyDetails} profileDetails={profileDetails}/>
+      <RequestPage/>
     </div>
   );
 }
 
 export default App;
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
