@@ -25,7 +25,16 @@ export const EMPLOYEE =
             last_name: "Lonthawolf",
             email: "lonthawolf.19@cse.mrt.ac.lk",
             dept_id: 0,
-            type_id: 1
+            type_id: 1,
+            address: "no44 kadawatha gampaha",
+            nic: "997404756V",
+            bday: "1999-03-11",
+            is_married: 1,
+            contact_num: "0771234567",
+            emergency_contact: "0661234567",
+            paygrade_id: 2,
+            emp_status_id: 1,
+            profile_picture: "assets/profile_picture/AD-0002.jpg"
         },
         {
             emp_id: "IT-0001",

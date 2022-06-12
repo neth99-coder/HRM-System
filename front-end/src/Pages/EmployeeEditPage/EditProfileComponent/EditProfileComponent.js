@@ -1,6 +1,6 @@
 import React,{Component} from "react";
-import Header from "../../Header/Header";
-import NavBar from "../../Header/NavBarComponent/NavBarComponent";
+import Header from "../../../Components/Header/Header";
+import NavBar from "../../../Components/Header/NavBarComponent/NavBarComponent";
 import {Breadcrumb, BreadcrumbItem,Card, CardBody, Form,FormGroup,Label,Col,Input,FormFeedback} from "reactstrap";
 import {Link} from "react-router-dom";
 import FindEmployeeByID from "../../../shared/findEmployeeByID";
@@ -56,12 +56,12 @@ class EditProfile extends Component{
                 <div>
                     <Breadcrumb>
                         <BreadcrumbItem>
-                            <Link to='/employee' className={Styles["breadcrumb-link"]}>
+                            <Link to='/hrmanager/employee' className={Styles["breadcrumb-link"]}>
                                 Employee
                             </Link>
                         </BreadcrumbItem>
                         <BreadcrumbItem>
-                            <Link to={`/employee/view/${this.state.employee.emp_id}`} className={Styles["breadcrumb-link"]}>
+                            <Link to={`/hrmanager/employee/view/${this.state.employee.emp_id}`} className={Styles["breadcrumb-link"]}>
                                 {this.state.employee.first_name + " " + this.state.employee.last_name}
                             </Link>
                         </BreadcrumbItem>
@@ -80,7 +80,7 @@ class EditProfile extends Component{
                                         <div className={Styles["user-profile"]}>
                                             <div className={Styles["user-avatar"]}>
                                                 {/*{"../../../public"+this.state.employee.profile_picture}*/}
-                                                <img className={Styles["profile-dp"]} src={require(`../../../${this.state.employee.profile_picture}`)}
+                                                <img className={Styles["profile-dp"]} src={`../../../${this.state.employee.profile_picture}`}
                                                      alt={this.state.employee.first_name + " " + this.state.employee.last_name}/>
                                             </div>
                                             <h5 className="user-name">{this.state.employee.first_name + " " + this.state.employee.last_name}</h5>
@@ -339,7 +339,7 @@ class EditProfile extends Component{
                                         <div className="row gutters">
                                             <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                                 <div className="text-right">
-                                                    <Link to={"/employee/view/" + this.state.employee.emp_id} >
+                                                    <Link to={"/hrmanager/employee/view/" + this.state.employee.emp_id} >
                                                         <button type="button" id="cancel" name="cancel"
                                                                 className="btn btn-secondary">Cancel
                                                         </button>

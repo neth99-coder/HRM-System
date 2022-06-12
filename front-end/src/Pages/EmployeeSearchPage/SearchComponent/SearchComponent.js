@@ -1,6 +1,6 @@
 import React,{Component} from "react";
 import {Button,Form,FormGroup,Label,Input,Col,FormFeedback} from "reactstrap";
-import Option from "../../UI/Dropdown/Option";
+import Option from "../../../Components/UI/Dropdown/Option";
 
 class Search extends Component{
 
@@ -72,14 +72,6 @@ class Search extends Component{
                                         </Col>
                                     </FormGroup>
                                 </div>
-
-                                {/*<div className="col-1 align-self-center">*/}
-                                {/*    <FormGroup row>*/}
-                                {/*        <Col md={{size:2, offset:1}}>*/}
-                                {/*            <Button type="submit" color="primary">Search</Button>*/}
-                                {/*        </Col>*/}
-                                {/*    </FormGroup>*/}
-                                {/*</div>*/}
                             </div>
                         </Form>
                     </div>

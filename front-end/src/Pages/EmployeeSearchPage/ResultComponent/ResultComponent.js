@@ -34,7 +34,7 @@ function Result(props){
 
     const employeeResult = result.map((employee) =>{
         return(
-            <tr onClick={() => navigate("/employee/view/" + employee.emp_id)} key={employee.emp_id} className={style["hover-table"]}>
+            <tr onClick={() => navigate("view/" + employee.emp_id)} key={employee.emp_id} className={style["hover-table"]}>
                 <td>{employee.emp_id}</td>
                 <td>{employee.first_name}</td>
                 <td>{findDepartmentById(employee.dept_id)}</td>

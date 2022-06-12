@@ -1,16 +1,10 @@
 import React from "react";
-import styles from "./ProfileViewComponent.module.css"
+import styles from "./ProfileComponent.module.css"
 import {
-    Nav,
-    Breadcrumb,
-    BreadcrumbItem,
     Card,
     CardBody,
-    List,
     ListGroup,
     ListGroupItem,
-    Button,
-    NavLink
 } from "reactstrap";
 import FindTypeById from "../../../shared/findTypeById";
 import FindDepartmentById from "../../../shared/findDepartmentById";
@@ -26,29 +20,13 @@ function Maritalstate(isMarried){
     }
 }
 
-function ProfileView(props){
+function Profile(props){
 
     const profileStyleClass = "rounded-circle " + styles["profile-dp"]
 
     return(
-        <div className="container">
+        <div>
             <div className={styles["main-body"]}>
-                <div className="row">
-                    <Breadcrumb>
-                        <BreadcrumbItem>
-                            <Link to="/employee" className={styles["breadcrumb-link"]}>
-                                Employee
-                            </Link>
-                        </BreadcrumbItem>
-                        <BreadcrumbItem active>
-                            {props.employee.first_name + " " + props.employee.last_name}
-                        </BreadcrumbItem>
-                    </Breadcrumb>
-                    <div className="col-12">
-                        <h3>{props.employee.first_name + " " + props.employee.last_name}</h3>
-                        <hr />
-                    </div>
-                </div>
 
                 <div className="row gutters-sm">
                     <div className="col-md-4 mb-3">
@@ -57,25 +35,11 @@ function ProfileView(props){
                         <Card>
                             <CardBody>
                                 <div className="d-flex flex-column align-items-center text-center">
-                                    <img src={require(`../../../${props.employee.profile_picture}`)} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>
+                                    <img src={`../../../${props.employee.profile_picture}`} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>
                                     <div className="mt-3">
                                         <h4>{props.employee.first_name + " " + props.employee.middle_name + " " + props.employee.last_name}</h4>
                                         <p className="text-secondary mb-1">{FindTypeById(props.employee.type_id)}</p>
-                                        <p className="text-muted font-size-sm">{FindDepartmentById(props.employee.dept_id).name + " Department"}</p>
-                                    </div>
-
-                                    <div className="row">
-                                        <div className="col-6">
-                                            <Link to={"/employee/edit/"+ props.employee.emp_id}>
-                                                <Button className="fa fa-pencil">Edit</Button>
-                                            </Link>
-                                        </div>
-
-                                        <div className="col-6">
-                                            {/*<Link to="/employee">*/}
-                                                <Button className="fa fa-trash">Delete</Button>
-                                            {/*</Link>*/}
-                                        </div>
+                                        <p className="text-muted font-size-sm">{FindDepartmentById(props.employee.dept_id) + " Department"}</p>
                                     </div>
                                 </div>
                             </CardBody>
@@ -205,4 +169,4 @@ function ProfileView(props){
     );
 }
 
-export default ProfileView;
+export default Profile;
