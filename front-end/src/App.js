@@ -8,7 +8,9 @@ import EmployeeSearch from "./Components/EmployeeSearchComponent/EmployeeSearchC
 import {EMPLOYEE} from "./shared/employee";
 import {TYPE} from "./shared/employeeType";
 import EmployeeView from "./Components/EmployeeViewComponent/EmployeeViewComponent";
-import EditProfile from "./Components/EditProfileComponent/EditProfileComponent";
+import EmployeeEdit from "./Components/EmployeeEditComponent/EmpoloyeeEditComponent";
+import {EMPLOYEESTATUS} from "./shared/employeeStatus";
+import {PAYGRADE} from "./shared/paygrade";
 
 function App() {
   const companyDetails = {
@@ -28,7 +30,7 @@ function App() {
     <div>
       {/*<EmployeeView companyDetails={companyDetails} profileDetails={profileDetails} />*/}
       {/*<EmployeeSearch employees={EMPLOYEE} type={TYPE} companyDetails={companyDetails} profileDetails={profileDetails} departments={DEPARTMENT}/>*/}
-      <EditProfile/>
+      <EmployeeEdit companyDetails={companyDetails} profileDetails={profileDetails} id={"AD-0001"} departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE} />
     </div>
   );
 }

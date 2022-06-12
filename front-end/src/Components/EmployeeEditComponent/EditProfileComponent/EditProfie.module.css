@@ -52,9 +52,12 @@ body {
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
-    font-size: .825rem;
+    font-size: 1rem;
+    padding: 2pt;
+    padding-left: 5pt;
     background: #ffffff;
     color: #2e323c;
+    width: 100%;
 }
 
 .card {
@@ -71,5 +74,25 @@ body {
 
     width: 100px;
     height: 100px;
+}
+
+.form-inline {
+    width: 100%;
+}
+
+.form-group {
+    width: 90%;
+}
+
+.input-group {
+    width: 90% !important;
+}
+
+span.input-group-addon {
+    width: 50px !important;
+}
+
+.cover{
+    margin: 10pt;
 }
 

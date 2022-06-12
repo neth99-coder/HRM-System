@@ -8,16 +8,16 @@ import ProfileView from "./ProfileViewComponent/ProfileViewComponent";
 function EmployeeView(props){
 
     //const {emp_id} = useParams();
-    //let employee = findEmployeeByID("AD-0001");
-    let employee = {
-        emp_id: "AD-0001",
-        first_name: "Nethmi",
-        middle_name: "Kavindya",
-        last_name: "Jayakodi",
-        email: "nethmi.19@cse.mrt.ac.lk",
-        dept_id: 0,
-        type_id: 0
-    };
+    let employee = findEmployeeByID("AD-0001");
+    // let employee = {
+    //     emp_id: "AD-0001",
+    //     first_name: "Nethmi",
+    //     middle_name: "Kavindya",
+    //     last_name: "Jayakodi",
+    //     email: "nethmi.19@cse.mrt.ac.lk",
+    //     dept_id: 0,
+    //     type_id: 0
+    // };
 
     return (
 

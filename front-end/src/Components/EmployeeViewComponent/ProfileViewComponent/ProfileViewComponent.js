@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 import FindTypeById from "../../../shared/findTypeById";
 import FindDepartmentById from "../../../shared/findDepartmentById";
 import findEmployeeStatusById from "../../../shared/findEmployeeStatusById";
-
+import findPayGradeByID from "../../../shared/findPayGradeByID";
 
 function Maritalstate(isMarried){
     if(isMarried == 0){
@@ -128,7 +128,7 @@ function ProfileView(props){
                                         <h6 className="mb-6">NIC</h6>
                                     </div>
                                     <div className="col-sm-9 text-secondary">
-                                        {props.employee.NIC}
+                                        {props.employee.nic}
                                     </div>
                                 </div>
                                 <hr/>
@@ -172,6 +172,15 @@ function ProfileView(props){
                                     </div>
                                 </div>
                                 <hr/>
+
+                                <div className="row">
+                                    <div className="col-sm-3">
+                                        <h6 className="mb-6">Pay-Grade</h6>
+                                    </div>
+                                    <div className="col-sm-9 text-secondary">
+                                        {findPayGradeByID(props.employee.paygrade_id)}
+                                    </div>
+                                </div>
 
 
                             </CardBody>
