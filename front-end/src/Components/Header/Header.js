@@ -32,7 +32,7 @@ function Header(props) {
 
   return (
     <div>
-      <header className={styles["header"]}>
+      <header className={`${styles["header"]} ${props.className}`}>
         <CompanyCard companyDetails={props.companyDetails} />
         <ProfileCard
           profileDetails={props.profileDetails}
