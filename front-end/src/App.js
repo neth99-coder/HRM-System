@@ -1,4 +1,7 @@
 import React from "react";
+
+import AppRouter from "./Router";
+
 import {BrowserRouter, Route, Routes, useParams} from "react-router-dom";
 import Header from "./Components/Header/Header.js";
 import "./App.css";
@@ -23,7 +26,7 @@ function App() {
 
   const profileDetails = {
     dp: "profile-pic.JPG",
-    name: "Poorna Jayakodi",
+    name: "Nethmi Jayakody",
     post: "Admin",
   };
 
@@ -39,6 +42,9 @@ function App() {
 
      // {/**/}
 
+    <div>
+      <AppRouter/>
+    </div>
   );
 }
 
