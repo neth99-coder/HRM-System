@@ -15,8 +15,8 @@ export default function AppRouter() {
     <Router>
       <>
         <Routes>
-          <Route path="/" component={LoginPage} />
-          <Route path="/home" component={HomePage} />
+          <Route path="/" element={<LoginPage/>} />
+          <Route path="/home" element={<HomePage/>} />
         </Routes>
       </>
     </Router>
