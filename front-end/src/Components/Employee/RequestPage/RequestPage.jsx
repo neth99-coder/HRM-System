@@ -28,8 +28,9 @@ const RequestPage = () => {
 
   useEffect(() => {
     //setTypes(arr2);
+    setIsLoading(true);
     const getTypes = async () => {
-      setIsLoading(true);
+      
       await Axios.get("http://localhost:3001/api/employee/getLeaveTypes").then(
         (res) => {
           //console.log(res.data.result);
@@ -157,7 +158,7 @@ const RequestPage = () => {
   return (
     <div>
             {isLoading ? (
-        <Spinner animation="border" role="status">
+        <Spinner animation="border" role="status" className={styles['spinner']}>
           <span className="visually-hidden">Loading...</span>
         </Spinner>
       ) : (
