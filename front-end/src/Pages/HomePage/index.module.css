@@ -1,5 +1,5 @@
 .page-holder{
-    background-color: rgb(205, 225, 250);
+
 }
 
 .header{
@@ -13,6 +13,8 @@
     padding: 10px;
     padding-top: 150px;
     padding-bottom: 60px;
+
+    background-color: rgb(205, 225, 250);
 }
 
 .cards{
@@ -90,4 +92,22 @@
 
 .availability:first-child{
     border-left: none!important;
+}
+
+.overall-static-section{
+    width: 100%;
+}
+
+/* Charts */
+
+.graph-view{
+    display: flex;
+}
+
+.stat-graph{
+    width: 25%;
+
+    margin-right: 60px;
+
+    height: 500px;
 }
