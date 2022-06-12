@@ -1,7 +1,6 @@
 import React from "react";
 
-import Header from "./Components/Header/Header.js";
-import RequestPage from "./Components/Employee/RequestPage/RequestPage.jsx";
+import AppRouter from "./Router";
 
 import "./App.css";
 
@@ -21,8 +20,7 @@ function App() {
 
   return (
     <div>
-      <Header companyDetails={companyDetails} profileDetails={profileDetails}/>
-      <RequestPage/>
+      <AppRouter/>
     </div>
   );
 }

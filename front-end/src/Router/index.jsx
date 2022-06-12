@@ -9,6 +9,7 @@ import {
 // Route imports
 import LoginPage from "../Pages/LoginPage";
 import HomePage from "../Pages/HomePage";
+import RequestPage from "../Pages/RequestPage/RequestPage";
 
 export default function AppRouter() {
   return (
@@ -17,6 +18,7 @@ export default function AppRouter() {
         <Routes>
           <Route path="/" element={<LoginPage/>} />
           <Route path="/home" element={<HomePage/>} />
+          <Route path="/requests" element={<RequestPage/>} />
         </Routes>
       </>
     </Router>
