@@ -23,7 +23,6 @@ class Search extends Component{
     }
 
     handleSubmit(event){
-        alert("Current State is: " + JSON.stringify(this.props));
         event.preventDefault();
 
     }
@@ -65,7 +64,9 @@ class Search extends Component{
                                         <Col lg={6}>
                                             <Input type="select" id="department" name="department"
                                                    value={this.props.department}
-                                                   onChange={this.handleInputChange}>
+                                                   onChange={this.handleInputChange}
+                                                    placeholder={"Department"}>
+                                                    <option value={""} hidden={true}>Department</option>
                                                    {departmentList}
                                             </Input>
                                         </Col>

@@ -52,18 +52,18 @@ class EditProfile extends Component{
 
     render() {
         return(
-            <div className={Styles["cover"]}>
+            <div className="container">
                 <div>
                     <Breadcrumb>
                         <BreadcrumbItem>
-                            {/*<Link to='/employee'>*/}
+                            <Link to='/employee' className={Styles["breadcrumb-link"]}>
                                 Employee
-                            {/*</Link>*/}
+                            </Link>
                         </BreadcrumbItem>
                         <BreadcrumbItem>
-                            {/*<Link to={`/employee/${this.state.employee.emp_id}`}>*/}
+                            <Link to={`/employee/view/${this.state.employee.emp_id}`} className={Styles["breadcrumb-link"]}>
                                 {this.state.employee.first_name + " " + this.state.employee.last_name}
-                            {/*</Link>*/}
+                            </Link>
                         </BreadcrumbItem>
                         <BreadcrumbItem active>
                             Edit
@@ -339,9 +339,11 @@ class EditProfile extends Component{
                                         <div className="row gutters">
                                             <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                                 <div className="text-right">
-                                                    <button type="button" id="submit" name="submit"
-                                                            className="btn btn-secondary">Cancel
-                                                    </button>
+                                                    <Link to={"/employee/view/" + this.state.employee.emp_id} >
+                                                        <button type="button" id="cancel" name="cancel"
+                                                                className="btn btn-secondary">Cancel
+                                                        </button>
+                                                    </Link>
                                                     <button type="submit" id="submit" name="submit"
                                                             className="btn btn-primary">Update
                                                     </button>

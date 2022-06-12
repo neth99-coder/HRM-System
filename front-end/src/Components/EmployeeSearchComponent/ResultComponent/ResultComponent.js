@@ -1,9 +1,18 @@
 import React from "react";
 import {Table} from "reactstrap";
+import findDepartmentById from "../../../shared/findDepartmentById";
+import style from "./ResultComponent.module.css"
+import {useNavigate} from "react-router-dom";
 
 function Result(props){
 
     let result;
+    const navigate = useNavigate();
+
+
+    // function navigateTo(){
+    //     navigate("/employee/view/AD-0001");
+    // }
 
 
     if(props.employeeid === '' && props.department === ''){
@@ -25,10 +34,10 @@ function Result(props){
 
     const employeeResult = result.map((employee) =>{
         return(
-            <tr>
+            <tr onClick={() => navigate("/employee/view/" + employee.emp_id)} key={employee.emp_id} className={style["hover-table"]}>
                 <td>{employee.emp_id}</td>
                 <td>{employee.first_name}</td>
-                <td>{employee.dept_id}</td>
+                <td>{findDepartmentById(employee.dept_id)}</td>
                 <td>{employee.email}</td>
             </tr>
         );

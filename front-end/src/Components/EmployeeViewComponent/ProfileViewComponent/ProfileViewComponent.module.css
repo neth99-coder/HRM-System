@@ -58,3 +58,8 @@ body{
     width: 100px;
     height: 100px;
 }
+
+.breadcrumb-link{
+    color: #1a202c;
+    text-decoration: none;
+}

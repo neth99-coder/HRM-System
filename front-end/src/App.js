@@ -1,4 +1,5 @@
 import React from "react";
+import {BrowserRouter, Route, Routes, useParams} from "react-router-dom";
 import Header from "./Components/Header/Header.js";
 import "./App.css";
 import NavBar from "./Components/Header/NavBarComponent/NavBarComponent";
@@ -27,11 +28,17 @@ function App() {
   };
 
   return (
-    <div>
-      {/*<EmployeeView companyDetails={companyDetails} profileDetails={profileDetails} />*/}
-      {/*<EmployeeSearch employees={EMPLOYEE} type={TYPE} companyDetails={companyDetails} profileDetails={profileDetails} departments={DEPARTMENT}/>*/}
-      <EmployeeEdit companyDetails={companyDetails} profileDetails={profileDetails} id={"AD-0001"} departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE} />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route exact path="/" element={<Header companyDetails={companyDetails} profileDetails={profileDetails}/>}/>
+        <Route exact path="/employee" element={<EmployeeSearch employees={EMPLOYEE} type={TYPE} companyDetails={companyDetails} profileDetails={profileDetails} departments={DEPARTMENT}/>}/>
+        <Route path="/employee/view/:emp_id" element={<EmployeeView companyDetails={companyDetails} profileDetails={profileDetails} />} />
+        <Route path="/employee/edit/:emp_id" element={<EmployeeEdit companyDetails={companyDetails} profileDetails={profileDetails} departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE} />} />
+      </Routes>
+    </BrowserRouter>
+
+     // {/**/}
+
   );
 }
 

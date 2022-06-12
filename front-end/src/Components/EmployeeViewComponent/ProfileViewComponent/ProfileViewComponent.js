@@ -1,11 +1,22 @@
 import React from "react";
 import styles from "./ProfileViewComponent.module.css"
-import {Nav, Breadcrumb, BreadcrumbItem, Card, CardBody, List, ListGroup, ListGroupItem, Button} from "reactstrap";
-import {Link} from "react-router-dom";
+import {
+    Nav,
+    Breadcrumb,
+    BreadcrumbItem,
+    Card,
+    CardBody,
+    List,
+    ListGroup,
+    ListGroupItem,
+    Button,
+    NavLink
+} from "reactstrap";
 import FindTypeById from "../../../shared/findTypeById";
 import FindDepartmentById from "../../../shared/findDepartmentById";
 import findEmployeeStatusById from "../../../shared/findEmployeeStatusById";
 import findPayGradeByID from "../../../shared/findPayGradeByID";
+import {Link} from "react-router-dom";
 
 function Maritalstate(isMarried){
     if(isMarried == 0){
@@ -25,8 +36,9 @@ function ProfileView(props){
                 <div className="row">
                     <Breadcrumb>
                         <BreadcrumbItem>
-                            {/*SHould add a link */}
-                            Employee
+                            <Link to="/employee" className={styles["breadcrumb-link"]}>
+                                Employee
+                            </Link>
                         </BreadcrumbItem>
                         <BreadcrumbItem active>
                             {props.employee.first_name + " " + props.employee.last_name}
@@ -45,7 +57,7 @@ function ProfileView(props){
                         <Card>
                             <CardBody>
                                 <div className="d-flex flex-column align-items-center text-center">
-                                    <img src={props.employee.profile_picture} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>
+                                    <img src={require(`../../../${props.employee.profile_picture}`)} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>
                                     <div className="mt-3">
                                         <h4>{props.employee.first_name + " " + props.employee.middle_name + " " + props.employee.last_name}</h4>
                                         <p className="text-secondary mb-1">{FindTypeById(props.employee.type_id)}</p>
@@ -54,9 +66,9 @@ function ProfileView(props){
 
                                     <div className="row">
                                         <div className="col-6">
-                                            {/*<Link to="/employee">*/}
+                                            <Link to={"/employee/edit/"+ props.employee.emp_id}>
                                                 <Button className="fa fa-pencil">Edit</Button>
-                                            {/*</Link>*/}
+                                            </Link>
                                         </div>
 
                                         <div className="col-6">

@@ -96,3 +96,8 @@ span.input-group-addon {
     margin: 10pt;
 }
 
+.breadcrumb-link{
+    color: #1a202c;
+    text-decoration: none;
+}
+

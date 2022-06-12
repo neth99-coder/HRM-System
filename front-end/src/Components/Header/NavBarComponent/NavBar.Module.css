@@ -1,3 +1,8 @@
 .navbarStyle{
     background: green;
 }
+
+.nav-link{
+    font-size: larger;
+    margin: 2pt;
+}
