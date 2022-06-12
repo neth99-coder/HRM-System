@@ -96,13 +96,11 @@
 
 .overall-static-section{
     width: 100%;
+
+    display: flex;
 }
 
 /* Charts */
-
-.graph-view{
-    display: flex;
-}
 
 .stat-graph{
     width: 25%;
@@ -110,4 +108,38 @@
     margin-right: 60px;
 
     height: 500px;
+}
+
+.absance-stats{
+    width: 50%;
+    padding-top: 20px;
+}
+
+.date-stat{
+    height: 45%;
+    padding: 10px 10px;
+}
+
+.avatar-container{
+    display: flex;
+
+    margin-top: 25px;
+}
+
+.avatar-img{
+    height: 50px;
+    width: 50px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+}
+
+.avatar{
+    width: fit-content;
+    border-radius: 50%;
+
+    border: 2px solid black;
+
+    margin-right: -20px;
 }
