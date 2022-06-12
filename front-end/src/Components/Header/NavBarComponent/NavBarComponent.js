@@ -23,7 +23,7 @@ class NavBar extends Component {
     };
 
     attendanceNav(){
-        if(this.state.employeeLevel === 2){
+        if(this.state.employeeLevel === 1){
             return(
                 <NavItem>
                     <NavLink className="nav-link" href="/">
@@ -35,7 +35,7 @@ class NavBar extends Component {
     }
 
     employeeNav(){
-        if(this.state.employeeLevel === 2){
+        if(this.state.employeeLevel === 1){
             return(
                 <NavItem>
                     <NavLink className="nav-link" href="/employee">
@@ -47,7 +47,7 @@ class NavBar extends Component {
     }
 
     reportNav(){
-        if(this.state.employeeLevel === 2){
+        if(this.state.employeeLevel === 1){
             return(
                 <NavItem>
                     <NavLink className="nav-link" href="/">

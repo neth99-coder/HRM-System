@@ -28,14 +28,14 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route exact path="/" element={<Header companyDetails={companyDetails} profileDetails={profileDetails}/>}/>
-        <Route exact path="/employee" element={<EmployeeSearch employees={EMPLOYEE} type={TYPE} companyDetails={companyDetails} profileDetails={profileDetails} departments={DEPARTMENT}/>}/>
-        <Route path="/employee/view/:emp_id" element={<EmployeeView companyDetails={companyDetails} profileDetails={profileDetails} />} />
-        <Route path="/employee/edit/:emp_id" element={<EmployeeEdit companyDetails={companyDetails} profileDetails={profileDetails} departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE} />} />
-      </Routes>
-    </BrowserRouter>
+    // <BrowserRouter>
+    //   <Routes>
+    //     <Route exact path="/" element={<Header companyDetails={companyDetails} profileDetails={profileDetails}/>}/>
+    //     <Route exact path="/employee" element={<EmployeeSearch employees={EMPLOYEE} type={TYPE} companyDetails={companyDetails} profileDetails={profileDetails} departments={DEPARTMENT}/>}/>
+    //     <Route path="/employee/view/:emp_id" element={<EmployeeView companyDetails={companyDetails} profileDetails={profileDetails} />} />
+    //     <Route path="/employee/edit/:emp_id" element={<EmployeeEdit companyDetails={companyDetails} profileDetails={profileDetails} departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE} />} />
+    //   </Routes>
+    // </BrowserRouter>
 
      // {/**/}
 
