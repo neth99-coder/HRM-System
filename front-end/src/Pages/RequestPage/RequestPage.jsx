@@ -63,7 +63,7 @@ const RequestPage = () => {
   //function to show only selecyed type of leaves
   function handleSort(e) {
     const id = e.target.id;
-    const sortEls = document.getElementsByTagName("li");
+    const sortEls = document.getElementById('pag-ul').getElementsByTagName("li");
 
     //select type
     for (var i = 0; i < sortEls.length; i++) {
@@ -172,10 +172,18 @@ const RequestPage = () => {
             aria-label="Page navigation example"
             className={styles["page-nav"]}
           >
-            <ul className={`pagination justify-content-center`}>
+            <ul className={`pagination justify-content-center`} id='pag-ul'>
               {types.map((cur, index) => {
                 return (
-                  <li
+                  (cur.type === 'All')?(<li
+                    className={`${styles["sort-el"]} page-item active`}
+                    onClick={handleSort}
+                    id={cur.type + "-li"}
+                  >
+                    <p className="page-link" id={cur.type}>
+                      {cur.type}
+                    </p>
+                  </li>):((<li
                     className={`${styles["sort-el"]} page-item`}
                     onClick={handleSort}
                     id={cur.type + "-li"}
@@ -183,8 +191,8 @@ const RequestPage = () => {
                     <p className="page-link" id={cur.type}>
                       {cur.type}
                     </p>
-                  </li>
-                );
+                  </li>))
+                )
               })}
             </ul>
           </nav>
@@ -248,7 +256,7 @@ const RequestPage = () => {
                   className={`${styles["mb-1"]} form-control`}
                   name="sup-id"
                   required
-                  value={newRequest.superviser_id}
+                  value={newRequest.supervisor_id}
                   readOnly
                 />
               </div>
