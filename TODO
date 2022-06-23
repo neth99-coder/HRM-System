@@ -1,8 +1,21 @@
-should add .env file before starting
+//should add .env file before starting
 
-content of .env --->
+// content of .env --->
 
-                        HOST=localhost
-                        DATABASE=hrm_db
-                        db_username=root
-                        db_password=
+//                         HOST=localhost
+//                         DATABASE=hrm_db
+//                         db_username=root
+//                         db_password=
+
+//profile retrieve - done
+//profile owners leaves - availabale, taken
+//SELECT COUNT(emp_id) AS leave_count FROM `leave_request` WHERE emp_id = '190253K' AND state_id = 1
+//SELECT num_of_leaves FROM `paygrade_leave` WHERE paygrade_id = 1
+
+// today - leave applied tomorrow- leave applied
+//SELECT * FROM `leave_request` NATURAL JOIN employee WHERE (CURDATE() >= leave_begin AND CURDATE() <= leave_end) ;
+//SELECT * FROM `leave_request` NATURAL JOIN employee WHERE (CURDATE()+1 >= leave_begin AND CURDATE()+1 <= leave_end) ;
+//today- working
+//SELECT department.name, COUNT(attendance.emp_id) as emp_count FROM (employee INNER JOIN department ON employee.dept_id = department.dept_id),attendance WHERE employee.emp_id = attendance.emp_id AND attendance.date = '2022-06-19' GROUP BY department.name
+// sick/holiday leave
+//SELECT leave_type.type, COUNT(leave_request.emp_id) FROM leave_request NATURAL JOIN leave_type WHERE (CURDATE() >= leave_request.leave_begin AND CURDATE() <= leave_request.leave_end) AND leave_request.state_id = 1 GROUP BY leave_type.type

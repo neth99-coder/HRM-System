@@ -6,6 +6,8 @@ import Axios from "axios";
 import styles from "./RequestPage.module.css";
 import RequestCard from "./RequestCard";
 
+
+//TODO: check whether employee can apply leave ?????????????
 const RequestPage = () => {
   const [types, setTypes] = useState([{ leave_id: 0, type: "All" }]); //reason types          ----> this should not be reasons as now
   const [requests, setRequests] = useState([]); //requests array
