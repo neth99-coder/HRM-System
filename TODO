@@ -15,6 +15,7 @@
 // today - leave applied tomorrow- leave applied
 //SELECT * FROM `leave_request` NATURAL JOIN employee WHERE (CURDATE() >= leave_begin AND CURDATE() <= leave_end) ;
 //SELECT * FROM `leave_request` NATURAL JOIN employee WHERE (CURDATE()+1 >= leave_begin AND CURDATE()+1 <= leave_end) ;
+
 //today- working
 //SELECT department.name, COUNT(attendance.emp_id) as emp_count FROM (employee INNER JOIN department ON employee.dept_id = department.dept_id),attendance WHERE employee.emp_id = attendance.emp_id AND attendance.date = '2022-06-19' GROUP BY department.name
 // sick/holiday leave
