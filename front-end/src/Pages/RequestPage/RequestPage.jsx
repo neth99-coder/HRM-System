@@ -6,6 +6,8 @@ import Axios from "axios";
 import styles from "./RequestPage.module.css";
 import RequestCard from "./RequestCard";
 
+
+//TODO: check whether employee can apply leave ?????????????
 const RequestPage = () => {
   const [types, setTypes] = useState([{ leave_id: 0, type: "All" }]); //reason types          ----> this should not be reasons as now
   const [requests, setRequests] = useState([]); //requests array
@@ -63,7 +65,7 @@ const RequestPage = () => {
   //function to show only selecyed type of leaves
   function handleSort(e) {
     const id = e.target.id;
-    const sortEls = document.getElementsByTagName("li");
+    const sortEls = document.getElementById('pag-ul').getElementsByTagName("li");
 
     //select type
     for (var i = 0; i < sortEls.length; i++) {
@@ -172,10 +174,18 @@ const RequestPage = () => {
             aria-label="Page navigation example"
             className={styles["page-nav"]}
           >
-            <ul className={`pagination justify-content-center`}>
+            <ul className={`pagination justify-content-center`} id='pag-ul'>
               {types.map((cur, index) => {
                 return (
-                  <li
+                  (cur.type === 'All')?(<li
+                    className={`${styles["sort-el"]} page-item active`}
+                    onClick={handleSort}
+                    id={cur.type + "-li"}
+                  >
+                    <p className="page-link" id={cur.type}>
+                      {cur.type}
+                    </p>
+                  </li>):((<li
                     className={`${styles["sort-el"]} page-item`}
                     onClick={handleSort}
                     id={cur.type + "-li"}
@@ -183,8 +193,8 @@ const RequestPage = () => {
                     <p className="page-link" id={cur.type}>
                       {cur.type}
                     </p>
-                  </li>
-                );
+                  </li>))
+                )
               })}
             </ul>
           </nav>
@@ -248,7 +258,7 @@ const RequestPage = () => {
                   className={`${styles["mb-1"]} form-control`}
                   name="sup-id"
                   required
-                  value={newRequest.superviser_id}
+                  value={newRequest.supervisor_id}
                   readOnly
                 />
               </div>
