@@ -8,7 +8,5 @@
 //                         db_password=
 
 
-//profile owners leaves - availabale, taken
-//SELECT leave_begin, leave_end, FLOOR(DATEDIFF(leave_end, leave_begin)/7)*5 + Mod(5 + Weekday(leave_end) - Weekday(leave_begin), 5) + 1 AS difference FROM leave_request WHERE emp_id = '190253K' AND state_id = 1
-//SELECT num_of_leaves FROM `paygrade_leave` WHERE paygrade_id = 1
+
 
