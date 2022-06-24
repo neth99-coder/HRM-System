@@ -4,7 +4,7 @@ const db = require("../config/db");
 //function to get all details of all employees who are absent today
 function getAbsentToday(){
     return new Promise((resolve, reject) => {
-      var sql = "SELECT * FROM `leave_request` NATURAL JOIN employee WHERE (CURDATE() >= leave_begin AND CURDATE() <= leave_end)" ;
+      var sql = "SELECT * FROM `leave_request` NATURAL JOIN employee WHERE (CURDATE() >= leave_begin AND CURDATE() <= leave_end) AND state_id = 1" ;
       db.query(sql, (err, result) => {
         if (err) {
           return reject(err);
@@ -18,7 +18,7 @@ function getAbsentToday(){
   //function to get all details of all employees who willbe absent tomorrow
   function getAbsentTomorrow(){
     return new Promise((resolve, reject) => {
-      var sql = "SELECT * FROM `leave_request` NATURAL JOIN employee WHERE (CURDATE()+1 >= leave_begin AND CURDATE()+1 <= leave_end)" ;
+      var sql = "SELECT * FROM `leave_request` NATURAL JOIN employee WHERE (CURDATE()+1 >= leave_begin AND CURDATE()+1 <= leave_end) AND state_id = 1" ;
       db.query(sql, (err, result) => {
         if (err) {
           return reject(err);

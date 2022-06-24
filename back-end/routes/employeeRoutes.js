@@ -6,6 +6,7 @@ router.get("/getemployee/:empId",employeeController.getEmployee);   // url -> lo
 router.get("/getemployees",employeeController.getEmployees); // url -> localhost:3001/api/employee/getemployees
 router.get("/getLeaveTypes",employeeController.getLeaveTypes);
 router.get("/getLeaveRequests/:empId",employeeController.getLeaveRequests); 
+router.get("/existingLeaveCount/:empId",employeeController.existingLeaveCount);
 
 router.post("/addLeaveRequest",employeeController.addLeaveRequest);
 module.exports = router;

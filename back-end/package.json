@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async-waterfall": "^0.1.5",
     "config": "^3.3.7",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
