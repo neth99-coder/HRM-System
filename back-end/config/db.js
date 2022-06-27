@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
   host: process.env.HOST,
   user: config.get("db_username"),
   password: config.get("db_password"),
-  database: process.env.DATABASE
+  database: "hrm_db"
 });
 connection.connect((err) => {
   if (err) {

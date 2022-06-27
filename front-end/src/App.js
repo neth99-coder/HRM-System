@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes , Route } from 'react-router-dom';
 import Header from "./Components/Header/Header.js";
-import AdminFront from "./adminFrontPage/adminFront.js";
+import AdminFront from "./adminFrontPage/AdminFront.jsx";
 
 import "./App.css";
 

@@ -18,7 +18,7 @@
 }
 
 .fullname,.job{
-    font-size: 20px;
+    font-size: 1.1em;
     font-weight: bolder;
     color: #555;
     display: flex;

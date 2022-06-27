@@ -74,12 +74,10 @@
 }
 
 .profile-img{
-    margin-left: 15px;
+    padding-left: 20px;
 }
 
-.basic-info{
-    margin-left: 50px;
-}
+
 
 .form-field{
     position: relative;
@@ -97,6 +95,7 @@
 
 .input-text:focus{
     outline: none;
+    
 }
 
 .label{
@@ -119,7 +118,7 @@
 }
 
 .employee-info{
-    padding-right:23px;
+    margin-top: 108px;
 }
 
 .profile{
@@ -138,3 +137,12 @@
 .profile:hover {
     transform: scale(1.1);
   }
+
+.employee-container{
+    position: absolute;
+    top: 680px;
+}
+
+.noemployee-container{
+    position: static;
+}
