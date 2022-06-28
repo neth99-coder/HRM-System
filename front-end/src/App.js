@@ -1,32 +1,14 @@
 import React from "react";
-import { BrowserRouter as Router, Routes , Route } from 'react-router-dom';
-import Header from "./Components/Header/Header.js";
-import AdminFront from "./adminFrontPage/AdminFront.jsx";
 
+import AppRouter from "./Router";
 import "./App.css";
 
-function App() {
-  const companyDetails = {
-    logo: "logo.png",
-    name: "Jupiter Apperels",
-    addressLine1: "paravi Island",
-    addressLine2: "Matara",
-  };
 
-  const profileDetails = {
-    dp: "profile-pic.JPG",
-    name: "Poorna Cooray",
-    post: "Admin",
-  };
+function App() {
 
   return (
     <div>
-      <Router>
-        <Header companyDetails={companyDetails} profileDetails={profileDetails}/>
-        <Routes>
-          <Route path="/" exact element = {<AdminFront />} />
-        </Routes>
-      </Router>
+      <AppRouter/>
     </div>
   );
 }
