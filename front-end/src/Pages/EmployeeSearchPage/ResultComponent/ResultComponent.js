@@ -10,11 +10,6 @@ function Result(props){
     const navigate = useNavigate();
 
 
-    // function navigateTo(){
-    //     navigate("/employee/view/AD-0001");
-    // }
-
-
     if(props.employeeid === '' && props.department === ''){
         result = [];
         return(
@@ -24,11 +19,11 @@ function Result(props){
         result = props.employees.filter((employee)=> employee.emp_id === props.employeeid);
 
     }else if(props.employeeid === ''){
-        let employeeDepartment = props.departments.filter((dept)=>dept.name === props.department)[0];
-        result = props.employees.filter((employee)=> employee.dept_id === employeeDepartment.id);
+        let employeeDepartment = props.departments.filter((dept)=>dept.dept_id === parseInt(props.department))[0];
+        result = props.employees.filter((employee)=> employee.dept_id === employeeDepartment.dept_id);
     }else{
-        let employeeDepartment = props.departments.filter((dept)=>dept.name === props.department)[0];
-        result = props.employees.filter((employee)=> employee.dept_id === employeeDepartment.id);
+        let employeeDepartment = props.departments.filter((dept)=>dept.dept_id === parseInt(props.department))[0];
+        result = props.employees.filter((employee)=> employee.dept_id === employeeDepartment.dept_id);
         result = result.filter((employee)=> employee.emp_id === props.employeeid);
     }
 
@@ -59,15 +54,15 @@ function Result(props){
         return (
             <Table>
                 <thead>
-                    <tr>
-                        <th>Employee ID</th>
-                        <th>Employee</th>
-                        <th>Department</th>
-                        <th>Email</th>
-                    </tr>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Employee</th>
+                    <th>Department</th>
+                    <th>Email</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {employeeResult}
+                {employeeResult}
                 </tbody>
             </Table>
         )

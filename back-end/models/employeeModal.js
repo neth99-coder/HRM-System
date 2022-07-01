@@ -77,10 +77,40 @@ function addLeaveRequest(data){
   })
 }
 
+//function to get all details of an employee for a given department_ID
+function getEmployeeByDeptId(deptId){
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT * FROM employee WHERE dept_id = ? ";
+        db.query(sql,[deptId] ,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(result);
+            }
+        });
+    });
+}
+
+//function to get all details of an employee for a given department_ID and employee_id
+function getEmployeeByEmpIdDeptId(empId,deptId){
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT * FROM employee WHERE dept_id = ? AND emp_id = ?";
+        db.query(sql,[deptId,empId] ,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(result);
+            }
+        });
+    });
+}
+
 module.exports = {
     getEmployee,
     getEmployees,
     getLeaveTypes,
     getLeaveRequests,
-    addLeaveRequest
+    addLeaveRequest,
+    getEmployeeByDeptId,
+    getEmployeeByEmpIdDeptId
 }    

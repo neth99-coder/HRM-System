@@ -1,367 +1,541 @@
-import React,{Component} from "react";
-import Header from "../../../Components/Header/Header";
-import NavBar from "../../../Components/Header/NavBarComponent/NavBarComponent";
+import React, {Component, useState} from "react";
 import {Breadcrumb, BreadcrumbItem,Card, CardBody, Form,FormGroup,Label,Col,Input,FormFeedback} from "reactstrap";
 import {Link} from "react-router-dom";
-import FindEmployeeByID from "../../../shared/findEmployeeByID";
 import Styles from "./EditProfie.module.css";
+import {Spinner} from "react-bootstrap";
+import styles from "../../RequestPage/RequestPage.module.css";
+import {useEffect} from "react";
+import Axios from "axios";
 
-class EditProfile extends Component{
+function EditProfile(props){
 
-    constructor(props) {
-        super(props);
+    const [isLoading,setIsLoading] = useState(true);
+    const [isSaved,setIssaved] = useState(false);
+    const [employee,setEmployee] = useState();
+    const [firstName,setFirstName] = useState();
+    const [middleName,setMiddleName] = useState();
+    const [lastName,setLastName] = useState();
+    const [email,setEmail] = useState();
+    const [deptID,setDeptID] = useState();
+    const [typeID,setTypeID] = useState();
+    const [address,setAddress] = useState();
+    const [nic,setNic] = useState();
+    const [bday,setBday] = useState();
+    const [isMarried,setIsMarried] = useState();
+    const [contactNum,setContactNum] = useState();
+    const [emergencyNum,setEmergencyNum] = useState();
+    const [paygradeID,setPaygradeID] = useState();
+    const [empStatusId,setEmpStatusId] = useState();
+    const [empID,setEmpID] = useState(props.empID);
+    const [departments,setDepartments] = useState([]);
+    const [types,setTypes] = useState([]);
+    const [profilePicture,setProfilePicture] = useState();
+    const [status,setStatus] = useState([]);
+    const [payGrades,setPayGrades] = useState([]);
+    const [orginalFirstName,setOrginalFirstName] = useState();
+    const [orginalLastName,setOrginalLastName] = useState();
+    const [employeeDepartment,setEmployeeDepartment] = useState({dept_id:'',name:'',building:'',description:''});
+    const [employeeType,setEmployeeType] = useState({type_id:'',type_name:''});
+    const [employeeUpdate,setEmployeeUpdate] = useState({
+        address: "",
+        bday: "",
+        contact_num: "",
+        dept_id: 0,
+        email: "",
+        emergency_contact: "",
+        emp_status_id: 0,
+        first_name: "",
+        is_married: 0,
+        last_name: "",
+        middle_name: "",
+        nic: '',
+        paygrade_id: 0,
+        type_id: 0,
+        emp_id: ""
+    });
 
-        this.state = {
-            employee: FindEmployeeByID(this.props.id),
-            isSaved: false,
-            firstName: FindEmployeeByID(this.props.id).first_name,
-            middleName: FindEmployeeByID(this.props.id).middle_name,
-            lastName: FindEmployeeByID(this.props.id).last_name,
-            email: FindEmployeeByID(this.props.id).email,
-            deptID: FindEmployeeByID(this.props.id).dept_id,
-            typeID: FindEmployeeByID(this.props.id).type_id,
-            address: FindEmployeeByID(this.props.id).address,
-            nic: FindEmployeeByID(this.props.id).nic,
-            bday: FindEmployeeByID(this.props.id).bday,
-            isMarried: FindEmployeeByID(this.props.id).is_married,
-            contactNum: FindEmployeeByID(this.props.id).contact_num,
-            emergencyNum: FindEmployeeByID(this.props.id).emergency_contact,
-            paygradeID: FindEmployeeByID(this.props.id).paygrade_id,
-            empStatusId: FindEmployeeByID(this.props.id).emp_status_id,
-            empID: FindEmployeeByID(this.props.id).emp_id
 
-        }
 
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+    useEffect(()=>{
+        setIsLoading(true);
 
-    handleInputChange(event){
+        const findEmployee = async () => {
+            await Axios.get("http://localhost:3001/api/hrmanager/getemployee/"+ empID).then(
+                (res) => {
+                    setEmployee(res.data.result[0]);
+                    setFirstName(res.data.result[0].first_name);
+                    setLastName(res.data.result[0].last_name);
+                    setOrginalFirstName(res.data.result[0].first_name);
+                    setOrginalLastName(res.data.result[0].last_name);
+                    setMiddleName(res.data.result[0].middle_name);
+                    setEmail(res.data.result[0].email);
+                    setDeptID(res.data.result[0].dept_id);
+                    setTypeID(res.data.result[0].type_id);
+                    setAddress(res.data.result[0].address);
+                    setNic(res.data.result[0].nic);
+                    setBday(res.data.result[0].bday.substring(0,10));
+                    setIsMarried(res.data.result[0].is_married);
+                    setContactNum(res.data.result[0].contact_num);
+                    setEmergencyNum(res.data.result[0].emergency_contact);
+                    setPaygradeID(res.data.result[0].paygrade_id);
+                    setEmpStatusId(res.data.result[0].emp_status_id);
+                }
+            );
+        };
+        findEmployee();
+
+
+        const findDepartments = async () => {
+                    await Axios.get("http://localhost:3001/api/hrmanager/getDepartments").then(
+                        (res) => {
+                            setDepartments(res.data.result);
+                        }
+                    );
+                };
+        findDepartments();
+
+        const findTypes = async () => {
+            await Axios.get("http://localhost:3001/api/hrmanager/getTypes").then(
+                (res) => {
+                    setTypes(res.data.result);
+                });
+        };
+        findTypes();
+
+        const findStatus = async () => {
+            await Axios.get("http://localhost:3001/api/hrmanager/getStatus").then(
+                (res) => {
+                    setStatus(res.data.result);
+                }
+                );
+        };
+        findStatus();
+
+        const findPaygrades = async () => {
+            await Axios.get("http://localhost:3001/api/hrmanager/getPaygrades").then(
+                (res) => {
+                    setPayGrades(res.data.result);
+                }
+                );
+        };
+        findPaygrades();
+
+        const findEmployeeDepartment = async () => {
+            await Axios.get("http://localhost:3001/api/hrmanager/getemployeeDepartment/" + empID).then(
+                (res) => {
+                    setEmployeeDepartment(res.data.result[0]);
+                }
+            );
+        };
+        findEmployeeDepartment();
+
+        const findEmployeeType = async () => {
+            await Axios.get("http://localhost:3001/api/hrmanager/getemployeeType/" + empID).then(
+                (res) => {
+                    setEmployeeType(res.data.result[0]);
+                }
+            );
+        };
+        findEmployeeType();
+
+        setIsLoading(false);
+    },[]);
+
+    //         employeeDepartment: this.props.departments.filter((dept)=>dept.dept_id === parseInt(this.props.employee.dept_id))[0],
+    //         employeeType: this.props.departments.filter((type)=>type.type_id === parseInt(this.props.employee.type_id))[0],
+
+
+    function handleInputChange(event){
         const target = event.target;
         const value = target.value;
         const name = target.name;
 
-        this.setState({
-            [name]: value
+        if(name == "firstName"){
+            setFirstName(value);
+        }else if(name == "middleName"){
+            setMiddleName(value);
+        }else if(name == 'lastName'){
+            setLastName(value);
+        }else if(name == "address"){
+            setAddress(value);
+        }else if(name == "email"){
+            setEmail(value);
+        }else if(name == "contactNum"){
+            setContactNum(value);
+        }else if(name == "emergencyNum"){
+            setEmergencyNum(value);
+        }else if(name == "nic"){
+            setNic(value);
+        }else if(name == "bday"){
+            setBday(value);
+        }else if(name == "isMarried"){
+            setIsMarried(value);
+        }else if(name == "deptID"){
+            setDeptID(value);
+        }else if(name == "typeID"){
+            setTypeID(value);
+        }else if(name == "empStatusId"){
+            setEmpStatusId(value);
+        }else if(name == "paygradeID"){
+            setPaygradeID(value);
+        }
+    }
+
+    function handleSubmit(event){
+        event.preventDefault();
+        console.log(event);
+        setEmployeeUpdate({
+            address: address,
+            bday: bday,
+            contact_num: contactNum,
+            dept_id: deptID,
+            email: email,
+            emergency_contact: emergencyNum,
+            emp_status_id: empStatusId,
+            first_name: firstName,
+            is_married: isMarried,
+            last_name: lastName,
+            middle_name: middleName,
+            nic: nic,
+            paygrade_id: paygradeID,
+            type_id: typeID,
+            emp_id: empID
+        });
+        Axios.post(
+            "http://localhost:3001/api/hrmanager/updateEmployee",
+            employeeUpdate
+        ).then((res) => {
+            if (!res.data.success) {
+                alert("Error occured !!");
+            } else {
+                window.location.reload(false); //refresh page
+            }
         });
     }
 
-    handleSubmit(event){
-        event.preventDefault();
-    }
 
-    render() {
+
         return(
-            <div className="container">
-                <div>
-                    <Breadcrumb>
-                        <BreadcrumbItem>
-                            <Link to='/hrmanager/employee' className={Styles["breadcrumb-link"]}>
-                                Employee
-                            </Link>
-                        </BreadcrumbItem>
-                        <BreadcrumbItem>
-                            <Link to={`/hrmanager/employee/view/${this.state.employee.emp_id}`} className={Styles["breadcrumb-link"]}>
-                                {this.state.employee.first_name + " " + this.state.employee.last_name}
-                            </Link>
-                        </BreadcrumbItem>
-                        <BreadcrumbItem active>
-                            Edit
-                        </BreadcrumbItem>
-                    </Breadcrumb>
-                    <h1 className="text-primary">Edit Profile</h1>
-                    <hr/>
+            <div>
+                {isLoading ? (
+                    <Spinner animation="border" role="status" className={styles['spinner']}>
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                ):(
+                    <>
+                    <div className="container">
+                        <div>
+                            <Breadcrumb>
+                                <BreadcrumbItem>
+                                    <Link to='/hrmanager/employee' className={Styles["breadcrumb-link"]}>
+                                        Employee
+                                    </Link>
+                                </BreadcrumbItem>
+                                <BreadcrumbItem>
+                                    <Link to={`/hrmanager/employee/view/${empID}`} className={Styles["breadcrumb-link"]}>
+                                        {orginalFirstName + " " + orginalLastName}
+                                    </Link>
+                                </BreadcrumbItem>
+                                <BreadcrumbItem active>
+                                    Edit
+                                </BreadcrumbItem>
+                            </Breadcrumb>
+                            <h1 className="text-primary">Edit Profile</h1>
+                            <hr/>
 
-                    <div className="row gutters">
-                        <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <div className={Styles["account-settings"]}>
-                                        <div className={Styles["user-profile"]}>
-                                            <div className={Styles["user-avatar"]}>
-                                                {/*{"../../../public"+this.state.employee.profile_picture}*/}
-                                                <img className={Styles["profile-dp"]} src={`../../../${this.state.employee.profile_picture}`}
-                                                     alt={this.state.employee.first_name + " " + this.state.employee.last_name}/>
-                                            </div>
-                                            <h5 className="user-name">{this.state.employee.first_name + " " + this.state.employee.last_name}</h5>
-                                            <h6 className="user-email">{this.state.employee.email}</h6>
-                                        </div>
-                                        <div className={Styles["about"]}>
-                                            <h5>About</h5>
-                                            <p>{this.props.type[this.state.employee.type_id].type_name} - {this.props.departments[this.state.employee.dept_id].name}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-                            <Card>
-                                <CardBody>
-                                    <Form onSubmit={this.handleSubmit}>
-                                        <div className="row gutters">
-                                            <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                                <h6 className="mb-2 text-primary">Personal Details</h6>
-                                            </div>
-
-                                            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="firstName">First Name</label>
-                                                    <input type="text"
-                                                           className={Styles["form-control"]}
-                                                           id="firstName"
-                                                           name="firstName"
-                                                           required={true}
-                                                           value={this.state.firstName}
-                                                           placeholder="Enter first name"
-                                                           onChange={this.handleInputChange}/>
-                                                </FormGroup>
-                                            </div>
-
-                                            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="middleName">Middle Name</label>
-                                                    <input type="text"
-                                                           className={Styles["form-control"]}
-                                                           id="middleName"
-                                                           name="middleName"
-                                                           required={true}
-                                                           value={this.state.middleName}
-                                                           placeholder="Enter middle name"
-                                                           onChange={this.handleInputChange}/>
-                                                </FormGroup>
-                                            </div>
-
-                                            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="lastName">Last Name</label>
-                                                    <input type="text"
-                                                           className={Styles["form-control"]}
-                                                           id="lastName"
-                                                           name="lastName"
-                                                           required={true}
-                                                           value={this.state.lastName}
-                                                           placeholder="Enter last name"
-                                                           onChange={this.handleInputChange}/>
-                                                </FormGroup>
-                                            </div>
-
-                                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="address">Address</label>
-                                                    <input type="text"
-                                                           className={Styles["form-control"]}
-                                                           id="address"
-                                                           name="address"
-                                                           required={true}
-                                                           value={this.state.address}
-                                                           placeholder="Enter Address"
-                                                           onChange={this.handleInputChange}/>
-                                                </FormGroup>
-                                            </div>
-
-                                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="email">Email</label>
-                                                    <input type="email"
-                                                           className={Styles["form-control"]}
-                                                           id="email"
-                                                           name="email"
-                                                           required={true}
-                                                           value={this.state.email}
-                                                           placeholder="Enter Email Address"
-                                                           onChange={this.handleInputChange}/>
-                                                </FormGroup>
-                                            </div>
-
-                                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="contactNum">Contact Number</label>
-                                                    <input type="text"
-                                                           className={Styles["form-control"]}
-                                                           id="contactNum"
-                                                           name="contactNum"
-                                                           required={true}
-                                                           value={this.state.contactNum}
-                                                           placeholder="Enter Contact Number"
-                                                           onChange={this.handleInputChange}/>
-                                                </FormGroup>
-                                            </div>
-
-                                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="emergencyNum">Emergency Number</label>
-                                                    <input type="text"
-                                                           className={Styles["form-control"]}
-                                                           id="emergencyNum"
-                                                           name="emergencyNum"
-                                                           required={true}
-                                                           value={this.state.emergencyNum}
-                                                           placeholder="Enter Emergency Number"
-                                                           onChange={this.handleInputChange}/>
-                                                </FormGroup>
-                                            </div>
-
-                                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="nic">NIC</label>
-                                                    <input type="text"
-                                                           className={Styles["form-control"]}
-                                                           id="nic"
-                                                           name="nic"
-                                                           required={true}
-                                                           value={this.state.nic}
-                                                           placeholder="Enter NIC Number"
-                                                           onChange={this.handleInputChange}/>
-                                                </FormGroup>
-                                            </div>
-
-                                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="bday">Birthday</label>
-                                                    <input type="date"
-                                                           className={Styles["form-control"]}
-                                                           id="bday"
-                                                           name="bday"
-                                                           required={true}
-                                                           value={this.state.bday}
-                                                           placeholder="Select Birthday"
-                                                           onChange={this.handleInputChange}/>
-                                                </FormGroup>
-                                            </div>
-
-                                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="isMarried">Marital Status</label>
-                                                    <select
-                                                        className={Styles["form-control"]}
-                                                        id="isMarried"
-                                                        name="isMarried"
-                                                        placeholder="Select Marital Status"
-                                                        required={true}
-                                                        value={this.state.isMarried}
-                                                        onChange={this.handleInputChange}>
-                                                            <option value={0} >Single</option>
-                                                            <option value={1} >Married</option>
-                                                    </select>
-                                                </FormGroup>
-                                            </div>
-
-                                        </div>
-
-                                        <hr/>
-
-                                        <div className="row gutters">
-                                            <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                                <h6 className="mt-3 mb-2 text-primary">Employee Details</h6>
-                                            </div>
-
-                                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="emergencyNum">Employee ID</label>
-                                                    <input type="text"
-                                                           className={Styles["form-control"]}
-                                                           id="empID"
-                                                           name="empID"
-                                                           required={true}
-                                                           value={this.state.empID}
-                                                           placeholder="Enter Employee ID"
-                                                            readOnly={true}
-                                                           onChange={this.handleInputChange}/>
-                                                </FormGroup>
-                                            </div>
-
-                                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="deptID">Department</label>
-                                                    <select
-                                                        className={Styles["form-control"]}
-                                                        id="deptID"
-                                                        name="deptID"
-                                                        placeholder="Select Department"
-                                                        required={true}
-                                                        value={this.state.deptID}
-                                                        onChange={this.handleInputChange}>
-                                                        {this.props.departments.map(({ id, name }, index) => <option value={id} >{name}</option>)}
-                                                    </select>
-                                                </FormGroup>
-                                            </div>
-
-                                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="typeID">Designation</label>
-                                                    <select
-                                                        className={Styles["form-control"]}
-                                                        id="typeID"
-                                                        name="typeID"
-                                                        placeholder="Select Designation"
-                                                        required={true}
-                                                        value={this.state.typeID}
-                                                        onChange={this.handleInputChange}>
-                                                        {this.props.type.map(({ type_id, type_name }, index) => <option value={type_id} >{type_name}</option>)}
-                                                    </select>
-                                                </FormGroup>
-                                            </div>
-
-                                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="empStatusId">Employee status</label>
-                                                    <select
-                                                        className={Styles["form-control"]}
-                                                        id="empStatusId"
-                                                        name="empStatusId"
-                                                        placeholder="Select Status"
-                                                        required={true}
-                                                        value={this.state.empStatusId}
-                                                        onChange={this.handleInputChange}>
-                                                        {this.props.status.map(({ emp_status_id, name }, index) => <option value={emp_status_id} >{name}</option>)}
-                                                    </select>
-                                                </FormGroup>
-                                            </div>
-
-                                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                <FormGroup>
-                                                    <label htmlFor="paygradeID">Pay-Grade</label>
-                                                    <select
-                                                        className={Styles["form-control"]}
-                                                        id="paygradeID"
-                                                        name="paygradeID"
-                                                        placeholder="Select pay-grade"
-                                                        required={true}
-                                                        value={this.state.paygradeID}
-                                                        onChange={this.handleInputChange}>
-                                                        {this.props.paygrades.map(({ paygrade_id, name }, index) => <option value={paygrade_id} >{name}</option>)}
-                                                    </select>
-                                                </FormGroup>
-                                            </div>
-
-                                        </div>
-
-                                        <div className="row gutters">
-                                            <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                                <div className="text-right">
-                                                    <Link to={"/hrmanager/employee/view/" + this.state.employee.emp_id} >
-                                                        <button type="button" id="cancel" name="cancel"
-                                                                className="btn btn-secondary">Cancel
-                                                        </button>
-                                                    </Link>
-                                                    <button type="submit" id="submit" name="submit"
-                                                            className="btn btn-primary">Update
-                                                    </button>
+                            <div className="row gutters">
+                                <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+                                    <div className="card h-100">
+                                        <div className="card-body">
+                                            <div className={Styles["account-settings"]}>
+                                                <div className={Styles["user-profile"]}>
+                                                    <div className={Styles["user-avatar"]}>
+                                                        {/*{"../../../public"+this.state.employee.profile_picture}*/}
+                                                        <img className={Styles["profile-dp"]} src={`../../../${profilePicture}`}
+                                                             alt={orginalFirstName + " " + orginalLastName}/>
+                                                    </div>
+                                                    <h5 className="user-name">{orginalFirstName + " " + orginalLastName}</h5>
+                                                    <h6 className="user-email">{email}</h6>
+                                                </div>
+                                                <div className={Styles["about"]}>
+                                                    <h5>About</h5>
+                                                    <p>{employeeType.type_name} - {employeeDepartment.name}</p>
                                                 </div>
                                             </div>
                                         </div>
-                                    </Form>
-                                </CardBody>
-                            </Card>
+                                    </div>
+                                </div>
+                                <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+                                    <Card>
+                                        <CardBody>
+                                            <Form onSubmit={handleSubmit}>
+                                                <div className="row gutters">
+                                                    <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                        <h6 className="mb-2 text-primary">Personal Details</h6>
+                                                    </div>
+
+                                                    <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="firstName">First Name</label>
+                                                            <input type="text"
+                                                                   className={Styles["form-control"]}
+                                                                   id="firstName"
+                                                                   name="firstName"
+                                                                   required={true}
+                                                                   value={firstName}
+                                                                   placeholder="Enter first name"
+                                                                   onChange={handleInputChange}/>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                    <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="middleName">Middle Name</label>
+                                                            <input type="text"
+                                                                   className={Styles["form-control"]}
+                                                                   id="middleName"
+                                                                   name="middleName"
+                                                                   required={true}
+                                                                   value={middleName}
+                                                                   placeholder="Enter middle name"
+                                                                   onChange={handleInputChange}/>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                    <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="lastName">Last Name</label>
+                                                            <input type="text"
+                                                                   className={Styles["form-control"]}
+                                                                   id="lastName"
+                                                                   name="lastName"
+                                                                   required={true}
+                                                                   value={lastName}
+                                                                   placeholder="Enter last name"
+                                                                   onChange={handleInputChange}/>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="address">Address</label>
+                                                            <input type="text"
+                                                                   className={Styles["form-control"]}
+                                                                   id="address"
+                                                                   name="address"
+                                                                   required={true}
+                                                                   value={address}
+                                                                   placeholder="Enter Address"
+                                                                   onChange={handleInputChange}/>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="email">Email</label>
+                                                            <input type="email"
+                                                                   className={Styles["form-control"]}
+                                                                   id="email"
+                                                                   name="email"
+                                                                   required={true}
+                                                                   value={email}
+                                                                   placeholder="Enter Email Address"
+                                                                   onChange={handleInputChange}/>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="contactNum">Contact Number</label>
+                                                            <input type="text"
+                                                                   className={Styles["form-control"]}
+                                                                   id="contactNum"
+                                                                   name="contactNum"
+                                                                   required={true}
+                                                                   value={contactNum}
+                                                                   placeholder="Enter Contact Number"
+                                                                   onChange={handleInputChange}/>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="emergencyNum">Emergency Number</label>
+                                                            <input type="text"
+                                                                   className={Styles["form-control"]}
+                                                                   id="emergencyNum"
+                                                                   name="emergencyNum"
+                                                                   required={true}
+                                                                   value={emergencyNum}
+                                                                   placeholder="Enter Emergency Number"
+                                                                   onChange={handleInputChange}/>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="nic">NIC</label>
+                                                            <input type="text"
+                                                                   className={Styles["form-control"]}
+                                                                   id="nic"
+                                                                   name="nic"
+                                                                   required={true}
+                                                                   value={nic}
+                                                                   placeholder="Enter NIC Number"
+                                                                   onChange={handleInputChange}/>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="bday">Birthday</label>
+                                                            <input type="date"
+                                                                   className={Styles["form-control"]}
+                                                                   id="bday"
+                                                                   name="bday"
+                                                                   required={true}
+                                                                   value={bday}
+                                                                   placeholder="Select Birthday"
+                                                                   onChange={handleInputChange}/>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="isMarried">Marital Status</label>
+                                                            <select
+                                                                className={Styles["form-control"]}
+                                                                id="isMarried"
+                                                                name="isMarried"
+                                                                placeholder="Select Marital Status"
+                                                                required={true}
+                                                                value={isMarried}
+                                                                onChange={handleInputChange}>
+                                                                <option value={0} >Single</option>
+                                                                <option value={1} >Married</option>
+                                                            </select>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                </div>
+
+                                                <hr/>
+
+                                                <div className="row gutters">
+                                                    <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                        <h6 className="mt-3 mb-2 text-primary">Employee Details</h6>
+                                                    </div>
+
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="emergencyNum">Employee ID</label>
+                                                            <input type="text"
+                                                                   className={Styles["form-control"]}
+                                                                   id="empID"
+                                                                   name="empID"
+                                                                   required={true}
+                                                                   value={empID}
+                                                                   placeholder="Enter Employee ID"
+                                                                   readOnly={true}
+                                                                   onChange={handleInputChange}/>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="deptID">Department</label>
+                                                            <select
+                                                                className={Styles["form-control"]}
+                                                                id="deptID"
+                                                                name="deptID"
+                                                                placeholder="Select Department"
+                                                                required={true}
+                                                                value={deptID}
+                                                                onChange={handleInputChange}>
+                                                                {departments.map(({ dept_id, name }, index) => <option value={dept_id} >{name}</option>)}
+                                                            </select>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="typeID">Designation</label>
+                                                            <select
+                                                                className={Styles["form-control"]}
+                                                                id="typeID"
+                                                                name="typeID"
+                                                                placeholder="Select Designation"
+                                                                required={true}
+                                                                value={typeID}
+                                                                onChange={handleInputChange}>
+                                                                {types.map(({ type_id, type_name }, index) => <option value={type_id} >{type_name}</option>)}
+                                                            </select>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="empStatusId">Employee status</label>
+                                                            <select
+                                                                className={Styles["form-control"]}
+                                                                id="empStatusId"
+                                                                name="empStatusId"
+                                                                placeholder="Select Status"
+                                                                required={true}
+                                                                value={empStatusId}
+                                                                onChange={handleInputChange}>
+                                                                {status.map(({ emp_status_id, name }, index) => <option value={emp_status_id} >{name}</option>)}
+                                                            </select>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="paygradeID">Pay-Grade</label>
+                                                            <select
+                                                                className={Styles["form-control"]}
+                                                                id="paygradeID"
+                                                                name="paygradeID"
+                                                                placeholder="Select pay-grade"
+                                                                required={true}
+                                                                value={paygradeID}
+                                                                onChange={handleInputChange}>
+                                                                {payGrades.map(({ paygrade_id, name }, index) => <option value={paygrade_id} >{name}</option>)}
+                                                            </select>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                </div>
+
+                                                <div className="row gutters">
+                                                    <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                        <div className="text-right">
+                                                            <Link to={"/hrmanager/employee/view/" + empID} >
+                                                                <button type="button" id="cancel" name="cancel"
+                                                                        className="btn btn-secondary">Cancel
+                                                                </button>
+                                                            </Link>
+                                                            <button type="submit" id="submit" name="submit"
+                                                                    className="btn btn-primary">Update
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Form>
+                                        </CardBody>
+                                    </Card>
+                                </div>
+                            </div>
+
+
+
                         </div>
                     </div>
-
-
-
-                </div>
+                    </>
+                    )}
             </div>
+
         );
-    }
 }
 
 export default EditProfile;

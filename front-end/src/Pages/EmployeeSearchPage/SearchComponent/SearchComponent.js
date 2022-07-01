@@ -31,7 +31,7 @@ class Search extends Component{
 
             const departmentList = this.props.departments.map((department) =>{
                 return(
-                    <option key={department.id}>{department.name}</option>
+                    <option key={department.dept_id} value={department.dept_id}>{department.name}</option>
                 );
             });
 
