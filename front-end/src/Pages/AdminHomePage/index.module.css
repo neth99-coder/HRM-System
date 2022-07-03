@@ -140,7 +140,8 @@
 
 .employee-container{
     position: absolute;
-    top: 680px;
+    top: 750px;
+    padding-right: 100px;
 }
 
 .noemployee-container{

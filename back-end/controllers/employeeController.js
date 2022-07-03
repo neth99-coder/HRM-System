@@ -111,8 +111,15 @@ const existingLeaveCount = async (req, res) => {
 };
 
   const addEmployee = async (req,res) =>{
+    const file = req.files.file;
+    file.mv(`${__dirname}/../public/images/${file.name}`,err =>{
+      if(err){
+        console.error(err);
+      }
+    });
+
     await employeeModal
-    .addEmployee(req.body)
+    .addEmployee({...req.body,emp_img:req.files.file.name})
     .then((result)=>{
       res.json({
         success: true,
