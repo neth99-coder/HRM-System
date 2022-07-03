@@ -99,10 +99,24 @@ function getEmployee(empId){
     });
 }
 
+//function to get all employee ID
+function getEmployeeIds(){
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT emp_id FROM employee";
+        db.query(sql,[] ,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(result);
+            }
+        });
+    });
+}
+
 //function to get all details of all employees
 function getEmployees() {
     return new Promise((resolve, reject) => {
-        var sql = "SELECT * FROM employee";
+        var sql = "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id FROM employee";
         db.query(sql, (err, result) => {
             if (err) {
                 return reject(err);
@@ -142,7 +156,7 @@ function getEmployeeType(empId){
 }
 
 //function to update employee record
-function updateEmployee(date){
+function updateEmployee(data){
     return new Promise((resolve,reject)=>{
         const sql = "UPDATE employee SET address = ? , bday = ?, contact_num = ?, dept_id = ?, email = ?, emergency_contact = ?, emp_status_id = ?, first_name = ?, is_married = ?, last_name = ?, middle_name = ?, nic = ?, paygrade_id = ?, type_id = ? WHERE emp_id = ?";
         db.query(
@@ -152,7 +166,29 @@ function updateEmployee(date){
                 if(result){
                     return resolve(result);
                 }else{
+                    console.log("f2efes");
                     return reject(err);
+
+                }
+            }
+        );
+    })
+}
+
+//function to delete employee record
+function deleteEmployee(data){
+    return new Promise((resolve,reject)=>{
+        const sql = "DELETE FROM employee WHERE emp_id = ?";
+        db.query(
+            sql,
+            [data.emp_id],
+            (err,result) => {
+                if(result){
+                    return resolve(result);
+                }else{
+                    console.log("f2efes");
+                    return reject(err);
+
                 }
             }
         );
@@ -170,7 +206,9 @@ module.exports = {
     getEmployees,
     getEmployeeDepartment,
     getEmployeeType,
+    getEmployeeIds,
 
-    updateEmployee
+    updateEmployee,
+    deleteEmployee
 
 }

@@ -12,8 +12,10 @@ router.get("/getEmployeeByEmpIdDeptId",hrmanagerController.getEmployeeByEmpIdDep
 router.get("/getemployees",hrmanagerController.getEmployees);
 router.get("/getemployeeDepartment/:empId",hrmanagerController.getEmployeeDepartment);
 router.get("/getemployeeType/:empId",hrmanagerController.getEmployeeType);
+router.get("/getEmployeeIds",hrmanagerController.getEmployeeIds);
 
 router.post("/updateEmployee",hrmanagerController.updateEmployee);
+router.post("/deleteEmployee",hrmanagerController.deleteEmployee);
 
 
 module.exports = router;

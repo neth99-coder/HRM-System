@@ -1,6 +1,4 @@
 import React,{Component} from "react";
-import Header from "../../Components/Header/Header";
-import NavBar from "../../Components/Header/NavBarComponent/NavBarComponent";
 import Search from "./SearchComponent/SearchComponent";
 import Result from "./ResultComponent/ResultComponent";
 import {useState} from "react";

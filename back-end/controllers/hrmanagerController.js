@@ -87,7 +87,7 @@ const getPaygrades = async (req,res) => {
     };
 
     const getEmployeeByDeptId = async (req,res) =>{
-        await employeeModal
+        await hrmanagerModal
             .getEmployeeByDeptId(req.params.deptId)
             .then((result)=>{
                 res.json({
@@ -104,7 +104,7 @@ const getPaygrades = async (req,res) => {
     };
 
     const getEmployeeByEmpIdDeptId = async (req,res) =>{
-        await employeeModal
+        await hrmanagerModal
             .getEmployeeByEmpIdDeptId(req.query.empId,req.query.deptId)
             .then((result)=>{
                 res.json({
@@ -121,7 +121,7 @@ const getPaygrades = async (req,res) => {
     };
 
 const getEmployees = async (req,res) =>{
-    await employeeModal
+    await hrmanagerModal
         .getEmployees()
         .then((result)=>{
             res.json({
@@ -171,9 +171,40 @@ const getEmployeeType = async (req,res) =>{
         });
 };
 
+const getEmployeeIds = async (req,res) =>{
+    await hrmanagerModal.
+    getEmployeeIds()
+        .then((result)=>{
+            res.json({
+                success: true,
+                result,
+            });
+        })
+        .catch((err)=>{
+            res.json({
+                success: false,
+                err,
+            });
+        });
+};
+
 const updateEmployee = async (req,res)=>{
     await hrmanagerModal
-        updateEmployee(req.body)
+        .updateEmployee(req.body)
+        .then((result) => {
+            res.json({ success: true, result });
+        })
+        .catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
+const deleteEmployee = async (req,res)=>{
+    await hrmanagerModal
+        .deleteEmployee(req.body)
         .then((result) => {
             res.json({ success: true, result });
         })
@@ -196,7 +227,9 @@ module.exports = {
     getEmployees,
     getEmployeeDepartment,
     getEmployeeType,
+    getEmployeeIds,
 
-    updateEmployee
+    updateEmployee,
+    deleteEmployee
 
 }

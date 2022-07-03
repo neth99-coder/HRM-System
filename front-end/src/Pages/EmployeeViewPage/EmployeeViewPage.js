@@ -24,7 +24,7 @@ function EmployeeView(props){
         setIsLoading(true);
 
         const findEmployee = async () => {
-            await Axios.get("http://localhost:3001/api/employee/getemployee/"+ emp_id).then(
+            await Axios.get("http://localhost:3001/api/hrmanager/getemployee/"+ emp_id).then(
                 (res) => {
                     setEmployee(res.data.result[0]);
                 }

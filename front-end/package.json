@@ -11,7 +11,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
     "bootstrap": "^5.1.3",
-    "bootstrap": "^5.1.3",
+    "fast-key-generator": "^1.0.1",
     "font-awesome": "^4.7.0",
     "react": "^18.0.0",
     "react-bootstrap": "^2.4.0",
