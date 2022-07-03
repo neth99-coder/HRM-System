@@ -39,11 +39,11 @@ function getLeaveCounts(emp_arr, paygrade_arr) {
 
 
 
-  return {
+  return [{
     leaveCount: leaveCount,
     allowedCount: allowedCount,
     remaining: { "Medical": allowedCount["Medical"] - leaveCount["Medical"], "Casual":allowedCount["Casual"] - leaveCount["Casual"] , "Annual": allowedCount["Annual"] - leaveCount["Annual"] }
-  };
+  }];
 }
 
 module.exports = { getLeaveCounts };
