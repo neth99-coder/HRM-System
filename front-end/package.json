@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/helper-split-export-declaration": "^7.18.6",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
@@ -13,8 +14,8 @@
     "bootstrap": "^5.1.3",
     "fast-key-generator": "^1.0.1",
     "font-awesome": "^4.7.0",
-    "image-data-uri": "^2.0.1",
     "framer-motion": "^6.3.16",
+    "image-data-uri": "^2.0.1",
     "react": "^18.0.0",
     "react-bootstrap": "^2.4.0",
     "react-dom": "^18.0.0",
