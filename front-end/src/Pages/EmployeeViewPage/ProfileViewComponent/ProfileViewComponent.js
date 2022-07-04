@@ -148,7 +148,6 @@ function ProfileView(props){
                     <div id="myModal" className={styles["modal"]} hidden={delVisibility}>
                         <div className={styles["modal-content"]}>
                             <div className={styles["modal-header"]}>
-                                <span className={styles["close"]}>&times;</span>
                                 <h2>Delete Employee</h2>
                             </div>
                             <div className={styles["modal-body"]}>
