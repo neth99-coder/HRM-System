@@ -1,18 +1,17 @@
-import React, {Component, useState} from "react";
+import React, {useState} from "react";
 import {Breadcrumb, BreadcrumbItem,Card, CardBody, Form,FormGroup,Label,Col,Input,FormFeedback} from "reactstrap";
 import {Link} from "react-router-dom";
-import Styles from "./EditProfie.module.css";
+import Styles from "./AddNew.module.css";
 import {Spinner} from "react-bootstrap";
 import styles from "../../RequestPage/RequestPage.module.css";
 import {useEffect} from "react";
 import Axios from "axios";
+import {generateKey} from "fast-key-generator";
 import ReactImageUploading from "react-images-uploading";
 
-function EditProfile(props){
+function AddNewComponent(props){
 
     const [isLoading,setIsLoading] = useState(true);
-    const [isSaved,setIssaved] = useState(false);
-    const [employee,setEmployee] = useState();
     const [firstName,setFirstName] = useState();
     const [middleName,setMiddleName] = useState();
     const [lastName,setLastName] = useState();
@@ -33,49 +32,21 @@ function EditProfile(props){
     const [profilePicture,setProfilePicture] = useState();
     const [status,setStatus] = useState([]);
     const [payGrades,setPayGrades] = useState([]);
-    const [orginalFirstName,setOrginalFirstName] = useState();
-    const [orginalLastName,setOrginalLastName] = useState();
-    const [employeeDepartment,setEmployeeDepartment] = useState({dept_id:'',name:'',building:'',description:''});
-    const [employeeType,setEmployeeType] = useState({type_id:'',type_name:''});
+    const [employeeIds,setEmployeeIds] = useState([]);
+    const [isValid,setIsValid] = useState(true);
+    const [errorMsg, setErrorMsg] = useState("");
     const [Image,setImage] = useState();
 
     useEffect(()=>{
         setIsLoading(true);
 
-        const findEmployee = async () => {
-            await Axios.get("http://localhost:3001/api/hrManager/getemployee/"+ empID).then(
+        const findDepartments = async () => {
+            await Axios.get("http://localhost:3001/api/hrManager/getDepartments").then(
                 (res) => {
-                    setEmployee(res.data.result[0]);
-                    setFirstName(res.data.result[0].first_name);
-                    setLastName(res.data.result[0].last_name);
-                    setOrginalFirstName(res.data.result[0].first_name);
-                    setOrginalLastName(res.data.result[0].last_name);
-                    setMiddleName(res.data.result[0].middle_name);
-                    setEmail(res.data.result[0].email);
-                    setDeptID(res.data.result[0].dept_id);
-                    setTypeID(res.data.result[0].type_id);
-                    setAddress(res.data.result[0].address);
-                    setNic(res.data.result[0].nic);
-                    setBday(res.data.result[0].bday.substring(0,10));
-                    setIsMarried(res.data.result[0].is_married);
-                    setContactNum(res.data.result[0].contact_num);
-                    setEmergencyNum(res.data.result[0].emergency_contact);
-                    setPaygradeID(res.data.result[0].paygrade_id);
-                    setEmpStatusId(res.data.result[0].emp_status_id);
-                    setProfilePicture("../../../assets/profile_picture/" + res.data.result[0].profile_picture);
+                    setDepartments(res.data.result);
                 }
             );
         };
-        findEmployee();
-
-
-        const findDepartments = async () => {
-                    await Axios.get("http://localhost:3001/api/hrManager/getDepartments").then(
-                        (res) => {
-                            setDepartments(res.data.result);
-                        }
-                    );
-                };
         findDepartments();
 
         const findTypes = async () => {
@@ -91,7 +62,7 @@ function EditProfile(props){
                 (res) => {
                     setStatus(res.data.result);
                 }
-                );
+            );
         };
         findStatus();
 
@@ -100,34 +71,50 @@ function EditProfile(props){
                 (res) => {
                     setPayGrades(res.data.result);
                 }
-                );
+            );
         };
         findPaygrades();
 
-        const findEmployeeDepartment = async () => {
-            await Axios.get("http://localhost:3001/api/hrManager/getemployeeDepartment/" + empID).then(
+        const findEmployeeIds = async () => {
+            await Axios.get("http://localhost:3001/api/hrManager/getEmployeeIds").then(
                 (res) => {
-                    setEmployeeDepartment(res.data.result[0]);
+                    setEmployeeIds(res.data.result);
                 }
             );
         };
-        findEmployeeDepartment();
+        findEmployeeIds();
 
-        const findEmployeeType = async () => {
-            await Axios.get("http://localhost:3001/api/hrManager/getemployeeType/" + empID).then(
-                (res) => {
-                    setEmployeeType(res.data.result[0]);
-                }
-            );
+        const GenerateEmpId = async () => {
+            const excludeList = []
+            for(let i = 0; i < employeeIds.length ; i++){
+                excludeList[i] = employeeIds[i].emp_id;
+
+            }
+            const key = generateKey({
+                size: 7,
+                chartype: 'numeric',
+                exclude: excludeList
+            });
+            setEmpID(key);
+
         };
-        findEmployeeType();
+        GenerateEmpId();
 
         setIsLoading(false);
     },[]);
 
-    //         employeeDepartment: this.props.departments.filter((dept)=>dept.dept_id === parseInt(this.props.employee.dept_id))[0],
-    //         employeeType: this.props.departments.filter((type)=>type.type_id === parseInt(this.props.employee.type_id))[0],
 
+    function validate(emp_id){
+
+        for(let i = 0; i < employeeIds.length ; i++){
+            if(emp_id === employeeIds[i].emp_id){
+                setIsValid(false);
+                setErrorMsg("Employee Id already exist!");
+                return;
+            }
+        }
+        setIsValid(true);
+    }
 
     function handleInputChange(event){
         const target = event.target;
@@ -162,16 +149,12 @@ function EditProfile(props){
             setEmpStatusId(value);
         }else if(name === "paygradeID"){
             setPaygradeID(value);
+        }else if(name === "empID"){
+            setEmpID(value);
+            validate(value);
         }
     }
 
-    async function delay(delayInms) {
-        return new Promise(resolve  => {
-            setTimeout(() => {
-                resolve(2);
-            }, delayInms);
-        });
-    }
 
 
     async function handleSubmit(event) {
@@ -194,7 +177,7 @@ function EditProfile(props){
             emp_id: empID
         };
         Axios.post(
-            "http://localhost:3001/api/hrManager/updateEmployee",
+            "http://localhost:3001/api/hrManager/addEmployee",
             formValues
         ).then((res) => {
             if (!res.data.success) {
@@ -211,16 +194,14 @@ function EditProfile(props){
         setImage(imageList[0]);
     };
 
-
-
-        return(
-            <div>
-                {isLoading ? (
-                    <Spinner animation="border" role="status" className={styles['spinner']}>
-                        <span className="visually-hidden">Loading...</span>
-                    </Spinner>
-                ):(
-                    <>
+    return(
+        <div>
+            {isLoading ? (
+                <Spinner animation="border" role="status" className={styles['spinner']}>
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            ):(
+                <>
                     <div className="container">
                         <div>
                             <Breadcrumb>
@@ -229,16 +210,11 @@ function EditProfile(props){
                                         Employee
                                     </Link>
                                 </BreadcrumbItem>
-                                <BreadcrumbItem>
-                                    <Link to={`/hrmanager/employee/view/${empID}`} className={Styles["breadcrumb-link"]}>
-                                        {orginalFirstName + " " + orginalLastName}
-                                    </Link>
-                                </BreadcrumbItem>
                                 <BreadcrumbItem active>
-                                    Edit
+                                    Add New Employee
                                 </BreadcrumbItem>
                             </Breadcrumb>
-                            <h1 className="text-primary">Edit Profile</h1>
+                            <h1 className="text-primary">New Employee</h1>
                             <hr/>
 
                             <div className="row gutters">
@@ -250,8 +226,7 @@ function EditProfile(props){
                                                     <div className={Styles["user-avatar"]}>
                                                         {/*{"../../../public"+this.state.employee.profile_picture}*/}
                                                         <img className={Styles["profile-dp"]} src={profilePicture}
-                                                             alt={orginalFirstName + " " + orginalLastName}/>
-
+                                                             alt={"Add Profile Picture"}/>
                                                     </div>
 
                                                     <div>
@@ -268,11 +243,11 @@ function EditProfile(props){
                                                                 // write your building UI
                                                                 <div className="upload__image-wrapper">
                                                                     <button className="btn btn-primary"
-                                                                        style={isDragging ? { color: 'red' } : undefined}
-                                                                        onClick={onImageUpload}
-                                                                        {...dragProps}
+                                                                            style={isDragging ? { color: 'red' } : undefined}
+                                                                            onClick={onImageUpload}
+                                                                            {...dragProps}
                                                                     >
-                                                                        Change Image
+                                                                        Add Image
                                                                     </button>
                                                                     &nbsp;
                                                                     {imageList.map((image, index) => (
@@ -288,13 +263,6 @@ function EditProfile(props){
                                                             )}
                                                         </ReactImageUploading>
                                                     </div>
-
-                                                    <h5 className="user-name">{orginalFirstName + " " + orginalLastName}</h5>
-                                                    <h6 className="user-email">{email}</h6>
-                                                </div>
-                                                <div className={Styles["about"]}>
-                                                    <h5>About</h5>
-                                                    <p>{employeeType.type_name} - {employeeDepartment.name}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -305,6 +273,8 @@ function EditProfile(props){
                                         <CardBody>
                                             <Form onSubmit={handleSubmit}>
                                                 <div className="row gutters">
+                                                    <div>
+                                                    </div>
                                                     <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                                         <h6 className="mb-2 text-primary">Personal Details</h6>
                                                     </div>
@@ -448,6 +418,7 @@ function EditProfile(props){
                                                                 required={true}
                                                                 value={isMarried}
                                                                 onChange={handleInputChange}>
+                                                                <option value="" hidden={true}>Select Marital Status</option>
                                                                 <option value={0} >Single</option>
                                                                 <option value={1} >Married</option>
                                                             </select>
@@ -472,9 +443,13 @@ function EditProfile(props){
                                                                    name="empID"
                                                                    required={true}
                                                                    value={empID}
+                                                                   pattern="[0-9]{7}"
                                                                    placeholder="Enter Employee ID"
-                                                                   readOnly={true}
                                                                    onChange={handleInputChange}/>
+                                                            <div className={Styles["warning"]} hidden={isValid}>
+                                                                <span className="fa fa-warning"></span>
+                                                                <span className={Styles['warning-msg']}>{errorMsg}</span>
+                                                            </div>
                                                         </FormGroup>
                                                     </div>
 
@@ -489,6 +464,7 @@ function EditProfile(props){
                                                                 required={true}
                                                                 value={deptID}
                                                                 onChange={handleInputChange}>
+                                                                <option value="" hidden={true}>Select Department</option>
                                                                 {departments.map(({ dept_id, name }, index) => <option value={dept_id} >{name}</option>)}
                                                             </select>
                                                         </FormGroup>
@@ -505,6 +481,7 @@ function EditProfile(props){
                                                                 required={true}
                                                                 value={typeID}
                                                                 onChange={handleInputChange}>
+                                                                <option value="" hidden={true}>Select Designation</option>
                                                                 {types.map(({ type_id, type_name }, index) => <option value={type_id} >{type_name}</option>)}
                                                             </select>
                                                         </FormGroup>
@@ -521,6 +498,7 @@ function EditProfile(props){
                                                                 required={true}
                                                                 value={empStatusId}
                                                                 onChange={handleInputChange}>
+                                                                <option value="" hidden={true}>Select Employee Status</option>
                                                                 {status.map(({ emp_status_id, name }, index) => <option value={emp_status_id} >{name}</option>)}
                                                             </select>
                                                         </FormGroup>
@@ -537,6 +515,7 @@ function EditProfile(props){
                                                                 required={true}
                                                                 value={paygradeID}
                                                                 onChange={handleInputChange}>
+                                                                <option value="" hidden={true}>Select Pay-Grade</option>
                                                                 {payGrades.map(({ paygrade_id, name }, index) => <option value={paygrade_id} >{name}</option>)}
                                                             </select>
                                                         </FormGroup>
@@ -547,13 +526,13 @@ function EditProfile(props){
                                                 <div className="row gutters">
                                                     <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                                         <div className="text-right">
-                                                            <Link to={"/hrmanager/employee/view/" + empID} >
+                                                            <Link to={"/hrmanager/employee"} >
                                                                 <button type="button" id="cancel" name="cancel"
                                                                         className="btn btn-secondary">Cancel
                                                                 </button>
                                                             </Link>
                                                             <button type="submit" id="submit" name="submit"
-                                                                    className="btn btn-primary">Update
+                                                                    className="btn btn-primary" disabled={!isValid}>Add
                                                             </button>
                                                         </div>
                                                     </div>
@@ -568,11 +547,11 @@ function EditProfile(props){
 
                         </div>
                     </div>
-                    </>
-                    )}
-            </div>
+                </>
+            )}
+        </div>
 
-        );
+    );
 }
 
-export default EditProfile;
+export default AddNewComponent;

@@ -8,6 +8,8 @@ router.get("/getLeaveTypes",employeeController.getLeaveTypes);
 router.get("/getLeaveRequests/:empId",employeeController.getLeaveRequests); 
 router.get("/existingLeaveCount/:empId",employeeController.existingLeaveCount);
 router.get("/leaveChart/:empId",employeeController.loadLeaveChart);
+router.get("/getEmployeeByDeptId/:deptId",employeeController.getEmployeeByDeptId);
+router.get("/getEmployeeByEmpIdDeptId/:empId:deptId",employeeController.getEmployeeByEmpIdDeptId);
 
 router.post("/addLeaveRequest",employeeController.addLeaveRequest);
 module.exports = router;

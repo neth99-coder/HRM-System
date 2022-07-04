@@ -1,6 +1,7 @@
 import React,{Component} from "react";
 import {Button,Form,FormGroup,Label,Input,Col,FormFeedback} from "reactstrap";
 import Option from "../../../Components/UI/Dropdown/Option";
+import {Link} from "react-router-dom";
 
 class Search extends Component{
 
@@ -31,7 +32,7 @@ class Search extends Component{
 
             const departmentList = this.props.departments.map((department) =>{
                 return(
-                    <option key={department.id}>{department.name}</option>
+                    <option key={department.dept_id} value={department.dept_id}>{department.name}</option>
                 );
             });
 
@@ -74,6 +75,14 @@ class Search extends Component{
                                 </div>
                             </div>
                         </Form>
+                    </div>
+
+                    <div>
+                        <Link to={"/hrmanager/employee/add-new"} >
+                            <button type="button" id="addNew" name="addNew"
+                                    className="btn btn-primary">Add New Employee
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

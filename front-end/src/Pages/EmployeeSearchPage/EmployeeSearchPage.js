@@ -1,41 +1,61 @@
 import React,{Component} from "react";
-import Header from "../../Components/Header/Header";
-import NavBar from "../../Components/Header/NavBarComponent/NavBarComponent";
 import Search from "./SearchComponent/SearchComponent";
 import Result from "./ResultComponent/ResultComponent";
+import {useState} from "react";
+import {useEffect} from "react";
+import Axios from "axios";
 
-class EmployeeSearch extends Component{
+function EmployeeSearch(props){
 
-    constructor(props) {
-        super(props);
+    const [isLoading, setIsLoading] = useState(false);
+    const [getEmpId,setEmpId] = useState('');
+    const [getDepartment,setDepartment] = useState('');
+    const [getDepartments,setDepartments] = useState([]);
+    const [getEmployees,setEmployees] = useState([]);
 
-        this.state = {
-            employeeid: '',
-            department: ''
-        }
-        this.SearchChange = this.SearchChange.bind(this);
-    }
+    useEffect(()=>{
+        setIsLoading(true);
 
-    SearchChange(target){
+        const findDepartments = async () => {
+            await Axios.get("http://localhost:3001/api/hrManager/getDepartments").then(
+                (res) => {
+                    setDepartments(res.data.result);
+                }
+            );
+        };
+        findDepartments();
+
+        const findEmployees = async () => {
+            await Axios.get("http://localhost:3001/api/hrManager/getemployees").then(
+                (res)=>{
+                    setEmployees(res.data.result);
+                }
+            );
+        };
+        findEmployees();
+
+    },[]);
+
+    const SearchChange = (target) =>{
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
 
-        this.setState({
-            [name]: value
-        });
+        if(name == 'employeeid'){
+            setEmpId(value);
+        }else{
+            setDepartment(value)
+        }
 
     }
 
 
-    render() {
 
-        return(
-            <div className="mt-1">
-                <Search departments={this.props.departments} department={this.state.department} employeeid={this.state.employeeid} searchChange={this.SearchChange}/>
-                <Result employees={this.props.employees} employeeid={this.state.employeeid} departments={this.props.departments} department={this.state.department}/>
-            </div>
-        )
-    }
+    return(
+        <div className="mt-1">
+            <Search departments={getDepartments} department={getDepartment} employeeid={getEmpId} searchChange={SearchChange}/>
+            <Result employees={getEmployees} employeeid={getEmpId} departments={getDepartments} department={getDepartment}/>
+        </div>
+    );
 }
 
 export default EmployeeSearch;

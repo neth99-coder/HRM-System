@@ -1,8 +1,9 @@
-import React from "react";
-import Header from "../../Components/Header/Header";
+import React, {useEffect, useState} from "react";
 import EditProfile from "./EditProfileComponent/EditProfileComponent";
-import NavBar from "../../Components/Header/NavBarComponent/NavBarComponent";
 import {useParams} from "react-router-dom";
+import Axios from "axios";
+import styles from "../RequestPage/RequestPage.module.css";
+import {Spinner} from "react-bootstrap";
 
 function EmployeeEdit(props){
 
@@ -10,9 +11,11 @@ function EmployeeEdit(props){
 
     return(
         <div>
-            <EditProfile id={emp_id} departments={props.departments} type={props.type} status={props.status} paygrades={props.paygrades}/>
+                <>
+                    <EditProfile empID= {emp_id}/>
+                </>
         </div>
-    )
-}
+    );
+};
 
 export default EmployeeEdit;

@@ -1,12 +1,18 @@
-//should add .env file before starting
+should add .env file before starting
 
-// content of .env --->
+content of .env --->
 
-//                         HOST=localhost
-//                         DATABASE=hrm_db
-//                         db_username=root
-//                         db_password=
+                        HOST=localhost
+                        DATABASE=hrm_db
+                        db_username=root
+                        db_password=
 
-
-
-
+supun:
+    upload profile picture ..
+    add extra attributes
+    sign up page
+nethmi:
+    medical record upload/download ..
+    leave count dif. years
+    whos away
+    jwt

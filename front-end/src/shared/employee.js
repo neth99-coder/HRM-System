@@ -1,7 +1,7 @@
 export const EMPLOYEE =
     [
         {
-            emp_id: "AD-0001",
+            emp_id: "190253K",
             first_name: "Nethmi",
             middle_name: "Kavindya",
             last_name: "Jayakodi",
@@ -37,7 +37,7 @@ export const EMPLOYEE =
             profile_picture: "assets/profile_picture/AD-0002.jpg"
         },
         {
-            emp_id: "IT-0001",
+            emp_id: "190046K",
             first_name: "Kumuthu",
             middle_name: "bla bla bla",
             last_name: "Athukorala",

@@ -100,7 +100,7 @@ function getLeaveTypesCount(){
       if (err) {
         return reject(err);
       } else {
- 
+
         return resolve(arrayOrganizer.todayLeaveArray(result));
       }
     });
