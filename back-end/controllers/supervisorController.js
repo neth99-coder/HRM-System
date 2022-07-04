@@ -119,4 +119,12 @@ const getLeaveTypesCount = async (req, res) => {
     });
 };
 
-module.exports = { getRequests, approveRequest, rejectRequest, getAbsentToday, getAbsentTomorrow, getWorkingToday, getLeaveTypesCount };
+module.exports = {
+  getRequests,
+  approveRequest,
+  rejectRequest,
+  getAbsentToday,
+  getAbsentTomorrow,
+  getWorkingToday,
+  getLeaveTypesCount,
+};
