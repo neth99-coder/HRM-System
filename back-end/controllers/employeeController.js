@@ -97,6 +97,24 @@ const existingLeaveCount = async (req, res) => {
       });
     });
 };
+
+const loadLeaveChart = async (req, res) => {
+  await employeeModal
+    .loadLeaveChart(req.params.empId)
+    .then((result) => {
+      res.json({
+        success: true,
+        result,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        success: false,
+        err,
+      });
+    });
+};
+
 module.exports = {
   getEmployee,
   getEmployees,
@@ -104,4 +122,5 @@ module.exports = {
   getLeaveRequests,
   addLeaveRequest,
   existingLeaveCount,
+  loadLeaveChart,
 };

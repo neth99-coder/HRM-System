@@ -1,5 +1,6 @@
 const { json } = require("express");
 const db = require("../config/db");
+const arrayOrganizer = require("../helpers/arrayOrganizer");
 
 //function to get all details of all employees who are absent today
 function getAbsentToday(){
@@ -32,12 +33,13 @@ function getAbsentToday(){
   //function to get present employee count today
   function getWorkingToday(){
     return new Promise((resolve, reject) => {
-      var sql = "SELECT department.name, COUNT(attendance.emp_id) as emp_count FROM (employee INNER JOIN department ON employee.dept_id = department.dept_id),attendance WHERE employee.emp_id = attendance.emp_id AND attendance.date = CURDATE() GROUP BY department.name" ;
+      var sql = "SELECT department.name, COUNT(attendance.emp_id) as emp_count FROM (employee INNER JOIN department ON employee.dept_id = department.dept_id),attendance WHERE employee.emp_id = attendance.emp_id AND attendance.date = CURDATE() AND is_present = 1 GROUP BY department.name" ;
       db.query(sql, (err, result) => {
         if (err) {
           return reject(err);
         } else {
-          return resolve(result);
+          //console.log(arrayOrganizer.todayWorkingArray(result));
+          return resolve(arrayOrganizer.todayWorkingArray(result));
         }
       });
     });  
