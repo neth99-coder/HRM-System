@@ -1,5 +1,6 @@
 const { json } = require("express");
 const db = require("../config/db");
+const arrayOrganizer = require("../helpers/arrayOrganizer");
 
 //function to get all pending leave requests for a supervisor
 function getRequests(empId) {
@@ -99,7 +100,8 @@ function getLeaveTypesCount(){
       if (err) {
         return reject(err);
       } else {
-        return resolve(result);
+
+        return resolve(arrayOrganizer.todayLeaveArray(result));
       }
     });
   });  

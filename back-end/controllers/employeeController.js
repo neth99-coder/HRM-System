@@ -164,15 +164,69 @@ const updateEmployee = async (req, res) => {
     })
 }
 
+const loadLeaveChart = async (req, res) => {
+  await employeeModal
+    .loadLeaveChart(req.params.empId)
+    .then((result) => {
+      res.json({
+        success: true,
+        result,
+      })
+    })
+    .catch((err) => {
+      res.json({
+        success: false,
+        err,
+      })
+    })
+}
+
+const getEmployeeByDeptId = async (req, res) => {
+  await employeeModal
+    .getEmployeeByDeptId(req.params.deptId)
+    .then((result) => {
+      res.json({
+        success: true,
+        result,
+      })
+    })
+    .catch((err) => {
+      res.json({
+        success: false,
+        err,
+      })
+    })
+}
+
+const getEmployeeByEmpIdDeptId = async (req, res) => {
+  await employeeModal
+    .getEmployeeByEmpIdDeptId(req.params.empId, req.params.deptId)
+    .then((result) => {
+      res.json({
+        success: true,
+        result,
+      })
+    })
+    .catch((err) => {
+      res.json({
+        success: false,
+        err,
+      })
+    })
+}
+
 module.exports = {
   addEmployee,
-  getEmployee,
-  getEmployees,
   deleteEmployee,
   updateEmployee,
   getEmployeewithUserType,
+  getEmployee,
+  getEmployees,
   getLeaveTypes,
   getLeaveRequests,
   addLeaveRequest,
+  getEmployeeByDeptId,
   existingLeaveCount,
+  loadLeaveChart,
+  getEmployeeByEmpIdDeptId,
 }
