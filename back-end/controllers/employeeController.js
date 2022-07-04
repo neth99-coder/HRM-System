@@ -1,4 +1,4 @@
-const employeeModal = require("../models/employeeModal");
+const employeeModal = require('../models/employeeModal')
 
 const getEmployee = async (req, res) => {
   await employeeModal
@@ -7,15 +7,15 @@ const getEmployee = async (req, res) => {
       res.json({
         success: true,
         result,
-      });
+      })
     })
     .catch((err) => {
       res.json({
         success: false,
         err,
-      });
-    });
-};
+      })
+    })
+}
 
 const getEmployees = async (req, res) => {
   await employeeModal
@@ -24,15 +24,15 @@ const getEmployees = async (req, res) => {
       res.json({
         success: true,
         result,
-      });
+      })
     })
     .catch((err) => {
       res.json({
         success: false,
         err,
-      });
-    });
-};
+      })
+    })
+}
 const getLeaveTypes = async (req, res) => {
   await employeeModal
     .getLeaveTypes()
@@ -40,15 +40,15 @@ const getLeaveTypes = async (req, res) => {
       res.json({
         success: true,
         result,
-      });
+      })
     })
     .catch((err) => {
       res.json({
         success: false,
         err,
-      });
-    });
-};
+      })
+    })
+}
 
 const getLeaveRequests = async (req, res) => {
   await employeeModal
@@ -57,90 +57,122 @@ const getLeaveRequests = async (req, res) => {
       res.json({
         success: true,
         result,
-      });
+      })
     })
     .catch((err) => {
       res.json({
         success: false,
         err,
-      });
-    });
-};
+      })
+    })
+}
 
 const addLeaveRequest = async (req, res) => {
   await employeeModal
     .addLeaveRequest(req.body)
     .then((result) => {
-      res.json({ success: true, result });
+      res.json({ success: true, result })
     })
     .catch((err) => {
       res.json({
         success: false,
         err,
-      });
-    });
-};
+      })
+    })
+}
 
-
-  const getEmployeeNameandType = async (req,res) =>{
-    await employeeModal
-    .getEmployeeNameandType()
+const getEmployeewithUserType = async (req, res) => {
+  await employeeModal
+    .getEmployeewithUserType()
     .then((result) => {
-      res.json({ success: true, result });
+      res.json({ success: true, result })
     })
     .catch((err) => {
       res.json({
         success: false,
         err,
-      });
-    });
-};
+      })
+    })
+}
 
 const existingLeaveCount = async (req, res) => {
   await employeeModal
     .existingLeaveCount(req.params.empId)
     .then((result) => {
-      res.json({ success: true, result });
+      res.json({ success: true, result })
     })
     .catch((err) => {
       res.json({
         success: false,
         err,
-      });
-    });
-};
+      })
+    })
+}
 
-  const addEmployee = async (req,res) =>{
-    const file = req.files.file;
-    file.mv(`${__dirname}/../public/images/${file.name}`,err =>{
-      if(err){
-        console.error(err);
-      }
-    });
+const addEmployee = async (req, res) => {
+  const file = req.files.file
+  file.mv(`${__dirname}/../public/images/${file.name}`, (err) => {
+    if (err) {
+      console.error(err)
+    }
+  })
 
-    await employeeModal
-    .addEmployee({...req.body,emp_img:req.files.file.name})
-    .then((result)=>{
+  await employeeModal
+    .addEmployee({ ...req.body, emp_img: req.files.file.name })
+    .then((result) => {
       res.json({
         success: true,
         result,
-      });
+      })
     })
-    .catch((err)=>{
+    .catch((err) => {
+      console.log(err)
       res.json({
         success: false,
         err,
-      });
-    });
-  };
+      })
+    })
+}
+
+const deleteEmployee = async (req, res) => {
+  await employeeModal
+    .deleteEmployee(req.body)
+    .then((result) => {
+      res.json({ success: true, result })
+    })
+    .catch((err) => {
+      console.log(err)
+      res.json({
+        success: false,
+        err,
+      })
+    })
+}
+
+const updateEmployee = async (req, res) => {
+  await employeeModal
+    .updateEmployee(req.body)
+    .then((result) => {
+      res.json({ success: true, result })
+    })
+    .catch((err) => {
+      console.log(err)
+      res.json({
+        success: false,
+        err,
+      })
+    })
+}
 
 module.exports = {
   addEmployee,
   getEmployee,
   getEmployees,
-  getEmployeeNameandType,
+  deleteEmployee,
+  updateEmployee,
+  getEmployeewithUserType,
   getLeaveTypes,
   getLeaveRequests,
   addLeaveRequest,
   existingLeaveCount,
-};
+}

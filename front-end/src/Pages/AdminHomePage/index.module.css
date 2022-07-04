@@ -1,3 +1,11 @@
+body {
+    margin: 0;
+    padding-top: 0;
+    color: #2e323c;
+    background: #f5f6fa;
+    position: relative;
+    height: 100%;
+}
 .admin-container{
     margin: 100px;
 }
@@ -11,12 +19,11 @@
 
 .hrmanager-heading h1 ,.employee-heading h1{
     font-size: 1.5em;
-    color:rgb(140, 130, 129);
 }
 
 .hrmanager-heading , .employee-heading{
     padding-bottom: 5px;
-    border-bottom:rgb(176, 171, 171) solid 1px;
+    border-bottom:rgb(137, 153, 243) solid 1px;
 }
 
 .hrmanager-profile{
@@ -110,6 +117,7 @@
     cursor: text;
     text-transform: capitalize;
     transition: transform 0.2s ease-in-out;
+    transform: translateY(-19px);
 }
 
 .input-text:focus~label,
@@ -118,7 +126,15 @@
 }
 
 .employee-info{
-    margin-top: 108px;
+    margin-top: 158px;
+    padding: 10px;
+    background-color: white;
+}
+
+.basic-info{
+    padding: 10px;
+    background-color: white;
+    margin-right: 10px;
 }
 
 .profile{
