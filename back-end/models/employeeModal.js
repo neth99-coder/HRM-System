@@ -92,7 +92,7 @@ function addLeaveRequest(data) {
 function existingLeaveCount(empId) {
   return new Promise((resolve, reject) => {
     const sql =
-      "SELECT employee.paygrade_id, leave_id, leave_begin,leave_end, FLOOR(DATEDIFF(leave_end, leave_begin)/7)*5 + Mod(5 + Weekday(leave_end) - Weekday(leave_begin), 5) + 1 AS difference FROM leave_request NATURAL JOIN employee WHERE emp_id = ? AND state_id = 1";
+      "SELECT employee.paygrade_id, leave_id, leave_begin,leave_end, FLOOR(DATEDIFF(leave_end, leave_begin)/7)*5 + Mod(5 + Weekday(leave_end) - Weekday(leave_begin), 5) + 1 AS difference FROM leave_request NATURAL JOIN employee WHERE emp_id = ? AND state_id = 1 AND YEAR(CURDATE()) = YEAR(leave_begin)";
     db.query(sql, [empId],(err, result1) => {
       if (result1) {
        // console.log("inserted");
@@ -100,6 +100,7 @@ function existingLeaveCount(empId) {
           "SELECT num_of_leaves, leave_id FROM `paygrade_leave` WHERE paygrade_id = ?";
         db.query(sql, [result1[0]["paygrade_id"]], (err, result) => {
           if (result) {
+            //return resolve(result1)
             return resolve(leaveCounter.getLeaveCounts(result1,result));
           }
         });
@@ -110,6 +111,29 @@ function existingLeaveCount(empId) {
     });
   });
 }
+
+function loadLeaveChart(empId){
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT employee.paygrade_id, leave_id, leave_begin,leave_end, FLOOR(DATEDIFF(leave_end, leave_begin)/7)*5 + Mod(5 + Weekday(leave_end) - Weekday(leave_begin), 5) + 1 AS difference FROM leave_request NATURAL JOIN employee WHERE emp_id = ? AND state_id = 1 AND YEAR(CURDATE()) = YEAR(leave_begin)";
+    db.query(sql, [empId],(err, result1) => {
+      if (result1) {
+       // console.log("inserted");
+        const sql =
+          "SELECT num_of_leaves, leave_id FROM `paygrade_leave` WHERE paygrade_id = ?";
+        db.query(sql, [result1[0]["paygrade_id"]], (err, result) => {
+          if (result) {
+            return resolve(leaveCounter.getLeavesForChart(result1,result));
+          }
+        });
+      } else {
+        // console.log(err);
+        return reject(err);
+      }
+    });
+  });  
+}
+
 
 // function existingLeaveCount(empId) {
 //   return new Promise((resolve, reject) => {
@@ -164,4 +188,5 @@ module.exports = {
   getLeaveRequests,
   addLeaveRequest,
   existingLeaveCount,
+  loadLeaveChart,
 };
