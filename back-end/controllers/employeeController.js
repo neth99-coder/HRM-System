@@ -118,7 +118,7 @@ const addEmployee = async (req, res) => {
   })
 
   await employeeModal
-    .addEmployee({ ...req.body, emp_img: req.files.file.name })
+    .addEmployee({ ...req.body, profile_picture: req.files.file.name })
     .then((result) => {
       res.json({
         success: true,

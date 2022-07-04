@@ -51,7 +51,7 @@ function addEmployee(data) {
   return new Promise((resolve, reject) => {
     var sql =
       `INSERT INTO employee (emp_id , first_name ,middle_name, last_name,address,nic,bday,is_married,` +
-      `contact_num,emergency_contact,email,dept_id,paygrade_id,emp_status_id,type_id,emp_img) ` +
+      `contact_num,emergency_contact,email,dept_id,paygrade_id,emp_status_id,type_id,profile_picture) ` +
       `VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
     db.query(
       sql,
@@ -71,7 +71,7 @@ function addEmployee(data) {
         data.paygrade_id,
         data.emp_status_id,
         data.type_id,
-        data.emp_img,
+        data.profile_picture,
       ],
       (err, result) => {
         if (err) {
@@ -86,7 +86,7 @@ function addEmployee(data) {
 
 //deletes an employee
 function deleteEmployee(data) {
-  fs.unlinkSync(`${__dirname}/../public/images/${data.emp_img}`)
+  fs.unlinkSync(`${__dirname}/../public/images/${data.profile_picture}`)
   return new Promise((resolve, reject) => {
     var sql = 'DELETE FROM EMPLOYEE WHERE emp_id = ?'
     db.query(sql, [data.emp_id], (err, result) => {

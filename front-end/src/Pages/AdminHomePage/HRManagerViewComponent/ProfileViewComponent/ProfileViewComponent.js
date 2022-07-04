@@ -36,7 +36,7 @@ function ProfileView(props){
     const navigate = useNavigate(); 
 
     const deleteHRM = ()=>{
-        const data={emp_id:hrmanager.emp_id,emp_img:hrmanager.emp_img}
+        const data={emp_id:hrmanager.emp_id,profile_picture:hrmanager.profile_picture}
         Axios.post(`http://localhost:3001/api/employee/hr-manager-delete`,data).then(
       (res) => {
        if(res.data.success){
@@ -75,7 +75,7 @@ function ProfileView(props){
                         <Card>
                             <CardBody>
                                 <div className="d-flex flex-column align-items-center text-center">
-                                    <img src={`http://localhost:3001/images/${hrmanager.emp_img}`} alt={hrmanager.first_name + " " + hrmanager.last_name} className={profileStyleClass} width="150"/>
+                                    <img src={`http://localhost:3001/images/${hrmanager.profile_picture}`} alt={hrmanager.first_name + " " + hrmanager.last_name} className={profileStyleClass} width="150"/>
                                     <div className="mt-3">
                                         <h4>{hrmanager.first_name + " " + hrmanager.middle_name + " " + hrmanager.last_name}</h4>
                                         <p className="text-secondary mb-1">{hrmanager.type_name}</p>

@@ -30,7 +30,7 @@ function EditProfile(props) {
     paygrade_id: props.employee.paygrade_id,
     emp_status_id: props.employee.emp_status_id,
     dept_id: props.employee.dept_id,
-    emp_img: props.employee.emp_img,
+    profile_picture: props.employee.profile_picture,
     type_id: props.employee.type_id,
     emp_id: props.employee.emp_id
   })
@@ -75,7 +75,7 @@ function EditProfile(props) {
                       {/*{"../../../public"+this.state.employee.profile_picture}*/}
                       <img
                         className={Styles['profile-dp']}
-                        src={`http://localhost:3001/images/${employee.emp_img}`}
+                        src={`http://localhost:3001/images/${employee.profile_picture}`}
                         alt={employee.first_name + ' ' + employee.last_name}
                       />
                     </div>

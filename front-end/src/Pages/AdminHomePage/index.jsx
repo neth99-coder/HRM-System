@@ -116,7 +116,7 @@ const Index = (props) => {
               <Profile
                 name={hrmanager.first_name + ' ' + hrmanager.last_name}
                 jobRole={hrmanager.type_name}
-                img={hrmanager.emp_img}
+                img={hrmanager.profile_picture}
               />
             </Link>
           </div>
@@ -155,7 +155,7 @@ const Index = (props) => {
                       <Profile
                         name={employee.first_name + ' ' + employee.last_name}
                         jobRole={employee.type_name}
-                        img={employee.emp_img}
+                        img={employee.profile_picture}
                       />
                     </Link>
                   </div>
