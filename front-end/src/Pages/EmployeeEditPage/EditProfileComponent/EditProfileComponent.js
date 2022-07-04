@@ -43,7 +43,7 @@ function EditProfile(props){
         setIsLoading(true);
 
         const findEmployee = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getemployee/"+ empID).then(
+            await Axios.get("http://localhost:3001/api/hrManager/getemployee/"+ empID).then(
                 (res) => {
                     setEmployee(res.data.result[0]);
                     setFirstName(res.data.result[0].first_name);
@@ -70,7 +70,7 @@ function EditProfile(props){
 
 
         const findDepartments = async () => {
-                    await Axios.get("http://localhost:3001/api/hrmanager/getDepartments").then(
+                    await Axios.get("http://localhost:3001/api/hrManager/getDepartments").then(
                         (res) => {
                             setDepartments(res.data.result);
                         }
@@ -79,7 +79,7 @@ function EditProfile(props){
         findDepartments();
 
         const findTypes = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getTypes").then(
+            await Axios.get("http://localhost:3001/api/hrManager/getTypes").then(
                 (res) => {
                     setTypes(res.data.result);
                 });
@@ -87,7 +87,7 @@ function EditProfile(props){
         findTypes();
 
         const findStatus = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getStatus").then(
+            await Axios.get("http://localhost:3001/api/hrManager/getStatus").then(
                 (res) => {
                     setStatus(res.data.result);
                 }
@@ -96,7 +96,7 @@ function EditProfile(props){
         findStatus();
 
         const findPaygrades = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getPaygrades").then(
+            await Axios.get("http://localhost:3001/api/hrManager/getPaygrades").then(
                 (res) => {
                     setPayGrades(res.data.result);
                 }
@@ -105,7 +105,7 @@ function EditProfile(props){
         findPaygrades();
 
         const findEmployeeDepartment = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getemployeeDepartment/" + empID).then(
+            await Axios.get("http://localhost:3001/api/hrManager/getemployeeDepartment/" + empID).then(
                 (res) => {
                     setEmployeeDepartment(res.data.result[0]);
                 }
@@ -114,7 +114,7 @@ function EditProfile(props){
         findEmployeeDepartment();
 
         const findEmployeeType = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getemployeeType/" + empID).then(
+            await Axios.get("http://localhost:3001/api/hrManager/getemployeeType/" + empID).then(
                 (res) => {
                     setEmployeeType(res.data.result[0]);
                 }
@@ -194,7 +194,7 @@ function EditProfile(props){
             emp_id: empID
         };
         Axios.post(
-            "http://localhost:3001/api/hrmanager/updateEmployee",
+            "http://localhost:3001/api/hrManager/updateEmployee",
             formValues
         ).then((res) => {
             if (!res.data.success) {

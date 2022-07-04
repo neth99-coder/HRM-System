@@ -78,8 +78,42 @@ const getEmployee = async (req,res) =>{
         success: false,
         err,
       });
-    });  
+    });
   }
+
+const existingLeaveCount = async (req, res) => {
+  await employeeModal
+    .existingLeaveCount(req.params.empId)
+    .then((result) => {
+      res.json({
+        success: true,
+        result,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        success: false,
+        err,
+      });
+    });
+};
+
+const loadLeaveChart = async (req, res) => {
+  await employeeModal
+    .loadLeaveChart(req.params.empId)
+    .then((result) => {
+      res.json({
+        success: true,
+        result,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        success: false,
+        err,
+      });
+    });
+};
 
   const getEmployeeByDeptId = async (req,res) =>{
     await employeeModal
@@ -122,5 +156,8 @@ const getEmployee = async (req,res) =>{
       getLeaveRequests,
       addLeaveRequest,
       getEmployeeByDeptId,
+      existingLeaveCount,
+      loadLeaveChart,
       getEmployeeByEmpIdDeptId
-  }
+  };
+

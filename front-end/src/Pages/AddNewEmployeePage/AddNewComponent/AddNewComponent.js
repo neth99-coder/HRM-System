@@ -41,7 +41,7 @@ function AddNewComponent(props){
         setIsLoading(true);
 
         const findDepartments = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getDepartments").then(
+            await Axios.get("http://localhost:3001/api/hrManager/getDepartments").then(
                 (res) => {
                     setDepartments(res.data.result);
                 }
@@ -50,7 +50,7 @@ function AddNewComponent(props){
         findDepartments();
 
         const findTypes = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getTypes").then(
+            await Axios.get("http://localhost:3001/api/hrManager/getTypes").then(
                 (res) => {
                     setTypes(res.data.result);
                 });
@@ -58,7 +58,7 @@ function AddNewComponent(props){
         findTypes();
 
         const findStatus = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getStatus").then(
+            await Axios.get("http://localhost:3001/api/hrManager/getStatus").then(
                 (res) => {
                     setStatus(res.data.result);
                 }
@@ -67,7 +67,7 @@ function AddNewComponent(props){
         findStatus();
 
         const findPaygrades = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getPaygrades").then(
+            await Axios.get("http://localhost:3001/api/hrManager/getPaygrades").then(
                 (res) => {
                     setPayGrades(res.data.result);
                 }
@@ -76,7 +76,7 @@ function AddNewComponent(props){
         findPaygrades();
 
         const findEmployeeIds = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getEmployeeIds").then(
+            await Axios.get("http://localhost:3001/api/hrManager/getEmployeeIds").then(
                 (res) => {
                     setEmployeeIds(res.data.result);
                 }
@@ -177,7 +177,7 @@ function AddNewComponent(props){
             emp_id: empID
         };
         Axios.post(
-            "http://localhost:3001/api/hrmanager/addEmployee",
+            "http://localhost:3001/api/hrManager/addEmployee",
             formValues
         ).then((res) => {
             if (!res.data.success) {

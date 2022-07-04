@@ -17,7 +17,7 @@ function EmployeeSearch(props){
         setIsLoading(true);
 
         const findDepartments = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getDepartments").then(
+            await Axios.get("http://localhost:3001/api/hrManager/getDepartments").then(
                 (res) => {
                     setDepartments(res.data.result);
                 }
@@ -26,7 +26,7 @@ function EmployeeSearch(props){
         findDepartments();
 
         const findEmployees = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getemployees").then(
+            await Axios.get("http://localhost:3001/api/hrManager/getemployees").then(
                 (res)=>{
                     setEmployees(res.data.result);
                 }
