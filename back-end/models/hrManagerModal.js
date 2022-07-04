@@ -1,6 +1,7 @@
 const {json} = require("express");
 const db = require("../config/db");
 const arrayOrganizer = require("../helpers/arrayOrganizer");
+const {reject} = require("bcrypt/promises");
 
 //function to get all details of all departments
 function getDepartments() {
@@ -159,15 +160,14 @@ function getEmployeeType(empId){
 //function to update employee record
 function updateEmployee(data){
     return new Promise((resolve,reject)=>{
-        const sql = "UPDATE employee SET address = ? , bday = ?, contact_num = ?, dept_id = ?, email = ?, emergency_contact = ?, emp_status_id = ?, first_name = ?, is_married = ?, last_name = ?, middle_name = ?, nic = ?, paygrade_id = ?, type_id = ? WHERE emp_id = ?";
+        const sql = "UPDATE employee SET address = ? , bday = ?, contact_num = ?, dept_id = ?, email = ?, emergency_contact = ?, emp_status_id = ?, first_name = ?, is_married = ?, last_name = ?, middle_name = ?, nic = ?, paygrade_id = ?, type_id = ?, profile_picture = ? WHERE emp_id = ?";
         db.query(
             sql,
-            [data.address, data.bday, data.contact_num,data.dept_id,data.email,data.emergency_contact,data.emp_status_id, data.first_name, data.is_married, data.last_name, data.middle_name, data.nic, data.paygrade_id, data.type_id, data.emp_id],
+            [data.address, data.bday, data.contact_num,data.dept_id,data.email,data.emergency_contact,data.emp_status_id, data.first_name, data.is_married, data.last_name, data.middle_name, data.nic, data.paygrade_id, data.type_id, data.profile_picture, data.emp_id],
             (err,result) => {
                 if(result){
                     return resolve(result);
                 }else{
-                    console.log("f2efes");
                     return reject(err);
 
                 }
@@ -179,10 +179,10 @@ function updateEmployee(data){
 //function to add employee record
 function addEmployee(data){
     return new Promise((resolve,reject)=>{
-        const sql = "INSERT INTO employee (address , bday , contact_num, dept_id, email, emergency_contact, emp_status_id, first_name, is_married, last_name, middle_name, nic, paygrade_id, type_id,emp_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        const sql = "INSERT INTO employee (address , bday , contact_num, dept_id, email, emergency_contact, emp_status_id, first_name, is_married, last_name, middle_name, nic, paygrade_id, type_id,profile_picture, emp_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         db.query(
             sql,
-            [data.address, data.bday, data.contact_num,data.dept_id,data.email,data.emergency_contact,data.emp_status_id, data.first_name, data.is_married, data.last_name, data.middle_name, data.nic, data.paygrade_id, data.type_id, data.emp_id],
+            [data.address, data.bday, data.contact_num,data.dept_id,data.email,data.emergency_contact,data.emp_status_id, data.first_name, data.is_married, data.last_name, data.middle_name, data.nic, data.paygrade_id, data.type_id, data.profile_picture, data.emp_id],
             (err,result) => {
                 if(result){
                     return resolve(result);
@@ -273,6 +273,18 @@ function getLeaveTypesCount(){
     });
 }
 
+function dpUpload(file,fileName){
+    const newPath = __dirname + "/../public/profilePictures/"
+
+    file.mv(`${newPath}${fileName}`, (err) => {
+        if (err) {
+            return reject(err);
+        }else{
+        }
+
+    });
+}
+
 module.exports = {
     getDepartments,
     getTypes,
@@ -292,6 +304,7 @@ module.exports = {
 
     updateEmployee,
     addEmployee,
-    deleteEmployee
+    deleteEmployee,
+    dpUpload
 
 }

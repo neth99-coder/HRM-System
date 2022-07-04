@@ -215,6 +215,23 @@ const addEmployee = async (req,res)=>{
         });
 }
 
+const dpUpload = async (req,res)=>{
+    try{
+        console.log(req.body.fileName);
+        await hrManagerModal
+            .dpUpload(req.files.file,req.body.fileName);
+        res.json({ success: true });
+    }catch (err){
+        console.log(err);
+        res.json({
+            success: false,
+            err,
+        });
+    }
+
+
+}
+
 const deleteEmployee = async (req,res)=>{
     await hrManagerModal
         .deleteEmployee(req.body)
@@ -316,6 +333,7 @@ module.exports = {
 
     updateEmployee,
     addEmployee,
-    deleteEmployee
+    deleteEmployee,
+    dpUpload
 
 }

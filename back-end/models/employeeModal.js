@@ -1,6 +1,8 @@
 const {json} = require("express");
 const db = require("../config/db");
 const leaveCounter = require("../helpers/leaveCounter");
+const waterfall = require("waterfall");
+
 
 //function to get all details of an employee for a given employee ID
 function getEmployee(empId){
@@ -165,11 +167,11 @@ function loadLeaveChart(empId){
 //   return new Promise((resolve, reject) => {
 //     waterfall([(callback) =>{
 //       const sql =
-//       "SELECT employee.paygrade_id,leave_begin, leave_end, FLOOR(DATEDIFF(leave_end, leave_begin)/7)*5 + Mod(5 + Weekday(leave_end) - Weekday(leave_begin), 5) + 1 AS difference FROM leave_request NATURAL JOIN employee WHERE emp_id = ? AND state_id = 1";
-//     db.query(sql, [empId],(err, result) => {
+//           "SELECT employee.paygrade_id, leave_id, leave_begin,leave_end, FLOOR(DATEDIFF(leave_end, leave_begin)/7)*5 + Mod(5 + Weekday(leave_end) - Weekday(leave_begin), 5) + 1 AS difference FROM leave_request NATURAL JOIN employee WHERE emp_id = ? AND state_id = 1 AND YEAR(CURDATE()) = YEAR(leave_begin)";
+//          db.query(sql, [empId],(err, result) => {
 //       if (result) {
 //         var paygrade_id = result[0]['paygrade_id'];
-       
+//
 //         callback(null,paygrade_id);
 //       }else{
 //         //return reject(err);
@@ -186,21 +188,21 @@ function loadLeaveChart(empId){
 //          //console.log(result)
 //          callback(null,result)
 //         }else{
-//           callback(null,err)  
+//           callback(null,err)
 //         }
 //       })
 //       }else{
 //         callback(null,"Error paygrade !!")
 //       }
-
+//
 //   }, (result,err)=>{
 //     if(result){
 //       // console.log(err)
-//       return resolve(result)   
+//       return resolve(result)
 //     }else{
 //       return reject(err);
 //     }
-//   } 
+//   }
 //     ])
 // })}
 

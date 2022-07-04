@@ -6,9 +6,13 @@ const employeeRoutes = require("./routes/employeeRoutes");
 const supervisorRoutes = require("./routes/supervisorRoutes");
 const hrmanagerRoutes = require("./routes/hrManagerRoutes");
 const authRoutes = require("./routes/authRoutes");
+const fileupload = require("express-fileupload");
+
 
 app.use(express.json());
 app.use(cors());
+app.use(fileupload());
+app.use(express.static("public"));
 require('dotenv').config();
 
 app.use("/api/employee",employeeRoutes);

@@ -7,11 +7,11 @@ import styles from "../../RequestPage/RequestPage.module.css";
 import {useEffect} from "react";
 import Axios from "axios";
 import ReactImageUploading from "react-images-uploading";
+import defaultPic from "../../../assets/profile_picture/default.jpg";
 
 function EditProfile(props){
 
     const [isLoading,setIsLoading] = useState(true);
-    const [isSaved,setIssaved] = useState(false);
     const [employee,setEmployee] = useState();
     const [firstName,setFirstName] = useState();
     const [middleName,setMiddleName] = useState();
@@ -37,8 +37,9 @@ function EditProfile(props){
     const [orginalLastName,setOrginalLastName] = useState();
     const [employeeDepartment,setEmployeeDepartment] = useState({dept_id:'',name:'',building:'',description:''});
     const [employeeType,setEmployeeType] = useState({type_id:'',type_name:''});
-    const [Image,setImage] = useState();
-
+    const [Image,setImage] = useState({});
+    const [imageName,setImageName] = useState();
+    const [isDpChanged,setIsDpChanged] = useState(false);
     useEffect(()=>{
         setIsLoading(true);
 
@@ -62,7 +63,14 @@ function EditProfile(props){
                     setEmergencyNum(res.data.result[0].emergency_contact);
                     setPaygradeID(res.data.result[0].paygrade_id);
                     setEmpStatusId(res.data.result[0].emp_status_id);
-                    setProfilePicture("../../../assets/profile_picture/" + res.data.result[0].profile_picture);
+                    setImageName(res.data.result[0].profile_picture);
+                    console.log(res.data.result[0].profile_picture);
+                    if(res.data.result[0].profile_picture !== undefined && res.data.result[0].profile_picture !== ""){
+                        setProfilePicture("http://localhost:3001/profilePictures/" + res.data.result[0].profile_picture);
+                    }else{
+                        setProfilePicture(defaultPic);
+                    }
+
                 }
             );
         };
@@ -125,9 +133,6 @@ function EditProfile(props){
         setIsLoading(false);
     },[]);
 
-    //         employeeDepartment: this.props.departments.filter((dept)=>dept.dept_id === parseInt(this.props.employee.dept_id))[0],
-    //         employeeType: this.props.departments.filter((type)=>type.type_id === parseInt(this.props.employee.type_id))[0],
-
 
     function handleInputChange(event){
         const target = event.target;
@@ -165,14 +170,6 @@ function EditProfile(props){
         }
     }
 
-    async function delay(delayInms) {
-        return new Promise(resolve  => {
-            setTimeout(() => {
-                resolve(2);
-            }, delayInms);
-        });
-    }
-
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -191,24 +188,40 @@ function EditProfile(props){
             nic: nic,
             paygrade_id: paygradeID,
             type_id: typeID,
-            emp_id: empID
+            emp_id: empID,
+            profile_picture: imageName
         };
         Axios.post(
             "http://localhost:3001/api/hrManager/updateEmployee",
             formValues
-        ).then((res) => {
+        ).then(async (res) => {
             if (!res.data.success) {
                 alert("Error occured !!");
-            } else {
+            } else if(isDpChanged) {
+                const formData = new FormData();
+                formData.append("file", Image);
+                formData.append("fileName", imageName);
+                await Axios.post("http://localhost:3001/api/hrManager/dpUpload",
+                    formData,{headers: {
+                    'Content-Type': 'multipart/form-data',
+                }}).then((res)=>{
+                    if (!res.data.success) {
+                        console.log(res);
+                    } else {
+                        window.open(`/hrmanager/employee/view/${empID}`);
+                    }
+                });
+            }else{
                 window.open(`/hrmanager/employee/view/${empID}`);
             }
         });
     }
 
     function onImgUpload(imageList,addUpdateIndex){
-        console.log(imageList);
         setProfilePicture(imageList[0].dataURL);
-        setImage(imageList[0]);
+        setImage(imageList[0].file);
+        setImageName(empID + imageList[0].file.name);
+        setIsDpChanged(true);
     };
 
 
@@ -287,6 +300,18 @@ function EditProfile(props){
                                                                 </div>
                                                             )}
                                                         </ReactImageUploading>
+                                                        {/*<form onSubmit={handleImageSubmit}>*/}
+                                                        {/*    <div>*/}
+                                                        {/*        <FormGroup>*/}
+                                                        {/*            <label>Add new profile picture</label>*/}
+                                                        {/*            <input type="file"*/}
+                                                        {/*            name="profilePicture"*/}
+                                                        {/*            id="profilePicture"*/}
+                                                        {/*            required={true}*/}
+                                                        {/*            onChange={handleImageChange}/>*/}
+                                                        {/*        </FormGroup>*/}
+                                                        {/*    </div>*/}
+                                                        {/*</form>*/}
                                                     </div>
 
                                                     <h5 className="user-name">{orginalFirstName + " " + orginalLastName}</h5>

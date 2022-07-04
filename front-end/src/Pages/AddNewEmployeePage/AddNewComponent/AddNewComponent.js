@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Breadcrumb, BreadcrumbItem,Card, CardBody, Form,FormGroup,Label,Col,Input,FormFeedback} from "reactstrap";
+import {Breadcrumb, BreadcrumbItem,Card, CardBody, Form,FormGroup} from "reactstrap";
 import {Link} from "react-router-dom";
 import Styles from "./AddNew.module.css";
 import {Spinner} from "react-bootstrap";
@@ -8,6 +8,8 @@ import {useEffect} from "react";
 import Axios from "axios";
 import {generateKey} from "fast-key-generator";
 import ReactImageUploading from "react-images-uploading";
+import defaultPic from "../../../assets/profile_picture/default.jpg";
+
 
 function AddNewComponent(props){
 
@@ -29,13 +31,15 @@ function AddNewComponent(props){
     const [empID,setEmpID] = useState(props.empID);
     const [departments,setDepartments] = useState([]);
     const [types,setTypes] = useState([]);
-    const [profilePicture,setProfilePicture] = useState();
+    const [profilePicture,setProfilePicture] = useState(defaultPic);
     const [status,setStatus] = useState([]);
     const [payGrades,setPayGrades] = useState([]);
     const [employeeIds,setEmployeeIds] = useState([]);
     const [isValid,setIsValid] = useState(true);
     const [errorMsg, setErrorMsg] = useState("");
     const [Image,setImage] = useState();
+    const [imageName,setImageName] = useState();
+    const [isDpChanged,setIsDpChanged] = useState(false);
 
     useEffect(()=>{
         setIsLoading(true);
@@ -174,14 +178,31 @@ function AddNewComponent(props){
             nic: nic,
             paygrade_id: paygradeID,
             type_id: typeID,
-            emp_id: empID
+            emp_id: empID,
+            profile_picture: imageName
         };
         Axios.post(
             "http://localhost:3001/api/hrManager/addEmployee",
             formValues
-        ).then((res) => {
+        ).then(async (res) => {
             if (!res.data.success) {
                 alert("Error occured !!");
+            } else if (isDpChanged) {
+                const formData = new FormData();
+                formData.append("file", Image);
+                formData.append("fileName", imageName);
+                await Axios.post("http://localhost:3001/api/hrManager/dpUpload",
+                    formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    }).then((res) => {
+                    if (!res.data.success) {
+                        console.log(res);
+                    } else {
+                        window.open(`/hrmanager/employee/view/${empID}`);
+                    }
+                });
             } else {
                 window.open(`/hrmanager/employee/view/${empID}`);
             }
@@ -189,9 +210,10 @@ function AddNewComponent(props){
     }
 
     function onImgUpload(imageList,addUpdateIndex){
-        console.log(imageList);
         setProfilePicture(imageList[0].dataURL);
-        setImage(imageList[0]);
+        setImage(imageList[0].file);
+        setImageName(empID + imageList[0].file.name);
+        setIsDpChanged(true);
     };
 
     return(

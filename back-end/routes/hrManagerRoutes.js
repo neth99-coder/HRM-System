@@ -21,6 +21,8 @@ router.get("/getLeaveTypesCount", hrManagerController.getLeaveTypesCount);
 router.post("/updateEmployee",hrManagerController.updateEmployee);
 router.post("/addEmployee",hrManagerController.addEmployee);
 router.post("/deleteEmployee",hrManagerController.deleteEmployee);
+router.post("/dpUpload",hrManagerController.dpUpload);
+
 
 
 module.exports = router;

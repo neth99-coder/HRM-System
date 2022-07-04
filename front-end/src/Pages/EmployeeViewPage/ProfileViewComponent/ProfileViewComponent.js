@@ -6,6 +6,7 @@ import {useState} from "react";
 import {useEffect} from "react";
 import Axios from "axios";
 import {Spinner} from "react-bootstrap";
+import defaultPic from "../../../assets/profile_picture/default.jpg";
 
 
 function Maritalstate(isMarried){
@@ -137,6 +138,14 @@ function ProfileView(props){
         setDelVisibility(true);
     }
 
+    function showProfilePicture(){
+        if(props.employee.profile_picture === undefined || props.employee.profile_picture === ""){
+            return(<img src={defaultPic} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>)
+        }else{
+            return(<img src={`http://localhost:3001/profilePictures/${props.employee.profile_picture}`} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>);
+        }
+    }
+
     return(
         <div>
             {isLoading ? (
@@ -202,7 +211,7 @@ function ProfileView(props){
                                 <Card>
                                     <CardBody>
                                         <div className="d-flex flex-column align-items-center text-center">
-                                            <img src={`../../../assets/profile_picture/${props.employee.profile_picture}`} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>
+                                            {showProfilePicture()}
                                             <div className="mt-3">
                                                 <h4>{props.employee.first_name + " " + props.employee.middle_name + " " + props.employee.last_name}</h4>
                                                 <p className="text-secondary mb-1">{findTypeById(props.employee.type_id)}</p>

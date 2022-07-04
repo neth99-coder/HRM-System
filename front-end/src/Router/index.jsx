@@ -1,9 +1,7 @@
 import React from "react";
 import {
   Routes,
-  Route,
-  BrowserRouter as Router,
-  Redirect, BrowserRouter,
+  Route, BrowserRouter,
 } from "react-router-dom";
 
 // Route imports
@@ -13,13 +11,6 @@ import RequestPage from "../Pages/RequestPage/RequestPage";
 import EmployeeSearch from "../Pages/EmployeeSearchPage/EmployeeSearchPage";
 import EmployeeEdit from "../Pages/EmployeeEditPage/EmpoloyeeEditPage";
 import EmployeeView from "../Pages/EmployeeViewPage/EmployeeViewPage";
-import {EMPLOYEE} from "../shared/employee";
-import {TYPE} from "../shared/employeeType";
-import {DEPARTMENT} from "../shared/department";
-import {EMPLOYEESTATUS} from "../shared/employeeStatus";
-import {PAYGRADE} from "../shared/paygrade";
-import Header from "../Components/Header/Header";
-import NavBar from "../Components/Header/NavBarComponent/NavBarComponent";
 import HeaderPage from "../Pages/HeaderPage";
 import ProfileView from "../Pages/ProfileViewPage/ProfileViewPage";
 import AddNewEmployeePage from "../Pages/AddNewEmployeePage/AddNewEmployeePage";
@@ -68,9 +59,9 @@ export default function AppRouter() {
           ): type === 3 ? (
               <Route exact path="hrmanager" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={3}/> } >
                 <Route path="requests" element={<RequestPage/>} />
-                <Route exact path="employee" element={<EmployeeSearch employees={EMPLOYEE} type={TYPE} companyDetails={companyDetails} profileDetails={profileDetails} departments={DEPARTMENT}/>}/>
+                <Route exact path="employee" element={<EmployeeSearch companyDetails={companyDetails} profileDetails={profileDetails}/>}/>
                 <Route path="employee/view/:emp_id" element={<EmployeeView companyDetails={companyDetails} profileDetails={profileDetails} />} />
-                <Route path="employee/edit/:emp_id" element={<EmployeeEdit companyDetails={companyDetails} profileDetails={profileDetails} departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE} />} />
+                <Route path="employee/edit/:emp_id" element={<EmployeeEdit companyDetails={companyDetails} profileDetails={profileDetails} />} />
                 <Route path="employee/add-new" element={<AddNewEmployeePage />} />
                 <Route path="my-profile" element={<ProfileView />} />
               </Route>
