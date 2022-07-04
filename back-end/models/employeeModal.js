@@ -1,5 +1,6 @@
 const {json} = require("express");
 const db = require("../config/db");
+const fs = require('fs')
 const leaveCounter = require("../helpers/leaveCounter");
 
 //function to get all details of an employee for a given employee ID
