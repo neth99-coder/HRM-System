@@ -1,13 +1,15 @@
 import { React, useState, useEffect } from 'react'
 import styles from './index.module.css'
 import Axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Profile from './ProfileComponent/profile.js'
 import { Modal } from 'react-bootstrap'
 
 const Index = (props) => {
   const [employees, setEmployees] = useState([])
   const [hrmanager, setHrmanager] = useState([])
+
+  const navigate = useNavigate();
 
   const [newEmployee, setNewEmployee] = useState({
     emp_id: '',
@@ -77,6 +79,8 @@ const Index = (props) => {
     }).then((res) => {
       if (res.data.success) {
         alert('successfully added')
+        handleCloseAdd()
+        navigate('/admin/home')
       } else {
         
       }
