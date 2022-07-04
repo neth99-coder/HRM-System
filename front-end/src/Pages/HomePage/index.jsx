@@ -179,7 +179,7 @@ function HomePage() {
                   <div key={profile.emp_id} className={styled["avatar"]}>
                     <img
                       className={styled["avatar-img"]}
-                      src={(profile.profile_picture !== '')?(`../../assets/profile_picture/${profile.profile_picture}`):(`../../assets/profile_picture/AD-0003.JPG`)}
+                      src={(profile.profile_picture !== '')?(`../../assets/profile_picture/${profile.profile_picture}`):(`../../assets/profile_picture/default.jpg`)}
                       alt={profile["emp_id"]}
                     />
                   </div>
