@@ -202,6 +202,20 @@ const updateEmployee = async (req,res)=>{
         });
 }
 
+const addEmployee = async (req,res)=>{
+    await hrmanagerModal
+        .addEmployee(req.body)
+        .then((result) => {
+            res.json({ success: true, result });
+        })
+        .catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
 const deleteEmployee = async (req,res)=>{
     await hrmanagerModal
         .deleteEmployee(req.body)
@@ -230,6 +244,7 @@ module.exports = {
     getEmployeeIds,
 
     updateEmployee,
+    addEmployee,
     deleteEmployee
 
 }

@@ -4,7 +4,7 @@ const db = require("../config/db");
 //function to get all details of an employee for a given employee ID
 function getEmployee(empId){
     return new Promise((resolve, reject) => {
-        var sql = "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id FROM employee WHERE emp_id = ? ";
+        var sql = "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture FROM employee WHERE emp_id = ? ";
         db.query(sql,[empId] ,(err, result) => {
           if (err) {
             return reject(err);

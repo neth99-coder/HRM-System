@@ -6,6 +6,7 @@ import {Spinner} from "react-bootstrap";
 import styles from "../../RequestPage/RequestPage.module.css";
 import {useEffect} from "react";
 import Axios from "axios";
+import ReactImageUploading from "react-images-uploading";
 
 function EditProfile(props){
 
@@ -36,6 +37,7 @@ function EditProfile(props){
     const [orginalLastName,setOrginalLastName] = useState();
     const [employeeDepartment,setEmployeeDepartment] = useState({dept_id:'',name:'',building:'',description:''});
     const [employeeType,setEmployeeType] = useState({type_id:'',type_name:''});
+    const [Image,setImage] = useState();
 
     useEffect(()=>{
         setIsLoading(true);
@@ -60,6 +62,7 @@ function EditProfile(props){
                     setEmergencyNum(res.data.result[0].emergency_contact);
                     setPaygradeID(res.data.result[0].paygrade_id);
                     setEmpStatusId(res.data.result[0].emp_status_id);
+                    setProfilePicture("../../../assets/profile_picture/" + res.data.result[0].profile_picture);
                 }
             );
         };
@@ -202,6 +205,12 @@ function EditProfile(props){
         });
     }
 
+    function onImgUpload(imageList,addUpdateIndex){
+        console.log(imageList);
+        setProfilePicture(imageList[0].dataURL);
+        setImage(imageList[0]);
+    };
+
 
 
         return(
@@ -240,9 +249,46 @@ function EditProfile(props){
                                                 <div className={Styles["user-profile"]}>
                                                     <div className={Styles["user-avatar"]}>
                                                         {/*{"../../../public"+this.state.employee.profile_picture}*/}
-                                                        <img className={Styles["profile-dp"]} src={`../../../${profilePicture}`}
+                                                        <img className={Styles["profile-dp"]} src={profilePicture}
                                                              alt={orginalFirstName + " " + orginalLastName}/>
+
                                                     </div>
+
+                                                    <div>
+                                                        <ReactImageUploading value={[]} onChange={onImgUpload} maxNumber={1} acceptType={['jpg','png']}>
+                                                            {({
+                                                                  imageList,
+                                                                  onImageUpload,
+                                                                  onImageRemoveAll,
+                                                                  onImageUpdate,
+                                                                  onImageRemove,
+                                                                  isDragging,
+                                                                  dragProps,
+                                                              }) => (
+                                                                // write your building UI
+                                                                <div className="upload__image-wrapper">
+                                                                    <button className="btn btn-primary"
+                                                                        style={isDragging ? { color: 'red' } : undefined}
+                                                                        onClick={onImageUpload}
+                                                                        {...dragProps}
+                                                                    >
+                                                                        Change Image
+                                                                    </button>
+                                                                    &nbsp;
+                                                                    {imageList.map((image, index) => (
+                                                                        <div key={index} className="image-item">
+                                                                            <img src={image['data_url']} alt="" width="100" />
+                                                                            <div className="image-item__btn-wrapper">
+                                                                                <button onClick={() => onImageUpdate(index)}>Update</button>
+                                                                                <button onClick={() => onImageRemove(index)}>Remove</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </ReactImageUploading>
+                                                    </div>
+
                                                     <h5 className="user-name">{orginalFirstName + " " + orginalLastName}</h5>
                                                     <h6 className="user-email">{email}</h6>
                                                 </div>
@@ -336,10 +382,11 @@ function EditProfile(props){
                                                     <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                                         <FormGroup>
                                                             <label htmlFor="contactNum">Contact Number</label>
-                                                            <input type="text"
+                                                            <input type="tel"
                                                                    className={Styles["form-control"]}
                                                                    id="contactNum"
                                                                    name="contactNum"
+                                                                   pattern="[0-9]{9,11}"
                                                                    required={true}
                                                                    value={contactNum}
                                                                    placeholder="Enter Contact Number"
@@ -350,10 +397,11 @@ function EditProfile(props){
                                                     <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                                         <FormGroup>
                                                             <label htmlFor="emergencyNum">Emergency Number</label>
-                                                            <input type="text"
+                                                            <input type="tel"
                                                                    className={Styles["form-control"]}
                                                                    id="emergencyNum"
                                                                    name="emergencyNum"
+                                                                   pattern="[0-9]{9,11}"
                                                                    required={true}
                                                                    value={emergencyNum}
                                                                    placeholder="Enter Emergency Number"

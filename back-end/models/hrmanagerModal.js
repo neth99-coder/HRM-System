@@ -88,7 +88,7 @@ function getEmployeeByDeptId(deptId){
 //function to get all details of an employee for a given employee ID
 function getEmployee(empId){
     return new Promise((resolve, reject) => {
-        var sql = "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id FROM employee WHERE emp_id = ? ";
+        var sql = "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture FROM employee WHERE emp_id = ? ";
         db.query(sql,[empId] ,(err, result) => {
             if (err) {
                 return reject(err);
@@ -175,6 +175,26 @@ function updateEmployee(data){
     })
 }
 
+//function to add employee record
+function addEmployee(data){
+    return new Promise((resolve,reject)=>{
+        const sql = "INSERT INTO employee (address , bday , contact_num, dept_id, email, emergency_contact, emp_status_id, first_name, is_married, last_name, middle_name, nic, paygrade_id, type_id,emp_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        db.query(
+            sql,
+            [data.address, data.bday, data.contact_num,data.dept_id,data.email,data.emergency_contact,data.emp_status_id, data.first_name, data.is_married, data.last_name, data.middle_name, data.nic, data.paygrade_id, data.type_id, data.emp_id],
+            (err,result) => {
+                if(result){
+                    return resolve(result);
+                }else{
+                    console.log("f2efes");
+                    return reject(err);
+
+                }
+            }
+        );
+    })
+}
+
 //function to delete employee record
 function deleteEmployee(data){
     return new Promise((resolve,reject)=>{
@@ -209,6 +229,7 @@ module.exports = {
     getEmployeeIds,
 
     updateEmployee,
+    addEmployee,
     deleteEmployee
 
 }

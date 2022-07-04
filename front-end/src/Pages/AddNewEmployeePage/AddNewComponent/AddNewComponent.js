@@ -7,6 +7,7 @@ import styles from "../../RequestPage/RequestPage.module.css";
 import {useEffect} from "react";
 import Axios from "axios";
 import {generateKey} from "fast-key-generator";
+import ReactImageUploading from "react-images-uploading";
 
 function AddNewComponent(props){
 
@@ -32,6 +33,9 @@ function AddNewComponent(props){
     const [status,setStatus] = useState([]);
     const [payGrades,setPayGrades] = useState([]);
     const [employeeIds,setEmployeeIds] = useState([]);
+    const [isValid,setIsValid] = useState(true);
+    const [errorMsg, setErrorMsg] = useState("");
+    const [Image,setImage] = useState();
 
     useEffect(()=>{
         setIsLoading(true);
@@ -99,9 +103,18 @@ function AddNewComponent(props){
         setIsLoading(false);
     },[]);
 
-    //         employeeDepartment: this.props.departments.filter((dept)=>dept.dept_id === parseInt(this.props.employee.dept_id))[0],
-    //         employeeType: this.props.departments.filter((type)=>type.type_id === parseInt(this.props.employee.type_id))[0],
 
+    function validate(emp_id){
+
+        for(let i = 0; i < employeeIds.length ; i++){
+            if(emp_id === employeeIds[i].emp_id){
+                setIsValid(false);
+                setErrorMsg("Employee Id already exist!");
+                return;
+            }
+        }
+        setIsValid(true);
+    }
 
     function handleInputChange(event){
         const target = event.target;
@@ -136,16 +149,12 @@ function AddNewComponent(props){
             setEmpStatusId(value);
         }else if(name === "paygradeID"){
             setPaygradeID(value);
+        }else if(name === "empID"){
+            setEmpID(value);
+            validate(value);
         }
     }
 
-    async function delay(delayInms) {
-        return new Promise(resolve  => {
-            setTimeout(() => {
-                resolve(2);
-            }, delayInms);
-        });
-    }
 
 
     async function handleSubmit(event) {
@@ -168,7 +177,7 @@ function AddNewComponent(props){
             emp_id: empID
         };
         Axios.post(
-            "http://localhost:3001/api/hrmanager/updateEmployee",
+            "http://localhost:3001/api/hrmanager/addEmployee",
             formValues
         ).then((res) => {
             if (!res.data.success) {
@@ -178,6 +187,12 @@ function AddNewComponent(props){
             }
         });
     }
+
+    function onImgUpload(imageList,addUpdateIndex){
+        console.log(imageList);
+        setProfilePicture(imageList[0].dataURL);
+        setImage(imageList[0]);
+    };
 
     return(
         <div>
@@ -210,8 +225,43 @@ function AddNewComponent(props){
                                                 <div className={Styles["user-profile"]}>
                                                     <div className={Styles["user-avatar"]}>
                                                         {/*{"../../../public"+this.state.employee.profile_picture}*/}
-                                                        <img className={Styles["profile-dp"]} src={`../../../${profilePicture}`}
+                                                        <img className={Styles["profile-dp"]} src={`../../../assets/profile_picture/${profilePicture}`}
                                                              alt={"Add Profile Picture"}/>
+                                                    </div>
+
+                                                    <div>
+                                                        <ReactImageUploading value={[]} onChange={onImgUpload} maxNumber={1} acceptType={['jpg','png']}>
+                                                            {({
+                                                                  imageList,
+                                                                  onImageUpload,
+                                                                  onImageRemoveAll,
+                                                                  onImageUpdate,
+                                                                  onImageRemove,
+                                                                  isDragging,
+                                                                  dragProps,
+                                                              }) => (
+                                                                // write your building UI
+                                                                <div className="upload__image-wrapper">
+                                                                    <button className="btn btn-primary"
+                                                                            style={isDragging ? { color: 'red' } : undefined}
+                                                                            onClick={onImageUpload}
+                                                                            {...dragProps}
+                                                                    >
+                                                                        Change Image
+                                                                    </button>
+                                                                    &nbsp;
+                                                                    {imageList.map((image, index) => (
+                                                                        <div key={index} className="image-item">
+                                                                            <img src={image['data_url']} alt="" width="100" />
+                                                                            <div className="image-item__btn-wrapper">
+                                                                                <button onClick={() => onImageUpdate(index)}>Update</button>
+                                                                                <button onClick={() => onImageRemove(index)}>Remove</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </ReactImageUploading>
                                                     </div>
                                                 </div>
                                             </div>
@@ -223,6 +273,8 @@ function AddNewComponent(props){
                                         <CardBody>
                                             <Form onSubmit={handleSubmit}>
                                                 <div className="row gutters">
+                                                    <div>
+                                                    </div>
                                                     <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                                         <h6 className="mb-2 text-primary">Personal Details</h6>
                                                     </div>
@@ -300,10 +352,11 @@ function AddNewComponent(props){
                                                     <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                                         <FormGroup>
                                                             <label htmlFor="contactNum">Contact Number</label>
-                                                            <input type="text"
+                                                            <input type="tel"
                                                                    className={Styles["form-control"]}
                                                                    id="contactNum"
                                                                    name="contactNum"
+                                                                   pattern="[0-9]{9,11}"
                                                                    required={true}
                                                                    value={contactNum}
                                                                    placeholder="Enter Contact Number"
@@ -314,10 +367,11 @@ function AddNewComponent(props){
                                                     <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                                         <FormGroup>
                                                             <label htmlFor="emergencyNum">Emergency Number</label>
-                                                            <input type="text"
+                                                            <input type="tel"
                                                                    className={Styles["form-control"]}
                                                                    id="emergencyNum"
                                                                    name="emergencyNum"
+                                                                   pattern="[0-9]{9,11}"
                                                                    required={true}
                                                                    value={emergencyNum}
                                                                    placeholder="Enter Emergency Number"
@@ -389,9 +443,13 @@ function AddNewComponent(props){
                                                                    name="empID"
                                                                    required={true}
                                                                    value={empID}
+                                                                   pattern="[0-9]{7}"
                                                                    placeholder="Enter Employee ID"
-                                                                   readOnly={true}
                                                                    onChange={handleInputChange}/>
+                                                            <div className={Styles["warning"]} hidden={isValid}>
+                                                                <span className="fa fa-warning"></span>
+                                                                <span className={Styles['warning-msg']}>{errorMsg}</span>
+                                                            </div>
                                                         </FormGroup>
                                                     </div>
 
@@ -474,7 +532,7 @@ function AddNewComponent(props){
                                                                 </button>
                                                             </Link>
                                                             <button type="submit" id="submit" name="submit"
-                                                                    className="btn btn-primary">Add
+                                                                    className="btn btn-primary" disabled={!isValid}>Add
                                                             </button>
                                                         </div>
                                                     </div>

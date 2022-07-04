@@ -101,3 +101,15 @@ span.input-group-addon {
     text-decoration: none;
 }
 
+.warning{
+    margin: 5px;
+    color: red;
+    padding-left: 10pt;
+    font-size: medium;
+    background-color: #afafb4;
+}
+
+.warning-msg{
+    margin-left: 5pt;
+    color: black;
+}

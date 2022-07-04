@@ -15,6 +15,7 @@ router.get("/getemployeeType/:empId",hrmanagerController.getEmployeeType);
 router.get("/getEmployeeIds",hrmanagerController.getEmployeeIds);
 
 router.post("/updateEmployee",hrmanagerController.updateEmployee);
+router.post("/addEmployee",hrmanagerController.addEmployee);
 router.post("/deleteEmployee",hrmanagerController.deleteEmployee);
 
 

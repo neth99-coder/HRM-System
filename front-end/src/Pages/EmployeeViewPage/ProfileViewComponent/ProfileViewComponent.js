@@ -203,7 +203,7 @@ function ProfileView(props){
                                 <Card>
                                     <CardBody>
                                         <div className="d-flex flex-column align-items-center text-center">
-                                            <img src={`../../../${props.employee.profile_picture}`} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>
+                                            <img src={`../../../assets/profile_picture/${props.employee.profile_picture}`} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>
                                             <div className="mt-3">
                                                 <h4>{props.employee.first_name + " " + props.employee.middle_name + " " + props.employee.last_name}</h4>
                                                 <p className="text-secondary mb-1">{findTypeById(props.employee.type_id)}</p>
