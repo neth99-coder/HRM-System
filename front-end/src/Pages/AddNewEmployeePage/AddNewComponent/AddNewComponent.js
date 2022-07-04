@@ -225,7 +225,7 @@ function AddNewComponent(props){
                                                 <div className={Styles["user-profile"]}>
                                                     <div className={Styles["user-avatar"]}>
                                                         {/*{"../../../public"+this.state.employee.profile_picture}*/}
-                                                        <img className={Styles["profile-dp"]} src={`../../../assets/profile_picture/${profilePicture}`}
+                                                        <img className={Styles["profile-dp"]} src={profilePicture}
                                                              alt={"Add Profile Picture"}/>
                                                     </div>
 
@@ -247,7 +247,7 @@ function AddNewComponent(props){
                                                                             onClick={onImageUpload}
                                                                             {...dragProps}
                                                                     >
-                                                                        Change Image
+                                                                        Add Image
                                                                     </button>
                                                                     &nbsp;
                                                                     {imageList.map((image, index) => (
