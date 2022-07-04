@@ -47,45 +47,44 @@ function signupUser(obj) {
     });
 }
 
-// function login(employee){
-//     const { empId, password} = employee;
-//     return new Promise((resolve, reject) => {
-//         var sql = "SELECT emp_id, password FROM login";
+function login(employee){
+    const { empId, password} = employee;
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT emp_id,password FROM login";
 
-//         db.query(sql,(err, result) => {
-//             isUserIn = result.find((element) => {
-//                 return element.emp_id === empId;
-//               });
-//               if (isUserIn === undefined) {
-//                 return reject("User Not found");
-//               } 
-//               if (isUserIn.emp_id) {
-//                 let qry = "SELECT password,type_id FROM employee NATURAL JOIN login WHERE emp_id = ?";
-//                 db.query(qry, [empId], (err, result) => {
-//                   //   bcrypt.hash(password, saltRounds, function (err, hash) {
-//                   bcrypt.compare(password, result[0].password, function (err, result) {
-//                     if (result) {
-//                       const token = JWT.sign(
-//                         { emp_id, type, ID: isUserIn.ID },
-//                         process.env.ACCESS_TOKEN_SECRET,
-//                         {
-//                           expiresIn: "2d",
-//                         }
-//                       );
-//                       // const user = JWT.verify(token, process.env.ACCESS_TOKEN_SECRET);
-//                       // console.log(user);
-//                       return resolve(token);
-//                     } else {
-//                       return reject(err);
-//                     }
-//                   });
-//                   //   });   
-//                 });
-//               }              
+        db.query(sql,(err, result) => {
+            isUserIn = result.find((element) => {
+                return element.emp_id === empId;
+              });
+              if (isUserIn === undefined) {
+                return reject("User Not found");
+              } 
+              if (isUserIn.emp_id) {
+                let sql = "SELECT password,type_id FROM employee NATURAL JOIN login WHERE emp_id = ?";
+                db.query(sql, [empId], (err, result) => {
+  
+                  bcrypt.compare(password, result[0].password, function (err, result) {
+                    if (result) {
+                      const token = JWT.sign(
+                        { empId, result[0].type_id },
+                        process.env.ACCESS_TOKEN_SECRET,
+                        {
+                          expiresIn: "2d",
+                        }
+                      );
+
+                      return resolve(token);
+                    } else {
+                      return reject(err);
+                    }
+                  });
+                  //   });   
+                });
+              }              
               
-//         });
-//     });
-// }
+        });
+    });
+}
 
 
 
