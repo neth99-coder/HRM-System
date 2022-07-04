@@ -27,65 +27,11 @@ function HomePage() {
   };
 
 
-
-  const work_home_data = [
-    ["Working Type", "Number"],
-    ["Home-Working", 52],
-    ["Physical-Working", 102],
-  ];
-
-  // Away people data
-  const today_absence = [
-    {
-      id: "123123K",
-      dp: "profile-pic-lona.jpg",
-      name: "Nethmi Jayakody",
-      post: "Admin",
-    },
-    {
-      id: "123443K",
-      dp: "profile-pic-cota.jpg",
-      name: "Nethmi Jayakody",
-      post: "Admin",
-    },
-    {
-      id: "111123K",
-      dp: "profile-pic-kj.png",
-      name: "Nethmi Jayakody",
-      post: "Admin",
-    },
-  ];
-
-  const tomorrow_absence = [
-    {
-      id: "435123K",
-      dp: "profile-pic-cota.jpg",
-      name: "Nethmi Jayakody",
-      post: "Admin",
-    },
-    {
-      id: "567123K",
-      dp: "profile-pic-lona.jpg",
-      name: "Nethmi Jayakody",
-      post: "Admin",
-    },
-    {
-      id: "789123K",
-      dp: "profile-pic-dedsec.jpg",
-      name: "Nethmi Jayakody",
-      post: "Admin",
-    },
-    {
-      id: "789133K",
-      dp: "profile-pic-kj.png",
-      name: "Nethmi Jayakody",
-      post: "Admin",
-    },
-  ];
-
   const [leaveData, setLeaveData] = useState([]);
   const [leavePieChart, setLeavePieChart] = useState([]);
   const [workingPieChart, setworkingPieChart] = useState([]);
+  const [absentToday, setAbsentToday] = useState([]);
+  const [absentTomorrow, setAbsentTomorrow] = useState([]);
 
   useEffect(() => {
     const loadLeaves = async () => {
@@ -117,6 +63,28 @@ function HomePage() {
       });
     };
     loadWorkingPieChart();
+
+    const loadAbsentToday = async () => {
+      await Axios.get(
+        "http://localhost:3001/api/hrManager/getAbsentToday"
+      ).then((res) => {
+       // console.log(res.data.result);
+        setAbsentToday(res.data.result)
+      });
+    };
+    loadAbsentToday();
+
+    const loadAbsentTomorrow = async () => {
+      await Axios.get(
+        "http://localhost:3001/api/hrManager/getAbsentTomorrow"
+      ).then((res) => {
+        console.log(res.data.result);
+        setAbsentTomorrow(res.data.result)
+      });
+    };
+    loadAbsentTomorrow();
+
+
   }, []);
 
   return (
@@ -185,12 +153,12 @@ function HomePage() {
               <b>Today</b>
             </h5>
             <div className={styled["avatar-container"]}>
-              {today_absence.map((profile) => (
-                <div key={profile.id} className={styled["avatar"]}>
+              {absentToday.map((profile) => (
+                <div key={profile.emp_id} className={styled["avatar"]}>
                   <img
                     className={styled["avatar-img"]}
-                    src={require("../../Images/ProfileAvatar/" + profile["dp"])}
-                    alt={profile["name"]}
+                    src={(profile.profile_picture)?(`../../assets/profile_picture/${profile.profile_picture}`):(`../../assets/profile_picture/default.jpg`)}
+                    alt={profile.emp_id}
                   />
                 </div>
               ))}
@@ -202,18 +170,17 @@ function HomePage() {
               <b>Tomorrow</b>
             </h5>
             <div className={styled["avatar-container"]}>
-              {tomorrow_absence.map((profile, index) => {
+              {absentTomorrow.map((profile, index) => {
                 if (index > 10) {
                   return <></>;
                 }
 
                 return (
-                  <div key={profile.id} className={styled["avatar"]}>
+                  <div key={profile.emp_id} className={styled["avatar"]}>
                     <img
                       className={styled["avatar-img"]}
-                      src={require("../../Images/ProfileAvatar/" +
-                        profile["dp"])}
-                      alt={profile["name"]}
+                      src={(profile.profile_picture !== '')?(`../../assets/profile_picture/${profile.profile_picture}`):(`../../assets/profile_picture/AD-0003.JPG`)}
+                      alt={profile["emp_id"]}
                     />
                   </div>
                 );
