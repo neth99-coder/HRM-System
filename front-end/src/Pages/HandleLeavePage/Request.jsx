@@ -2,9 +2,9 @@ import { React, useState } from "react";
 import styles from "./Request.module.css";
 import { Modal } from "react-bootstrap";
 import Axios from "axios";
+import authService from "../../services/auth.service";
 
 const Request = (props) => {
- 
   const [showA, setShowA] = useState(false);
   const handleCloseA = () => setShowA(false);
   const handleShowA = () => setShowA(true);
@@ -18,16 +18,16 @@ const Request = (props) => {
     const value = e.target.name;
     //console.log(e.target.name);
     const data = { leave_request_id: value };
-    await Axios.post("http://localhost:3001/api/supervisor/approve", data).then(
-      (res) => {
-        if (!res.data.success) {
-          alert("Error occured !!");
-        } else {
-          handleCloseA();
-          window.location.reload(false);
-        }
+    await Axios.post("http://localhost:3001/api/supervisor/approve", data, {
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then((res) => {
+      if (!res.data.success) {
+        alert("Error occured !!");
+      } else {
+        handleCloseA();
+        window.location.reload(false);
       }
-    );
+    });
   };
 
   const handleReject = async (e) => {
@@ -35,16 +35,16 @@ const Request = (props) => {
     const value = e.target.name;
     const data = { leave_request_id: value };
     //console.log(e.target.name);
-    await Axios.post("http://localhost:3001/api/supervisor/reject", data).then(
-      (res) => {
-        if (!res.data.success) {
-          alert("Error occured !!");
-        } else {
-          handleCloseA();
-          window.location.reload(false);
-        }
+    await Axios.post("http://localhost:3001/api/supervisor/reject", data, {
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then((res) => {
+      if (!res.data.success) {
+        alert("Error occured !!");
+      } else {
+        handleCloseA();
+        window.location.reload(false);
       }
-    );
+    });
   };
 
   return (
@@ -61,9 +61,9 @@ const Request = (props) => {
       <div className="col text-center">
         {props.cur.leave_begin + " - " + props.cur.leave_end}
       </div>
-
       <div className="col-3 text-center">{props.cur.reason}</div>
-       <div className="col-1 text-center">{props.cur.attachment}</div>        {/*  TODO: attchement downlaod */}
+      <div className="col-1 text-center">{props.cur.attachment}</div>{" "}
+      {/*  TODO: attchement downlaod */}
       <div className="col text-center">
         <div className="btn-group" role="group">
           <button
@@ -82,7 +82,6 @@ const Request = (props) => {
           </button>
         </div>
       </div>
-
       <Modal show={showA} onHide={handleCloseA} centered>
         <Modal.Header closeButton>
           <Modal.Title>Request Approval - {props.cur.first_name}</Modal.Title>
@@ -124,7 +123,6 @@ const Request = (props) => {
           </Modal.Footer>
         </form>
       </Modal>
-
       <Modal show={showR} onHide={handleCloseR} centered>
         <Modal.Header closeButton>
           <Modal.Title>Request Rejection - {props.cur.first_name}</Modal.Title>
