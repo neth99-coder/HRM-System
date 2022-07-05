@@ -10,6 +10,7 @@ import {
 import LoginPage from "../Pages/LoginPage";
 import HomePage from "../Pages/HomePage";
 import RequestPage from "../Pages/RequestPage/RequestPage";
+import AttendancePage from "../Pages/AttendancePage";
 
 export default function AppRouter() {
   return (
@@ -19,6 +20,7 @@ export default function AppRouter() {
           <Route path="/" element={<LoginPage/>} />
           <Route path="/home" element={<HomePage/>} />
           <Route path="/requests" element={<RequestPage/>} />
+          <Route path="/attendance" element={<AttendancePage/>}/>
         </Routes>
       </>
     </Router>
