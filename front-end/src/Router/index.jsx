@@ -62,7 +62,7 @@ console.log(type+"AAAA");
           {/*type4: Admin            admin/page_name*/}
           {/*todo: conditions should change*/}
 
-          {type == 1 ? (
+          {type === 1 ? (
             <Route >
                 <Route exact path="employee" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={1}/> } >
                 <Route path="" element={<EmployeeHomePage/>} />
@@ -72,7 +72,7 @@ console.log(type+"AAAA");
             </Route>
             <Route path="*" element={<Unauth/>} />
               </Route>
-          ) : type == 2 ? (
+          ) : type === 2 ? (
             <Route>
               <Route exact path="supervisor" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={2}/> } >
                 <Route path="" element={<EmployeeHomePage/>} />
@@ -84,7 +84,7 @@ console.log(type+"AAAA");
               <Route path="*" element={<Unauth/>} />
             </Route>
 
-          ): type == 3 ? (  
+          ): type === 3 ? (  
             <Route >
               <Route exact path="hrmanager" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={3}/> } >
                 <Route path="" element={<HrManagerHomePage/>} />
@@ -99,7 +99,7 @@ console.log(type+"AAAA");
               <Route path="*" element={<Unauth/>} />
             </Route>
 
-          ):type == 4 ?(
+          ):type === 4 ?(
             <Route>
               <Route exact path="employee" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={4}/> } >
                 {/* <Route path="home" element={<HomePage/>} /> */}
@@ -109,7 +109,7 @@ console.log(type+"AAAA");
               <Route path="*" element={<Unauth/>} />
             </Route>
 
-          ):type == null?(
+          ):type === null?(
             <Route path="*" element={<Unauth/>} />
           ):(
             <Route path="/" element={<LoginPage/>} />
