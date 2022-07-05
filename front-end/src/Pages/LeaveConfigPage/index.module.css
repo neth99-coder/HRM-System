@@ -1,0 +1,23 @@
+.main-header {
+  background-color: rgba(178, 204, 253, 0.705);
+}
+
+.form-title {
+  margin: 50px 0px;
+}
+
+.main-form {
+  padding: 20px 50px;
+}
+
+.form-validation {
+  display: flex;
+}
+
+.validation-label {
+  width: 10%;
+}
+
+.form-validation-container {
+  margin: 50px 0px;
+}
