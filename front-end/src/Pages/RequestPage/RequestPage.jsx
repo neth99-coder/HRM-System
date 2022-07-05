@@ -6,12 +6,13 @@ import Axios from "axios";
 import styles from "./RequestPage.module.css";
 import RequestCard from "./RequestCard";
 
+import authService from "../../services/auth.service";
 
 const RequestPage = () => {
   const [types, setTypes] = useState([{ leave_id: 0, type: "All" }]); //reason types          ----> this should not be reasons as now
   const [requests, setRequests] = useState([]); //requests array
   const [newRequest, setNewRequest] = useState({
-    emp_id: "190253K",
+    emp_id: authService.getUserID(),
     supervisor_id: "190110V",
     leave_id: "",
     state_id: 3,
@@ -39,20 +40,24 @@ const RequestPage = () => {
     setIsLoading(true);
 
     const getTypes = async () => {
-      await Axios.get("http://localhost:3001/api/employee/getLeaveTypes").then(
-        (res) => {
-          //console.log(res.data.result);
-          setTypes((prevVal) => {
-            return [prevVal[0], ...res.data.result];
-          });
-        }
-      );
+      await Axios.get("http://localhost:3001/api/employee/getLeaveTypes", {
+        headers: { "x-auth-token": authService.getUserToken() },
+      }).then((res) => {
+        //console.log(res.data.result);
+        setTypes((prevVal) => {
+          return [prevVal[0], ...res.data.result];
+        });
+      });
     };
     getTypes();
 
     const getRequests = async () => {
       await Axios.get(
-        "http://localhost:3001/api/employee/getLeaveRequests/190253K"
+        "http://localhost:3001/api/employee/getLeaveRequests/" +
+          authService.getUserID(),
+        {
+          headers: { "x-auth-token": authService.getUserToken() },
+        }
       ).then((res) => {
         //console.log(res.data.result);
         setArr1(res.data.result);
@@ -67,7 +72,11 @@ const RequestPage = () => {
 
     const getExistingLeaveCount = async () => {
       await Axios.get(
-        "http://localhost:3001/api/employee/existingLeaveCount/190253K"
+        "http://localhost:3001/api/employee/existingLeaveCount/" +
+          authService.getUserID(),
+        {
+          headers: { "x-auth-token": authService.getUserToken() },
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
       ).then((res) => {
         setRemainingLeaves(res.data.result);
@@ -125,13 +134,16 @@ const RequestPage = () => {
     ) {
       Axios.post(
         "http://localhost:3001/api/employee/addLeaveRequest",
-        newRequest
+        newRequest,
+        {
+          headers: { "x-auth-token": authService.getUserToken() },
+        }
       ).then((res) => {
         if (!res.data.success) {
           alert("Error occured !!");
         } else {
           setNewRequest({
-            emp_id: "190253K",
+            emp_id: authService.getUserID(),
             superviser_id: "190110V",
             leave_id: "",
             state_id: 3,
@@ -170,7 +182,7 @@ const RequestPage = () => {
         });
         setEndDanger(true);
       } else {
-        document.getElementById('invalid-end').value = '';
+        document.getElementById("invalid-end").value = "";
         setEndDanger(false);
         setNewRequest((prevVal) => {
           return { ...prevVal, leave_end: "" };
@@ -371,13 +383,13 @@ const RequestPage = () => {
                   </div>
                 </div>
 
-                <div className="form-group row" >
+                <div className="form-group row">
                   <label for="d-start" className="col-sm-3 col-form-label">
                     End Date
                   </label>
                   <div className="col-sm-8">
                     <Form.Control
-                    id="invalid-end"
+                      id="invalid-end"
                       type="date"
                       className="form-control"
                       name="d-end"
@@ -388,8 +400,11 @@ const RequestPage = () => {
                     />
                   </div>
                 </div>
-                
-                <div className={`${styles["danger"]} row justify-content-center `} hidden={endDanger}>
+
+                <div
+                  className={`${styles["danger"]} row justify-content-center `}
+                  hidden={endDanger}
+                >
                   You have selected days more than left!!
                 </div>
               </Modal.Body>

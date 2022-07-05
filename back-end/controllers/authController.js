@@ -17,8 +17,26 @@ const signupUser = async (req,res) =>{
         });
 };
 
+const loginUser = async (req,res) =>{
+    await authModal
+        .loginUser(req.body)
+        .then((result)=>{
+            res.json({
+                success: true,
+                result,
+            });
+        })
+        .catch((err)=>{
+            res.json({
+                success: false, 
+                err,
+            });
+        });  
+};
+
 
 
 module.exports = {
     signupUser,
+    loginUser
 }

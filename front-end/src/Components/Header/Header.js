@@ -12,6 +12,8 @@ import NavBar from "./NavBarComponent/NavBarComponent";
 import { FiLogOut, FiSettings, FiUser } from "react-icons/fi";
 import {Link} from "react-router-dom";
 
+import authService from "../../services/auth.service.js";
+
 function Header(props) {
   const [dropdown, setDropdown] = useState("");
 
@@ -43,7 +45,7 @@ function Header(props) {
           </div>
           <Option className={styles['option__first-child']} icon={<FiSettings />} name="Settings" />
             {profileLink()}
-          <Option icon={<FiLogOut />} name="Logout" />
+          <Option icon={<FiLogOut />} name="Logout" handleClick={handleLogout}/>
         </Dropdown>
       );
     } else {
@@ -51,6 +53,10 @@ function Header(props) {
     }
   };
 
+  function handleLogout(e){
+    authService.logout();
+    window.location.href = "/";
+  }
   return (
     <div>
       <header className={`${styles["header"]} ${props.className}`}>
