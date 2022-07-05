@@ -51,7 +51,7 @@ function loginUser(employee) {
   const empId = employee.empId;
   const password = employee.password;
   return new Promise((resolve, reject) => {
-    var sql = "SELECT emp_id,password FROM login";
+    var sql = "SELECT emp_id,password FROM login NATURAL JOIN employee";
 
     db.query(sql, (err, result) => {
       isUserIn = result.find((element) => {
@@ -62,14 +62,15 @@ function loginUser(employee) {
       }
       if (isUserIn.emp_id) {
 
-        let sql = "SELECT password,type_id FROM employee NATURAL JOIN login WHERE emp_id = ?";
+        let sql = "SELECT password,type_id,first_name,last_name FROM employee NATURAL JOIN login WHERE emp_id = ?";
         db.query(sql, [empId], (err, result) => {
 
           bcrypt.compare(password, result[0].password, function (err, result1) {
             if (result1) {
                 const empType = result[0].type_id;
+                const name = result[0].first_name + " " + result[0].last_name ;
           const token = JWT.sign(
-            { id:empId, type:empType },
+            { id:empId, type:empType, name: name },
             process.env.ACCESS_TOKEN_SECRET,
             {
               expiresIn: "2d",

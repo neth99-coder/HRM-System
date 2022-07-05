@@ -16,6 +16,39 @@ import authService from "../../services/auth.service.js";
 
 function Header(props) {
   const [dropdown, setDropdown] = useState("");
+  const empName  = authService.getUserName();
+  var empType = 'Default' ;
+    switch (authService.getUserType()){
+      
+      case 1:
+        
+        empType =  "Employee";
+        break;
+
+      case 2:
+        
+        empType =  "Supervisor";
+        break;
+
+      case 3:
+        
+        empType = "HR Manager";
+        break;
+
+      case 4:
+        empType = "Admin";
+        break;
+
+      default:
+        break;
+    }
+  
+
+  const profileDetails = {
+    dp: "profile-pic.JPG",
+    name: empName,
+    post: empType,
+  };
 
   const profileLink = () =>{
       if(props.type === 1){
@@ -40,8 +73,8 @@ function Header(props) {
       setDropdown(
         <Dropdown className={styles["dropdown"]}>
           <div className={styles["profile-details"]}>
-            <h2>{props.profileDetails.name}</h2>
-            <h3>{props.profileDetails.post}</h3>
+            <h2>{empName}</h2>
+            <h3>{empType}</h3>
           </div>
           <Option className={styles['option__first-child']} icon={<FiSettings />} name="Settings" />
             {profileLink()}
@@ -62,7 +95,7 @@ function Header(props) {
       <header className={`${styles["header"]} ${props.className}`}>
         <CompanyCard companyDetails={props.companyDetails} />
         <ProfileCard
-          profileDetails={props.profileDetails}
+          profileDetails={profileDetails}
           dropdownHandler={dropdownHandler}
         />
       </header>

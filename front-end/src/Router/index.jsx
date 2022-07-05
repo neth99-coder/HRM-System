@@ -8,8 +8,6 @@ import {
 
 // Route imports
 import LoginPage from "../Pages/LoginPage";
-import HomePage from "../Pages/HomePage";
-import AdminHomePage from "../Pages/AdminHomePage/index"
 import RequestPage from "../Pages/RequestPage/RequestPage";
 import EmployeeSearch from "../Pages/EmployeeSearchPage/EmployeeSearchPage";
 import EmployeeEdit from "../Pages/EmployeeEditPage/EmpoloyeeEditPage";
@@ -22,8 +20,6 @@ import {TYPE} from "../shared/employeeType";
 import {DEPARTMENT} from "../shared/department";
 import {EMPLOYEESTATUS} from "../shared/employeeStatus";
 import {PAYGRADE} from "../shared/paygrade";
-import Header from "../Components/Header/Header";
-import NavBar from "../Components/Header/NavBarComponent/NavBarComponent";
 import HeaderPage from "../Pages/HeaderPage";
 import ProfileView from "../Pages/ProfileViewPage/ProfileViewPage";
 import AddNewEmployeePage from "../Pages/AddNewEmployeePage/AddNewEmployeePage";
@@ -32,6 +28,11 @@ import EmployeeHomePage from "../Pages/EmployeeHomePage";
 import HrManagerHomePage from "../Pages/HrManagerHomePage"
 import Unauth from "../Pages/ErrorPages/Unauth";
 import NotFound from "../Pages/ErrorPages/NotFound";
+import AdminHomePage from "../Pages/AdminHomePage/index"
+import HRManagerView from "../Pages/AdminHomePage/HRManagerViewComponent/ProfileViewComponent/ProfileViewComponent";
+import HRManagerEdit from "../Pages/AdminHomePage/HRManagerEditComponent/EmpoloyeeEditPage";
+import EmployeeProfileView from "../Pages/AdminHomePage/EmployeeViewComponent/ProfileViewPage";
+
 
 import authService from "../services/auth.service"
 
@@ -53,7 +54,10 @@ export default function AppRouter() {
   let type = authService.getUserType(); //todo: this should change according to the user
 
 
-console.log(type+"AAAA");
+//console.log(type+"AAAA");
+
+
+
   return (
     <BrowserRouter>
       <>
@@ -67,7 +71,7 @@ console.log(type+"AAAA");
           {/*type4: Admin            admin/page_name*/}
           {/*todo: conditions should change*/}
 
-          {type == 1 ? (
+          {type === 1 ? (
             <Route >
                 <Route exact path="employee" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={1}/> } >
                 <Route path="" element={<EmployeeHomePage/>} />
@@ -77,7 +81,7 @@ console.log(type+"AAAA");
             </Route>
             <Route path="*" element={<Unauth/>} />
               </Route>
-          ) : type == 2 ? (
+          ) : type === 2 ? (
             <Route>
               <Route exact path="supervisor" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={2}/> } >
                 <Route path="" element={<EmployeeHomePage/>} />
@@ -89,7 +93,7 @@ console.log(type+"AAAA");
               <Route path="*" element={<Unauth/>} />
             </Route>
 
-          ): type == 3 ? (  
+          ): type === 3 ? (  
             <Route >
               <Route exact path="hrmanager" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={3}/> } >
                 <Route path="" element={<HrManagerHomePage/>} />
@@ -115,7 +119,7 @@ console.log(type+"AAAA");
               <Route path="*" element={<Unauth/>} />
             </Route>
 
-          ):type == null?(
+          ):type === null?(
             <Route path="*" element={<Unauth/>} />
           ):(
             <Route path="/" element={<LoginPage/>} />
