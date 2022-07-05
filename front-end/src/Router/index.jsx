@@ -9,10 +9,14 @@ import {
 // Route imports
 import LoginPage from "../Pages/LoginPage";
 import HomePage from "../Pages/HomePage";
+import AdminHomePage from "../Pages/AdminHomePage/index"
 import RequestPage from "../Pages/RequestPage/RequestPage";
 import EmployeeSearch from "../Pages/EmployeeSearchPage/EmployeeSearchPage";
 import EmployeeEdit from "../Pages/EmployeeEditPage/EmpoloyeeEditPage";
 import EmployeeView from "../Pages/EmployeeViewPage/EmployeeViewPage";
+import HRManagerView from "../Pages/AdminHomePage/HRManagerViewComponent/ProfileViewComponent/ProfileViewComponent";
+import HRManagerEdit from "../Pages/AdminHomePage/HRManagerEditComponent/EmpoloyeeEditPage";
+import EmployeeProfileView from "../Pages/AdminHomePage/EmployeeViewComponent/ProfileViewPage"
 import {EMPLOYEE} from "../shared/employee";
 import {TYPE} from "../shared/employeeType";
 import {DEPARTMENT} from "../shared/department";
@@ -47,6 +51,7 @@ export default function AppRouter() {
   };
 
   let type = authService.getUserType(); //todo: this should change according to the user
+
 
 console.log(type+"AAAA");
   return (
@@ -98,12 +103,13 @@ console.log(type+"AAAA");
               </Route>
               <Route path="*" element={<Unauth/>} />
             </Route>
-
-          ):type == 4 ?(
-            <Route>
-              <Route exact path="employee" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={4}/> } >
-                {/* <Route path="home" element={<HomePage/>} /> */}
-                <Route path="" element={<EmployeeHomePage/>} />
+          ):type === 4 ?(
+             <Route>
+              <Route exact path="admin" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={4}/> } >
+                <Route path="" element={<AdminHomePage departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE}/>} />
+                <Route path="emp-profile" element={<EmployeeProfileView />} />
+                <Route path="hr-profile" element={<HRManagerView />} />
+                <Route path="hr-profile/edit" element={<HRManagerEdit departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE}/>} />
                 <Route path="*" element={<NotFound/>} />
               </Route>
               <Route path="*" element={<Unauth/>} />
