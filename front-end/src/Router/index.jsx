@@ -8,7 +8,6 @@ import {
 
 // Route imports
 import LoginPage from "../Pages/LoginPage";
-import HomePage from "../Pages/HomePage";
 import RequestPage from "../Pages/RequestPage/RequestPage";
 import EmployeeSearch from "../Pages/EmployeeSearchPage/EmployeeSearchPage";
 import EmployeeEdit from "../Pages/EmployeeEditPage/EmpoloyeeEditPage";
@@ -18,8 +17,6 @@ import {TYPE} from "../shared/employeeType";
 import {DEPARTMENT} from "../shared/department";
 import {EMPLOYEESTATUS} from "../shared/employeeStatus";
 import {PAYGRADE} from "../shared/paygrade";
-import Header from "../Components/Header/Header";
-import NavBar from "../Components/Header/NavBarComponent/NavBarComponent";
 import HeaderPage from "../Pages/HeaderPage";
 import ProfileView from "../Pages/ProfileViewPage/ProfileViewPage";
 import AddNewEmployeePage from "../Pages/AddNewEmployeePage/AddNewEmployeePage";
@@ -28,9 +25,11 @@ import EmployeeHomePage from "../Pages/EmployeeHomePage";
 import HrManagerHomePage from "../Pages/HrManagerHomePage"
 import Unauth from "../Pages/ErrorPages/Unauth";
 import NotFound from "../Pages/ErrorPages/NotFound";
-import EmployeeProfileView from "../Pages/AdminHomePage/EmployeeViewComponent";
-import HRManagerView from "../Pages/AdminHomePage/HRManagerViewComponent";
-import HRManagerEdit from "../Pages/AdminHomePage/HRManagerEditComponent"
+import AdminHomePage from "../Pages/AdminHomePage/index"
+import HRManagerView from "../Pages/AdminHomePage/HRManagerViewComponent/ProfileViewComponent/ProfileViewComponent";
+import HRManagerEdit from "../Pages/AdminHomePage/HRManagerEditComponent/EmpoloyeeEditPage";
+import EmployeeProfileView from "../Pages/AdminHomePage/EmployeeViewComponent/ProfileViewPage";
+
 
 import authService from "../services/auth.service"
 
@@ -104,8 +103,8 @@ console.log(type+"AAAA");
 
           ):type === 4 ?(
             <Route>
-              <Route exact path="employee" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={4}/> } >
-                <Route path="" element={<EmployeeHomePage/>} />
+              <Route exact path="admin" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={4}/> } >
+                <Route path="" element={<AdminHomePage/>} />
                 <Route path="emp-profile" element={<EmployeeProfileView />} />
                 <Route path="hr-profile" element={<HRManagerView />} />
                 <Route path="hr-profile/edit" element={<HRManagerEdit departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE}/>} />
