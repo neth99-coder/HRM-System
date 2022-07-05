@@ -6,7 +6,7 @@
 
     background-color: transparent;
 
-    padding: 6px 2px;
+    padding: 4px 2px;
 }
 
 .dropdown{
@@ -52,6 +52,12 @@
     border-top-right-radius: 5px;
 }
 
+.option__sec-child{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: white;
+}
+
 @media (max-width: 767.98px){
     .header{
         padding: 3px 1px;
@@ -62,6 +68,10 @@
     }
 
     .option__first-child{
+        border-radius: 0px;
+    }
+
+    .option__sec-child{
         border-radius: 0px;
     }
 }
