@@ -50,7 +50,7 @@ export default function AppRouter() {
 
   let type = authService.getUserType(); //todo: this should change according to the user
 
-console.log(type+"AAAA");
+//console.log(type+"AAAA");
   return (
     <BrowserRouter>
       <>
