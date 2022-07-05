@@ -28,6 +28,9 @@ import EmployeeHomePage from "../Pages/EmployeeHomePage";
 import HrManagerHomePage from "../Pages/HrManagerHomePage"
 import Unauth from "../Pages/ErrorPages/Unauth";
 import NotFound from "../Pages/ErrorPages/NotFound";
+import EmployeeProfileView from "../Pages/AdminHomePage/EmployeeViewComponent";
+import HRManagerView from "../Pages/AdminHomePage/HRManagerViewComponent";
+import HRManagerEdit from "../Pages/AdminHomePage/HRManagerEditComponent"
 
 import authService from "../services/auth.service"
 
@@ -102,8 +105,10 @@ console.log(type+"AAAA");
           ):type === 4 ?(
             <Route>
               <Route exact path="employee" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={4}/> } >
-                {/* <Route path="home" element={<HomePage/>} /> */}
                 <Route path="" element={<EmployeeHomePage/>} />
+                <Route path="emp-profile" element={<EmployeeProfileView />} />
+                <Route path="hr-profile" element={<HRManagerView />} />
+                <Route path="hr-profile/edit" element={<HRManagerEdit departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE}/>} />
                 <Route path="*" element={<NotFound/>} />
               </Route>
               <Route path="*" element={<Unauth/>} />
