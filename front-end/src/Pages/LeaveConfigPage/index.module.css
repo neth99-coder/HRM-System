@@ -1,13 +1,26 @@
 .main-header {
-  background-color: rgba(178, 204, 253, 0.705);
+  background-color: rgba(124, 167, 247, 0.705);
 }
 
 .form-title {
   margin: 50px 0px;
 }
 
-.main-form {
+.main{
   padding: 20px 50px;
+  background-color: rgba(131, 190, 245, 0.404);
+}
+
+.main-form {
+  
+  padding: 20px 20px;
+
+  border-radius: 10px;
+  /* border: 1px solid rgba(0, 0, 0, 0.116); */
+
+  background-color: rgba(255, 255, 255, 0);
+
+  backdrop-filter: blur(5px);
 }
 
 .form-validation {
@@ -20,4 +33,12 @@
 
 .form-validation-container {
   margin: 50px 0px;
+}
+
+.paygrade-select-container{
+  margin: 10px 0px;
+}
+
+.paygrade-select{
+  background-color: blue;
 }

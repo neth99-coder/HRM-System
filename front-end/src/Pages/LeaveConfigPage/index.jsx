@@ -1,14 +1,31 @@
-import { Button, Navbar, Container, Nav, Form } from "react-bootstrap";
-import React from "react";
+import React, {useState} from "react";
 import Header from "../../Components/Header/Header";
+
+import { Button, Dropdown, Container, Nav, Form } from "react-bootstrap";
 
 import styled from "./index.module.css";
 
-function AdminLeaveConfig() {
+function LeaveConfigForm() {
+
+  const [paygrade, setPaygrade] = useState("Select Paygrade");
+
   return (
     <>
       <Form className={`${styled["main-form"]} ${styled["admin-form"]}`}>
-        <h3 className={styled["form-title"]}>Admin Leave Configeration</h3>
+        <h3 className={styled["form-title"]}>Leave Configeration</h3>
+
+        <Dropdown className={styled["paygrade-select-container"]}>
+          <Dropdown.Toggle className={styled["paygrade-select"]} variant="primary" id="dropdown-basic">
+            <span className={styled["paygrade-text"]}>{paygrade}</span>
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item onClick={()=>{setPaygrade("Paygrade 1")}}>Paygrade 1</Dropdown.Item>
+            <Dropdown.Item onClick={()=>{setPaygrade("Paygrade 2")}}>Paygrade 2</Dropdown.Item>
+            <Dropdown.Item onClick={()=>{setPaygrade("Paygrade 3")}}>Paygrade 3</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Casual Leaves</Form.Label>
           <Form.Control
@@ -87,19 +104,8 @@ function LeaveConfigPage() {
         companyDetails={companyDetails}
       />
 
-      <main>
-        <Navbar bg="primary" variant="dark">
-          <Container>
-            <Navbar.Brand href="#home">Leave Configeration</Navbar.Brand>
-            <Nav className="me-auto">
-              <Nav.Link href="/leave-config/admin-leave-config">Admin</Nav.Link>
-              <Nav.Link href="#hr-leave-config">HR Manager</Nav.Link>
-              <Nav.Link href="#sup-leave-config">Supervisor</Nav.Link>
-            </Nav>
-          </Container>
-        </Navbar>
-
-        <AdminLeaveConfig />
+      <main className={styled['main']}>
+        <LeaveConfigForm />
       </main>
     </>
   );
