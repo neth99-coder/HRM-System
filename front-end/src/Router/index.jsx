@@ -42,7 +42,7 @@ export default function AppRouter() {
     post: "Admin",
   };
 
-  let type = 3; //todo: this should change according to the user
+  let type = 4; //todo: this should change according to the user
 
   return (
     <BrowserRouter>
