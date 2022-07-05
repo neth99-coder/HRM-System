@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useState, useEffect } from 'react'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,10 +6,6 @@ import {
   CardBody,
   Form,
   FormGroup,
-  Label,
-  Col,
-  Input,
-  FormFeedback,
 } from 'reactstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import Styles from './EditProfie.module.css'
@@ -32,8 +28,52 @@ function EditProfile(props) {
     dept_id: props.employee.dept_id,
     profile_picture: props.employee.profile_picture,
     type_id: props.employee.type_id,
-    emp_id: props.employee.emp_id
+    emp_id: props.employee.emp_id,
   })
+
+  const [departments, setDepartments] = useState({})
+  const [empStatus, setEmpStatus] = useState({})
+  const [payGrades, setPayGrades] = useState({})
+  const [userTypes, setUserTypes] = useState({})
+
+  useEffect(() => {
+    Axios.get('http://localhost:3001/api/hrManager/getDepartments').then(
+      (res) => {
+        setDepartments(res.data.result)
+      },
+    )
+
+    Axios.get('http://localhost:3001/api/hrManager/getStatus').then((res) => {
+      setEmpStatus(res.data.result)
+    })
+
+    Axios.get('http://localhost:3001/api/hrManager/getPaygrades').then(
+      (res) => {
+        setPayGrades(res.data.result)
+      },
+    )
+
+    Axios.get('http://localhost:3001/api/hrManager/getTypes').then((res) => {
+      setUserTypes(res.data.result)
+    })
+  }, [])
+
+  const getDepartmentById = (ID) => {
+    for (let dept_id in departments) {
+      if (dept_id == ID) {
+        return departments[dept_id].name
+      }
+    }
+  }
+
+  const getUserTypeById = (ID) => {
+    console.log(payGrades)
+    for (let type in userTypes) {
+      if (type = ID) {
+        return userTypes[type].type_name
+      }
+    }
+  }
 
   const navigate = useNavigate()
 
@@ -87,8 +127,8 @@ function EditProfile(props) {
                   <div className={Styles['about']}>
                     <h5>About</h5>
                     <p>
-                      {props.type[employee.type_id].name} -{' '}
-                      {props.departments[employee.dept_id].name}
+                      {getUserTypeById(employee.type_id)} -{' '}
+                      {getDepartmentById(employee.dept_id)} Department
                     </p>
                   </div>
                 </div>
@@ -353,11 +393,11 @@ function EditProfile(props) {
                             })
                           }}
                         >
-                          {props.status.map(
-                            ({ emp_status_id, name }, index) => (
-                              <option value={emp_status_id}>{name}</option>
-                            ),
-                          )}
+                          {empStatus.map(({ emp_status_id, name }, index) => (
+                            <option value={emp_status_id}>{name}</option>
+                          ))}
+
+                        
                         </select>
                       </FormGroup>
                     </div>
@@ -379,11 +419,9 @@ function EditProfile(props) {
                             })
                           }}
                         >
-                          {props.paygrades.map(
-                            ({ paygrade_id, name }, index) => (
-                              <option value={paygrade_id}>{name}</option>
-                            ),
-                          )}
+                          {payGrades.map(({ paygrade_id, name, salary}, index) => (
+                            <option value={paygrade_id}>{name}</option>
+                          ))}
                         </select>
                       </FormGroup>
                     </div>

@@ -4,6 +4,7 @@ import Axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import Profile from './ProfileComponent/profile.js'
 import { Modal } from 'react-bootstrap'
+import {generateKey} from "fast-key-generator";
 
 const Index = (props) => {
   const [employees, setEmployees] = useState([])
@@ -27,6 +28,7 @@ const Index = (props) => {
     paygrade_id: '',
     emp_status_id: '',
   })
+  const [employeeIds,setEmployeeIds] = useState([]);
 
   const [imgUrl, setImgUrl] = useState('')
 
@@ -49,6 +51,26 @@ const Index = (props) => {
         setEmployees(res.data.result)
       },
     )
+
+    Axios.get('http://localhost:3001/api/hrManager/getEmployeeIds').then(
+      (res) => {
+        setEmployeeIds(res.data.result)
+      },
+    )
+
+    const GenerateEmpId = () => {
+      const excludeList = []
+      for (let i = 0; i < employeeIds.length; i++) {
+        excludeList[i] = employeeIds[i].emp_id
+      }
+      return generateKey({
+        size: 7,
+        chartype: 'numeric',
+        exclude: excludeList,
+      })
+    }
+
+    setNewEmployee({ ...newEmployee,emp_id:GenerateEmpId()})
   }, [])
 
   const addRecord = (e) => {

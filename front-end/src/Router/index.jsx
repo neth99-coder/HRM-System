@@ -22,12 +22,10 @@ import {TYPE} from "../shared/employeeType";
 import {DEPARTMENT} from "../shared/department";
 import {EMPLOYEESTATUS} from "../shared/employeeStatus";
 import {PAYGRADE} from "../shared/paygrade";
-import Header from "../Components/Header/Header";
-import NavBar from "../Components/Header/NavBarComponent/NavBarComponent";
 import HeaderPage from "../Pages/HeaderPage";
 import ProfileView from "../Pages/ProfileViewPage/ProfileViewPage";
 import AddNewEmployeePage from "../Pages/AddNewEmployeePage/AddNewEmployeePage";
-
+import HandleLeavePage from "../Pages/HandleLeavePage"
 
 export default function AppRouter() {
 
@@ -77,6 +75,7 @@ export default function AppRouter() {
                 <Route path="employee/edit/:emp_id" element={<EmployeeEdit companyDetails={companyDetails} profileDetails={profileDetails} departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE} />} />
                 <Route path="employee/add-new" element={<AddNewEmployeePage />} />
                 <Route path="my-profile" element={<ProfileView />} />
+                <Route path="leaves" element={<HandleLeavePage />} />
               </Route>
           ):type === 4 ?(
               <Route exact path="admin" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={4}/> } >

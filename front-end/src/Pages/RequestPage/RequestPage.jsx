@@ -18,6 +18,7 @@ const RequestPage = () => {
     reason: "",
     leave_begin: "",
     leave_end: "",
+    attachment:""
   });
   const [type, setType] = useState("");
 
@@ -123,9 +124,23 @@ const RequestPage = () => {
       newRequest.leave_begin !== "" &&
       newRequest.leave_end !== ""
     ) {
+      const formData = new FormData();
+     
+      formData.append('emp_id',newRequest.emp_id);
+      formData.append('supervisor_id',newRequest.supervisor_id);
+      formData.append('leave_id',newRequest.leave_id);
+      formData.append('state_id',newRequest.state_id);
+      formData.append('reason',newRequest.reason);
+      formData.append('leave_begin',newRequest.leave_begin);
+      formData.append('leave_end',newRequest.leave_end);
+      formData.append('file',newRequest.attachment);
       Axios.post(
         "http://localhost:3001/api/employee/addLeaveRequest",
-        newRequest
+        formData,{
+          headers:{
+            'Content-Type': 'multipart/form-data',
+          }
+        }
       ).then((res) => {
         if (!res.data.success) {
           alert("Error occured !!");
@@ -269,7 +284,7 @@ const RequestPage = () => {
             <Modal.Header closeButton>
               <Modal.Title> APPLY LEAVE </Modal.Title>{" "}
             </Modal.Header>
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form noValidate validated={validated} onSubmit={handleSubmit} encType="multipart/form-data">
               <Modal.Body>
                 <div className="form-group row">
                   <label for="emp-id" className="col-sm-3 col-form-label m-t-5">
@@ -385,6 +400,23 @@ const RequestPage = () => {
                       disabled={endActive}
                       value={newRequest.leave_end}
                       onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group row" >
+                  <label for="d-start" className="col-sm-3 col-form-label">
+                    Attachment
+                  </label>
+                  <div className="col-sm-8">
+                    <input
+                    id="attachment"
+                      type="file"
+                      className="form-control"
+                      name="attachment"
+                      required
+                      onChange={(e)=>{setNewRequest({...newRequest,attachment:e.target.files[0]})}}
+                      accept=".png,.gif,.jpg,.webp,.pdf"
                     />
                   </div>
                 </div>

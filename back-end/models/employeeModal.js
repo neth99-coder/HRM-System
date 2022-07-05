@@ -152,7 +152,7 @@ function getLeaveRequests(empId){
 function addLeaveRequest(data) {
   return new Promise((resolve, reject) => {
     const sql =
-      'INSERT INTO leave_request (emp_id,supervisor_id,leave_id,state_id,reason,leave_begin,leave_end) VALUES (?,?,?,?,?,?,?)'
+      'INSERT INTO leave_request (emp_id,supervisor_id,leave_id,state_id,reason,leave_begin,leave_end,attachment) VALUES (?,?,?,?,?,?,?,?)'
     db.query(
       sql,
       [
@@ -163,6 +163,7 @@ function addLeaveRequest(data) {
         data.reason,
         data.leave_begin,
         data.leave_end,
+        data.attachment
       ],
       (err, result) => {
         if (result) {
