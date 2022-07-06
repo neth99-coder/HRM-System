@@ -92,8 +92,8 @@ const Index = (props) => {
     formData.append('email', newEmployee.email)
     formData.append('paygrade_id', newEmployee.paygrade_id)
     formData.append('emp_status_id', newEmployee.emp_status_id)
-    formData.append('dept_id', 1)
-    formData.append('type_id', 5)
+    formData.append('dept_id', 2)
+    formData.append('type_id', 3)
 
     Axios.post('http://localhost:3001/api/employee/addemployee', formData, {
       headers: {

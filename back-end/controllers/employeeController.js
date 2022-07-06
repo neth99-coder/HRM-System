@@ -134,7 +134,6 @@ const addEmployee = async (req, res) => {
       })
     })
     .catch((err) => {
-      console.log(err)
       res.json({
         success: false,
         err,
@@ -149,7 +148,6 @@ const deleteEmployee = async (req, res) => {
       res.json({ success: true, result })
     })
     .catch((err) => {
-      console.log(err)
       res.json({
         success: false,
         err,
@@ -164,7 +162,6 @@ const updateEmployee = async (req, res) => {
       res.json({ success: true, result })
     })
     .catch((err) => {
-      console.log(err)
       res.json({
         success: false,
         err,

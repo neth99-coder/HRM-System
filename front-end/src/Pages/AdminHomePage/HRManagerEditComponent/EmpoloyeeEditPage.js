@@ -9,7 +9,7 @@ function EmployeeEdit(props){
     
     return(
         <div>
-            <EditProfile employee={hrmanager} departments={props.departments} type={props.type} status={props.status} paygrades={props.paygrades}/>
+            <EditProfile employee={hrmanager}/>
         </div>
     )
 }

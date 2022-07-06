@@ -78,7 +78,6 @@ function EditProfile(props) {
   
 
   const getUserTypeById = (ID) => {
-    console.log(payGrades)
     for (let type in userTypes) {
       if (userTypes[type].type_id= ID) {
         return userTypes[type].type_name

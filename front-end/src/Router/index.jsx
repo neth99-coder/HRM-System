@@ -48,8 +48,8 @@ export default function AppRouter() {
     <BrowserRouter>
       <>
         <Routes>
-          <Route exact path="/login" element={<LoginPage/>} />
-          <Route path="/" element={<HomePage/>} />
+          <Route exact path="/" element={<LoginPage/>} />
+          {/* <Route path="/" element={<HomePage/>} /> */}
 
           {/*type1: Normal employee  employee/page_name*/}
           {/*type2: Supervisor       supervisor/page_name*/}
@@ -79,10 +79,10 @@ export default function AppRouter() {
               </Route>
           ):type === 4 ?(
               <Route exact path="admin" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={4}/> } >
-                <Route path="home" element={<AdminHomePage departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE}/>} />
+                <Route path="" element={<AdminHomePage />} />
                 <Route path="emp-profile" element={<EmployeeProfileView />} />
                 <Route path="hr-profile" element={<HRManagerView />} />
-                <Route path="hr-profile/edit" element={<HRManagerEdit departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE}/>} />
+                <Route path="hr-profile/edit" element={<HRManagerEdit/>} />
               </Route>
           ):(
               <Route path="home" element={<HomePage/>} />
