@@ -11,7 +11,7 @@ import Axios from "axios";
 import ChartCard from "./ChartCard";
 import authService from "../../services/auth.service"
 
-function HomePage() {
+function HrManagerHomePage() {
   // Need to import these details from the server
   const companyDetails = {
     logo: "logo.png",
@@ -50,7 +50,7 @@ function HomePage() {
 
     const loadLeavePieChart = async () => {
       await Axios.get(
-        "http://localhost:3001/api/supervisor/getLeaveTypesCount",
+        "http://localhost:3001/api/hrManager/getLeaveTypesCount",
         {
           headers: { "x-auth-token": authService.getUserToken() },
         }
@@ -106,11 +106,11 @@ function HomePage() {
  
   return (
     <div className={styled["page-holder"]}>
-      <Header
+      {/* <Header
         profileDetails={profileDetails}
         companyDetails={companyDetails}
         className={styled["header"]}
-      />
+      /> */}
 
       <section className={styled["data-container"]}>
         <div className={styled["cards"]}>
@@ -210,4 +210,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default HrManagerHomePage;
