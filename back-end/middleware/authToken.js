@@ -18,7 +18,7 @@ const authToken = async (req, res, next) => {
  
   
   if (!token) {
-    console.log("BLAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    console.log("Token Not Found!")
     res.status(401).json({
       errors: [
         {

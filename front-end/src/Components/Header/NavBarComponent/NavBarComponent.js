@@ -72,6 +72,34 @@ class NavBar extends Component {
         }
     }
 
+    homePageNav(){
+        if(this.state.employeeLevel === 1){
+            return(
+                <NavItem>
+                    <NavLink className="nav-link" href="/employee">
+                        <span className="fa fa-2x fa-home fa-lg"></span> Home
+                    </NavLink>
+                </NavItem>
+            );
+        }else if(this.state.employeeLevel === 2){
+            return(
+                <NavItem>
+                    <NavLink className="nav-link" href="/supervisor">
+                        <span className="fa fa-2x fa-home fa-lg"></span> Home
+                    </NavLink>
+                </NavItem>
+            );
+        }else if(this.state.employeeLevel === 3){
+            return(
+                <NavItem>
+                    <NavLink className="nav-link" href="/hrmanager">
+                        <span className="fa fa-2x fa-home fa-lg"></span> Home
+                    </NavLink>
+                </NavItem>
+            );
+        }
+    }
+
     applyLeaveNav(){
         if(this.state.employeeLevel === 1){
             return(
@@ -120,12 +148,7 @@ class NavBar extends Component {
                         <NavbarToggler className="fa fa-2x fa-arrow-down" onClick={this.toggleNav} />
                         <Collapse isOpen={this.state.isNavOpen} navbar>
                             <Nav navbar className={style["navbar"]}>
-                                <NavItem>
-                                    <NavLink className={style["nav-link"]} href="/">
-                                        <span className="fa fa-2x fa-home fa-lg"></span> Home
-                                    </NavLink>
-                                </NavItem>
-
+                                {this.homePageNav()}
                                 {this.attendanceNav()}
                                 {this.applyLeaveNav()}
                                 {this.employeeNav()}

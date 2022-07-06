@@ -14,6 +14,8 @@ import LeaveConfigPage from "../Pages/LeaveConfigPage";
 import EmployeeSearch from "../Pages/EmployeeSearchPage/EmployeeSearchPage";
 import EmployeeEdit from "../Pages/EmployeeEditPage/EmpoloyeeEditPage";
 import EmployeeView from "../Pages/EmployeeViewPage/EmployeeViewPage";
+import HRManagerView from "../Pages/AdminHomePage/HRManagerViewComponent/ProfileViewComponent/ProfileViewComponent";
+import HRManagerEdit from "../Pages/AdminHomePage/HRManagerEditComponent/EmpoloyeeEditPage";
 import EmployeeProfileView from "../Pages/AdminHomePage/EmployeeViewComponent/ProfileViewPage"
 import {EMPLOYEE} from "../shared/employee";
 import {TYPE} from "../shared/employeeType";
@@ -28,9 +30,9 @@ import EmployeeHomePage from "../Pages/EmployeeHomePage";
 import HrManagerHomePage from "../Pages/HrManagerHomePage"
 import Unauth from "../Pages/ErrorPages/Unauth";
 import NotFound from "../Pages/ErrorPages/NotFound";
-import AdminHomePage from "../Pages/AdminHomePage/index"
-import HRManagerView from "../Pages/AdminHomePage/HRManagerViewComponent/ProfileViewComponent/ProfileViewComponent";
-import HRManagerEdit from "../Pages/AdminHomePage/HRManagerEditComponent/EmpoloyeeEditPage";
+import AdminHomePage from "../Pages/AdminHomePage/index";
+
+
 import authService from "../services/auth.service"
 
 
@@ -92,14 +94,14 @@ export default function AppRouter() {
               <Route path="*" element={<Unauth/>} />
             </Route>
 
-          ): type === 3 ? (  
+          ): type === 3 ? (
             <Route >
               <Route exact path="hrmanager" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={3}/> } >
                 <Route path="" element={<HrManagerHomePage/>} />
                 <Route path="requests" element={<RequestPage/>} />
-                <Route exact path="employee" element={<EmployeeSearch employees={EMPLOYEE} type={TYPE} companyDetails={companyDetails} profileDetails={profileDetails} departments={DEPARTMENT}/>}/>
+                <Route exact path="employee" element={<EmployeeSearch companyDetails={companyDetails} profileDetails={profileDetails}/>}/>
                 <Route path="employee/view/:emp_id" element={<EmployeeView companyDetails={companyDetails} profileDetails={profileDetails} />} />
-                <Route path="employee/edit/:emp_id" element={<EmployeeEdit companyDetails={companyDetails} profileDetails={profileDetails} departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE} />} />
+                <Route path="employee/edit/:emp_id" element={<EmployeeEdit companyDetails={companyDetails} profileDetails={profileDetails} />} />
                 <Route path="employee/add-new" element={<AddNewEmployeePage />} />
                 <Route path="my-profile" element={<ProfileView />} />
                 <Route path="attendance" element={<AttendancePage />} />
@@ -125,7 +127,6 @@ export default function AppRouter() {
           ):(
             <Route path="/" element={<LoginPage/>} />
           )}
-          
 
         </Routes>
       </>

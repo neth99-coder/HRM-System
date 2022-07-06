@@ -2,6 +2,8 @@ const { json } = require("express");
 const db = require("../config/db");
 const fs = require("fs");
 const leaveCounter = require("../helpers/leaveCounter");
+const waterfall = require("waterfall");
+
 
 //function to get all details of an employee for a given employee ID
 function getEmployee(empId) {
@@ -119,9 +121,9 @@ function updateEmployee(data) {
       if (key !== "emp_id") {
         sql += key + " = ? , ";
       }
-    });
-    sql = sql.substring(0, sql.length - 2);
-    sql += " WHERE emp_id = ?";
+    })
+    sql = sql.substring(0,sql.length- 2)
+    sql += ' WHERE emp_id = ?'
     db.query(sql, Object.values(data), (err, result) => {
       if (err) {
         return reject(err);
@@ -248,9 +250,9 @@ function loadLeaveChart(empId) {
   return new Promise((resolve, reject) => {
     const sql =
       "SELECT employee.paygrade_id, leave_id, leave_begin,leave_end, FLOOR(DATEDIFF(leave_end, leave_begin)/7)*5 + Mod(5 + Weekday(leave_end) - Weekday(leave_begin), 5) + 1 AS difference FROM leave_request NATURAL JOIN employee WHERE emp_id = ? AND state_id = 1 AND YEAR(CURDATE()) = YEAR(leave_begin)";
-    db.query(sql, [empId], (err, result1) => {
+      
+    db.query(sql, [empId],(err, result1) => {
       if (result1.length !== 0) {
-        // console.log("inserted");
         const sql =
           "SELECT num_of_leaves, leave_id FROM `paygrade_leave` WHERE paygrade_id = ?";
         db.query(sql, [result1[0]["paygrade_id"]], (err, result) => {
@@ -312,7 +314,7 @@ function loadLeaveChart(empId) {
 //       }else{
 //         callback(null,"Error paygrade !!")
 //       }
-
+//
 //   }, (result,err)=>{
 //     if(result){
 //       // console.log(err)

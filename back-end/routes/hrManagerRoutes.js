@@ -7,9 +7,12 @@ router.get("/getTypes",hrManagerController.getTypes);
 router.get("/getStatus",hrManagerController.getStauts);
 router.get("/getPaygrades",hrManagerController.getPaygrades);
 router.get("/getemployee/:empId",hrManagerController.getEmployee);
+router.get("/getemployeeFull/:empId",hrManagerController.getEmployeeFull);
 router.get("/getEmployeeByDeptId/:deptId",hrManagerController.getEmployeeByDeptId);
 router.get("/getEmployeeByEmpIdDeptId",hrManagerController.getEmployeeByEmpIdDeptId);
 router.get("/getemployees",hrManagerController.getEmployees);
+router.get("/getOneEmployeesFull",hrManagerController.getOneEmployeesFull);
+router.get("/getDataTypes",hrManagerController.getDataTypes);
 router.get("/getemployeeDepartment/:empId",hrManagerController.getEmployeeDepartment);
 router.get("/getemployeeType/:empId",hrManagerController.getEmployeeType);
 router.get("/getEmployeeIds",hrManagerController.getEmployeeIds);
@@ -23,6 +26,9 @@ router.post("/updateEmployee",hrManagerController.updateEmployee);
 router.post("/addEmployee",hrManagerController.addEmployee);
 router.post("/addAttendance",hrManagerController.addAttendance);
 router.post("/deleteEmployee",hrManagerController.deleteEmployee);
+router.post("/addColumn",hrManagerController.addColumn);
+router.post("/dpUpload",hrManagerController.dpUpload);
+
 
 
 module.exports = router;
