@@ -1,5 +1,6 @@
 const {json} = require("express");
 const db = require("../config/db");
+const fs = require('fs')
 const leaveCounter = require("../helpers/leaveCounter");
 const waterfall = require("waterfall");
 
@@ -32,40 +33,128 @@ function getEmployees() {
     });
   }
 
+  //returns all the details of the employees along with the job title
+function getEmployeewithUserType() {
+  return new Promise((resolve, reject) => {
+    var sql = 'SELECT * FROM employee natural join user_type'
+    db.query(sql, (err, result) => {
+      if (err) {
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
+}
 //function to get Leave types
 function getLeaveTypes(){
   return new Promise((resolve,reject)=>{
     var sql = "SELECT * FROM leave_type"
     db.query(sql, (err, result) => {
       if (err) {
-        return reject(err);
+        return reject(err)
       } else {
-        return resolve(result);
+        return resolve(result)
       }
-    });
-  });
+    })
+  })
+}
+
+
+//inserts a new employee
+function addEmployee(data) {
+  return new Promise((resolve, reject) => {
+    var sql =
+      `INSERT INTO employee (emp_id , first_name ,middle_name, last_name,address,nic,bday,is_married,` +
+      `contact_num,emergency_contact,email,dept_id,paygrade_id,emp_status_id,type_id,profile_picture) ` +
+      `VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+    db.query(
+      sql,
+      [
+        data.emp_id,
+        data.fname,
+        data.mname,
+        data.lname,
+        data.address,
+        data.nic,
+        data.bday,
+        data.is_married,
+        data.contact_num,
+        data.emergency_contact,
+        data.email,
+        data.dept_id,
+        data.paygrade_id,
+        data.emp_status_id,
+        data.type_id,
+        data.profile_picture,
+      ],
+      (err, result) => {
+        if (err) {
+          return reject(err)
+        } else {
+          return resolve(result)
+        }
+      },
+    )
+  })
+}
+
+//deletes an employee
+function deleteEmployee(data) {
+  fs.unlinkSync(`${__dirname}/../public/images/${data.profile_picture}`)
+  return new Promise((resolve, reject) => {
+    var sql = 'DELETE FROM EMPLOYEE WHERE emp_id = ?'
+    db.query(sql, [data.emp_id], (err, result) => {
+      if (err) {
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
+}
+
+function updateEmployee(data) {
+  return new Promise((resolve, reject) => {
+    var sql = 'UPDATE EMPLOYEE SET '
+    Object.keys(data).forEach((key) => {
+      if(key !== 'emp_id'){
+        sql += key + " = ? , "
+      }
+
+    })
+    sql = sql.substring(0,sql.length- 2)
+    sql += ' WHERE emp_id = ?'
+    db.query(sql, Object.values(data), (err, result) => {
+      if (err) {
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
 }
 
 //function to get leaves of a perticular employee
 function getLeaveRequests(empId){
   return new Promise((resolve, reject) => {
     var sql =
-      "SELECT leave_id,leave_request_id,emp_id,supervisor_id,state_id,reason,attachment,type, DATE_FORMAT(leave_begin, '%d-%m-%Y') AS leave_begin, DATE_FORMAT(leave_end, '%d-%m-%Y') AS leave_end FROM leave_request NATURAL JOIN leave_type WHERE emp_id = ?";
+      "SELECT leave_id,leave_request_id,emp_id,supervisor_id,state_id,reason,attachment,type, DATE_FORMAT(leave_begin, '%d-%m-%Y') AS leave_begin, DATE_FORMAT(leave_end, '%d-%m-%Y') AS leave_end FROM leave_request NATURAL JOIN leave_type WHERE emp_id = ?"
     db.query(sql, [empId], (err, result) => {
       if (err) {
-        return reject(err);
+        return reject(err)
       } else {
-        return resolve(result.reverse());
+        return resolve(result.reverse())
       }
-    });
-  });
+    })
+  })
 }
 
 //function to add new Leave Request
 function addLeaveRequest(data) {
   return new Promise((resolve, reject) => {
     const sql =
-      "INSERT INTO leave_request (emp_id,supervisor_id,leave_id,state_id,reason,leave_begin,leave_end) VALUES (?,?,?,?,?,?,?)";
+      'INSERT INTO leave_request (emp_id,supervisor_id,leave_id,state_id,reason,leave_begin,leave_end) VALUES (?,?,?,?,?,?,?)'
     db.query(
       sql,
       [
@@ -80,14 +169,14 @@ function addLeaveRequest(data) {
       (err, result) => {
         if (result) {
           // console.log("inserted");
-          return resolve(result);
+          return resolve(result)
         } else {
           // console.log(err);
-          return reject(err);
+          return reject(err)
         }
-      }
-    );
-  });
+      },
+    )
+  })
 }
 
 function existingLeaveCount(empId) {
@@ -146,20 +235,20 @@ function loadLeaveChart(empId){
       "SELECT employee.paygrade_id, leave_id, leave_begin,leave_end, FLOOR(DATEDIFF(leave_end, leave_begin)/7)*5 + Mod(5 + Weekday(leave_end) - Weekday(leave_begin), 5) + 1 AS difference FROM leave_request NATURAL JOIN employee WHERE emp_id = ? AND state_id = 1 AND YEAR(CURDATE()) = YEAR(leave_begin)";
     db.query(sql, [empId],(err, result1) => {
       if (result1) {
-       // console.log("inserted");
+        // console.log("inserted");
         const sql =
-          "SELECT num_of_leaves, leave_id FROM `paygrade_leave` WHERE paygrade_id = ?";
-        db.query(sql, [result1[0]["paygrade_id"]], (err, result) => {
+          'SELECT num_of_leaves, leave_id FROM `paygrade_leave` WHERE paygrade_id = ?'
+        db.query(sql, [result1[0]['paygrade_id']], (err, result) => {
           if (result) {
             return resolve(leaveCounter.getLeavesForChart(result1,result));
           }
-        });
+        })
       } else {
         // console.log(err);
-        return reject(err);
+        return reject(err)
       }
-    });
-  });
+    })
+  })
 }
 
 
@@ -167,11 +256,11 @@ function loadLeaveChart(empId){
 //   return new Promise((resolve, reject) => {
 //     waterfall([(callback) =>{
 //       const sql =
-//           "SELECT employee.paygrade_id, leave_id, leave_begin,leave_end, FLOOR(DATEDIFF(leave_end, leave_begin)/7)*5 + Mod(5 + Weekday(leave_end) - Weekday(leave_begin), 5) + 1 AS difference FROM leave_request NATURAL JOIN employee WHERE emp_id = ? AND state_id = 1 AND YEAR(CURDATE()) = YEAR(leave_begin)";
-//          db.query(sql, [empId],(err, result) => {
+//       "SELECT employee.paygrade_id,leave_begin, leave_end, FLOOR(DATEDIFF(leave_end, leave_begin)/7)*5 + Mod(5 + Weekday(leave_end) - Weekday(leave_begin), 5) + 1 AS difference FROM leave_request NATURAL JOIN employee WHERE emp_id = ? AND state_id = 1";
+//     db.query(sql, [empId],(err, result) => {
 //       if (result) {
 //         var paygrade_id = result[0]['paygrade_id'];
-//
+
 //         callback(null,paygrade_id);
 //       }else{
 //         //return reject(err);
@@ -207,8 +296,12 @@ function loadLeaveChart(empId){
 // })}
 
 module.exports = {
+  addEmployee,
   getEmployee,
   getEmployees,
+  deleteEmployee,
+  updateEmployee,
+  getEmployeewithUserType,
   getLeaveTypes,
   getLeaveRequests,
   addLeaveRequest,

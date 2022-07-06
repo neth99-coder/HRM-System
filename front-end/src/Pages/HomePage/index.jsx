@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import Axios from "axios";
 import ChartCard from "./ChartCard";
+import authService from "../../services/auth.service"
 
 function HomePage() {
   // Need to import these details from the server
@@ -36,9 +37,12 @@ function HomePage() {
   useEffect(() => {
     const loadLeaves = async () => {
       await Axios.get(
-        "http://localhost:3001/api/employee/leaveChart/190253K"
+        "http://localhost:3001/api/employee/leaveChart/"+  authService.getUserID(),
+        {
+          headers: { "x-auth-token": authService.getUserToken() },
+        }
       ).then((res) => {
-        //console.log(res.data.result);
+        console.log(res.data.result);
         setLeaveData([...res.data.result]);
       });
     };
@@ -46,7 +50,10 @@ function HomePage() {
 
     const loadLeavePieChart = async () => {
       await Axios.get(
-        "http://localhost:3001/api/supervisor/getLeaveTypesCount"
+        "http://localhost:3001/api/supervisor/getLeaveTypesCount",
+        {
+          headers: { "x-auth-token": authService.getUserToken() },
+        }
       ).then((res) => {
         //console.log(res.data.result);
         setLeavePieChart([...res.data.result]);
@@ -56,7 +63,10 @@ function HomePage() {
 
     const loadWorkingPieChart = async () => {
       await Axios.get(
-        "http://localhost:3001/api/hrManager/getWorkingToday"
+        "http://localhost:3001/api/hrManager/getWorkingToday",
+        {
+          headers: { "x-auth-token": authService.getUserToken() },
+        }
       ).then((res) => {
         //console.log(res.data.result);
         setworkingPieChart(res.data.result)
@@ -66,7 +76,10 @@ function HomePage() {
 
     const loadAbsentToday = async () => {
       await Axios.get(
-        "http://localhost:3001/api/hrManager/getAbsentToday"
+        "http://localhost:3001/api/hrManager/getAbsentToday",
+        {
+          headers: { "x-auth-token": authService.getUserToken() },
+        }
       ).then((res) => {
        // console.log(res.data.result);
         setAbsentToday(res.data.result)
@@ -76,9 +89,12 @@ function HomePage() {
 
     const loadAbsentTomorrow = async () => {
       await Axios.get(
-        "http://localhost:3001/api/hrManager/getAbsentTomorrow"
+        "http://localhost:3001/api/hrManager/getAbsentTomorrow",
+        {
+          headers: { "x-auth-token": authService.getUserToken() },
+        }
       ).then((res) => {
-        console.log(res.data.result);
+        //console.log(res.data.result);
         setAbsentTomorrow(res.data.result)
       });
     };
@@ -87,6 +103,7 @@ function HomePage() {
 
   }, []);
 
+ 
   return (
     <div className={styled["page-holder"]}>
       <Header

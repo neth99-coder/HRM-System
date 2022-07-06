@@ -1,12 +1,12 @@
 import React from "react";
-import { useEffect} from "react";
+import { useEffect } from "react";
 import ProfileView from "./ProfileViewComponent/ProfileViewComponent";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Axios from "axios";
-import {useState} from "react";
-import {Spinner} from "react-bootstrap";
+import { useState } from "react";
+import { Spinner } from "react-bootstrap";
 import styles from "../RequestPage/RequestPage.module.css";
-
+import authService from "../../services/auth.service";
 
 /*
 todo: add a field to store employee's profile picture
@@ -22,11 +22,14 @@ function EmployeeView(props){
         emp_id = props.emp_id;
     }
 
-    useEffect(()=>{
-        setIsLoading(true);
+  useEffect(() => {
+    setIsLoading(true);
 
         const findEmployee = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getemployee/"+ emp_id).then(
+            await Axios.get("http://localhost:3001/api/hrmanager/getemployee/"+ emp_id,
+                {
+                    headers: { "x-auth-token": authService.getUserToken() },
+                }).then(
                 (res) => {
                     setEmployee(res.data.result[0]);
                 }
@@ -35,7 +38,10 @@ function EmployeeView(props){
         findEmployee();
 
         const findEmployeeFull = async () => {
-            await Axios.get("http://localhost:3001/api/hrManager/getemployeeFull/" + emp_id).then(
+            await Axios.get("http://localhost:3001/api/hrManager/getemployeeFull/" + emp_id,
+                {
+                    headers: { "x-auth-token": authService.getUserToken() },
+                }).then(
                 (res) => {
                     setEmployeeFull(res.data.result[0]);
                 }

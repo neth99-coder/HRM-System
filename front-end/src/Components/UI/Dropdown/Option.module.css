@@ -6,6 +6,7 @@
 
 .option:hover{
     background-color: rgb(0, 0, 0);
+    
 }
 
 .option:first-child{
@@ -26,4 +27,7 @@
     font-size: 1.2rem;
 
     
+}
+.option label:hover{
+    cursor: pointer;
 }

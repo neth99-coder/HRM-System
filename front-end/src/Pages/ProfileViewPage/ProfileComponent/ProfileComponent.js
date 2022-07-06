@@ -1,23 +1,19 @@
 import React from "react";
-import styles from "./ProfileComponent.module.css"
-import {
-    Card,
-    CardBody,
-    ListGroup,
-    ListGroupItem,
-} from "reactstrap";
-import {useState} from "react";
-import {useEffect} from "react";
+import styles from "./ProfileComponent.module.css";
+import { Card, CardBody, ListGroup, ListGroupItem } from "reactstrap";
+import { useState } from "react";
+import { useEffect } from "react";
 import Axios from "axios";
-import {Spinner} from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
+import authService from "../../../services/auth.service";
 import defaultPic from "../../../assets/profile_picture/default.jpg";
 
-function Maritalstate(isMarried){
-    if(isMarried == 0){
-        return("Single")
-    }else{
-        return("Married")
-    }
+function Maritalstate(isMarried) {
+  if (isMarried == 0) {
+    return "Single";
+  } else {
+    return "Married";
+  }
 }
 
 function Profile(props){
@@ -29,89 +25,94 @@ function Profile(props){
     const [payGrades,setPayGrades] = useState([]);
     const [newAttributes,setNewAttributes] = useState();
 
-    const profileStyleClass = "rounded-circle " + styles["profile-dp"]
+  const profileStyleClass = "rounded-circle " + styles["profile-dp"];
 
-    useEffect(()=>{
-        setIsLoading(true);
+  useEffect(() => {
+    setIsLoading(true);
 
-        const findDepartments = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getDepartments").then(
-                (res) => {
-                    setDepartments(res.data.result);
-                }
-            );
-        };
-        findDepartments();
+    const findDepartments = async () => {
+      await Axios.get("http://localhost:3001/api/hrmanager/getDepartments", {
+        headers: { "x-auth-token": authService.getUserToken() },
+      }).then((res) => {
+        setDepartments(res.data.result);
+      });
+    };
+    findDepartments();
 
-        const findTypes = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getTypes").then(
-                (res) => {
-                    setTypes(res.data.result);
-                });
-        };
-        findTypes();
+    const findTypes = async () => {
+      await Axios.get("http://localhost:3001/api/hrmanager/getTypes", {
+        headers: { "x-auth-token": authService.getUserToken() },
+      }).then((res) => {
+        setTypes(res.data.result);
+      });
+    };
+    findTypes();
 
-        const findStatus = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getStatus").then(
-                (res) => {
-                    setStatus(res.data.result);
-                }
-            );
-        };
-        findStatus();
+    const findStatus = async () => {
+      await Axios.get("http://localhost:3001/api/hrmanager/getStatus", {
+        headers: { "x-auth-token": authService.getUserToken() },
+      }).then((res) => {
+        setStatus(res.data.result);
+      });
+    };
+    findStatus();
 
-        const findPaygrades = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getPaygrades").then(
-                (res) => {
-                    setPayGrades(res.data.result);
-                }
-            );
-        };
-        findPaygrades();
+    const findPaygrades = async () => {
+      await Axios.get("http://localhost:3001/api/hrmanager/getPaygrades", {
+        headers: { "x-auth-token": authService.getUserToken() },
+      }).then((res) => {
+        setPayGrades(res.data.result);
+      });
+    };
+    findPaygrades();
 
-        setIsLoading(false);
-    },[]);
+    setIsLoading(false);
+  }, []);
 
-    function findDepartmentById(dept_id){
-        let department = departments.filter((dept) => dept.dept_id === dept_id);
-        if(department.length === 0){
-            return "";
-        }else{
-            return department[0].name;
-        }
+  function findDepartmentById(dept_id) {
+    let department = departments.filter((dept) => dept.dept_id === dept_id);
+    if (department.length === 0) {
+      return "";
+    } else {
+      return department[0].name;
     }
+  }
 
-    function findEmployeeStatusById(status_id){
-        let type = status.filter((emp_type) => emp_type.emp_status_id === status_id);
-        if(type.length === 0){
-            return "";
-        }else{
-            let time = "full time";
-            if(type[0].is_full_time === 0){
-                time = "part time";
-            }
+  function findEmployeeStatusById(status_id) {
+    let type = status.filter(
+      (emp_type) => emp_type.emp_status_id === status_id
+    );
+    if (type.length === 0) {
+      return "";
+    } else {
+      let time = "full time";
+      if (type[0].is_full_time === 0) {
+        time = "part time";
+      }
 
-            return(type[0].name + " - " + time);
-        }
+      return type[0].name + " - " + time;
     }
+  }
 
-    function findPayGradeByID(paygrade_id){
-        let payGrade = payGrades.filter((paygrade) => paygrade.paygrade_id === paygrade_id);
-        if(payGrade.length === 0){
-            return "";
-        }else{
-            return(payGrade[0].name);
-        }
+  function findPayGradeByID(paygrade_id) {
+    let payGrade = payGrades.filter(
+      (paygrade) => paygrade.paygrade_id === paygrade_id
+    );
+    if (payGrade.length === 0) {
+      return "";
+    } else {
+      return payGrade[0].name;
     }
+  }
 
-    function findTypeById(type_id){
-        let type = types.filter((emp_type) => emp_type.type_id === type_id);
-        if(type.length === 0){
-            return "";
-        }else{
-            return type[0].type_name;
-        }
+  function findTypeById(type_id) {
+    let type = types.filter((emp_type) => emp_type.type_id === type_id);
+    if (type.length === 0) {
+      return "";
+    } else {
+      return type[0].type_name;
     }
+  }
 
     function showProfilePicture(){
         if(props.employee.profile_picture === undefined || props.employee.profile_picture === ""){
@@ -164,16 +165,21 @@ function Profile(props){
                                     </CardBody>
                                 </Card>
 
-
-                                {/*Contact information*/}
-                                <Card className="mt-3">
-                                    <ListGroup className="list-group-flush">
-                                        <ListGroupItem className="d-flex justify-content-between align-items-center flex-wrap">
-                                            {/*<i className="fa fa-envelope fa-2x"></i>*/}
-                                            <div className="col-1"><h6 className="fa fa-envelope fa-1x"></h6></div>
-                                            <div className="col-2"><h6>Email</h6></div>
-                                            <div className="col-8"><h6>{props.employee.email}</h6></div>
-                                        </ListGroupItem>
+                {/*Contact information*/}
+                <Card className="mt-3">
+                  <ListGroup className="list-group-flush">
+                    <ListGroupItem className="d-flex justify-content-between align-items-center flex-wrap">
+                      {/*<i className="fa fa-envelope fa-2x"></i>*/}
+                      <div className="col-1">
+                        <h6 className="fa fa-envelope fa-1x"></h6>
+                      </div>
+                      <div className="col-2">
+                        <h6>Email</h6>
+                      </div>
+                      <div className="col-8">
+                        <h6>{props.employee.email}</h6>
+                      </div>
+                    </ListGroupItem>
 
                                         <ListGroupItem className="d-flex justify-content-between align-items-center flex-wrap">
                                             {/*<i className="fa fa-envelope fa-2x"></i>*/}
@@ -193,80 +199,82 @@ function Profile(props){
 
                             </div>
 
-                            <div className="col-md-8">
-                                <Card className="mb-3">
-                                    <CardBody>
+              <div className="col-md-8">
+                <Card className="mb-3">
+                  <CardBody>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <h6 className="mb-6">Full Name</h6>
+                      </div>
+                      <div className="col-sm-9 text-secondary">
+                        {props.employee.first_name +
+                          " " +
+                          props.employee.middle_name +
+                          " " +
+                          props.employee.last_name}
+                      </div>
+                    </div>
+                    <hr />
 
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <h6 className="mb-6">Employee ID</h6>
+                      </div>
+                      <div className="col-sm-9 text-secondary">
+                        {props.employee.emp_id}
+                      </div>
+                    </div>
+                    <hr />
 
-                                        <div className="row">
-                                            <div className="col-sm-3">
-                                                <h6 className="mb-6">Full Name</h6>
-                                            </div>
-                                            <div className="col-sm-9 text-secondary">
-                                                {props.employee.first_name + " " + props.employee.middle_name + " " + props.employee.last_name}
-                                            </div>
-                                        </div>
-                                        <hr/>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <h6 className="mb-6">NIC</h6>
+                      </div>
+                      <div className="col-sm-9 text-secondary">
+                        {props.employee.nic}
+                      </div>
+                    </div>
+                    <hr />
 
-                                        <div className="row">
-                                            <div className="col-sm-3">
-                                                <h6 className="mb-6">Employee ID</h6>
-                                            </div>
-                                            <div className="col-sm-9 text-secondary">
-                                                {props.employee.emp_id}
-                                            </div>
-                                        </div>
-                                        <hr/>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <h6 className="mb-6">BirthDay</h6>
+                      </div>
+                      <div className="col-sm-9 text-secondary">
+                        {props.employee.bday}
+                      </div>
+                    </div>
+                    <hr />
 
-                                        <div className="row">
-                                            <div className="col-sm-3">
-                                                <h6 className="mb-6">NIC</h6>
-                                            </div>
-                                            <div className="col-sm-9 text-secondary">
-                                                {props.employee.nic}
-                                            </div>
-                                        </div>
-                                        <hr/>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <h6 className="mb-6">Marital State</h6>
+                      </div>
+                      <div className="col-sm-9 text-secondary">
+                        {Maritalstate(props.employee.is_married)}
+                      </div>
+                    </div>
+                    <hr />
 
-                                        <div className="row">
-                                            <div className="col-sm-3">
-                                                <h6 className="mb-6">BirthDay</h6>
-                                            </div>
-                                            <div className="col-sm-9 text-secondary">
-                                                {props.employee.bday}
-                                            </div>
-                                        </div>
-                                        <hr/>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <h6 className="mb-6">Emergency Contact</h6>
+                      </div>
+                      <div className="col-sm-9 text-secondary">
+                        {props.employee.emergency_contact}
+                      </div>
+                    </div>
+                    <hr />
 
-                                        <div className="row">
-                                            <div className="col-sm-3">
-                                                <h6 className="mb-6">Marital State</h6>
-                                            </div>
-                                            <div className="col-sm-9 text-secondary">
-                                                {Maritalstate(props.employee.is_married)}
-                                            </div>
-                                        </div>
-                                        <hr/>
-
-                                        <div className="row">
-                                            <div className="col-sm-3">
-                                                <h6 className="mb-6">Emergency Contact</h6>
-                                            </div>
-                                            <div className="col-sm-9 text-secondary">
-                                                {props.employee.emergency_contact}
-                                            </div>
-                                        </div>
-                                        <hr/>
-
-                                        <div className="row">
-                                            <div className="col-sm-3">
-                                                <h6 className="mb-6">Employee Status</h6>
-                                            </div>
-                                            <div className="col-sm-9 text-secondary">
-                                                {findEmployeeStatusById(props.employee.emp_status_id)}
-                                            </div>
-                                        </div>
-                                        <hr/>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <h6 className="mb-6">Employee Status</h6>
+                      </div>
+                      <div className="col-sm-9 text-secondary">
+                        {findEmployeeStatusById(props.employee.emp_status_id)}
+                      </div>
+                    </div>
+                    <hr />
 
                                         <div className="row">
                                             <div className="col-sm-3">
