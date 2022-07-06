@@ -90,19 +90,19 @@ function LeaveConfigPage() {
   };
 
   // Current User leave data
-  const profileDetails = {
-    dp: "profile-pic.JPG",
-    name: "Nethmi Jayakody",
-    post: "Admin",
-  };
+  // const profileDetails = {
+  //   dp: "profile-pic.JPG",
+  //   name: "Nethmi Jayakody",
+  //   post: "Admin",
+  // };
 
   return (
     <>
-      <Header
+      {/* <Header
         className={styled["main-header"]}
         profileDetails={profileDetails}
         companyDetails={companyDetails}
-      />
+      /> */}
 
       <main className={styled['main']}>
         <LeaveConfigForm />
