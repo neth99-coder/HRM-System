@@ -10,6 +10,7 @@ function getDepartments() {
             if (err) {
                 return reject(err);
             } else {
+                
                 return resolve(result);
             }
         });

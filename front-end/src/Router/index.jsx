@@ -14,8 +14,6 @@ import LeaveConfigPage from "../Pages/LeaveConfigPage";
 import EmployeeSearch from "../Pages/EmployeeSearchPage/EmployeeSearchPage";
 import EmployeeEdit from "../Pages/EmployeeEditPage/EmpoloyeeEditPage";
 import EmployeeView from "../Pages/EmployeeViewPage/EmployeeViewPage";
-import HRManagerView from "../Pages/AdminHomePage/HRManagerViewComponent/ProfileViewComponent/ProfileViewComponent";
-import HRManagerEdit from "../Pages/AdminHomePage/HRManagerEditComponent/EmpoloyeeEditPage";
 import EmployeeProfileView from "../Pages/AdminHomePage/EmployeeViewComponent/ProfileViewPage"
 import {EMPLOYEE} from "../shared/employee";
 import {TYPE} from "../shared/employeeType";
@@ -31,8 +29,8 @@ import HrManagerHomePage from "../Pages/HrManagerHomePage"
 import Unauth from "../Pages/ErrorPages/Unauth";
 import NotFound from "../Pages/ErrorPages/NotFound";
 import AdminHomePage from "../Pages/AdminHomePage/index"
-
-
+import HRManagerView from "../Pages/AdminHomePage/HRManagerViewComponent/ProfileViewComponent/ProfileViewComponent";
+import HRManagerEdit from "../Pages/AdminHomePage/HRManagerEditComponent/EmpoloyeeEditPage";
 import authService from "../services/auth.service"
 
 

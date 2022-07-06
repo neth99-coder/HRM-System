@@ -1,30 +1,31 @@
-import { React, useState, useEffect } from "react";
-import { BsPlusLg } from "react-icons/bs";
-import { Form, Modal, Spinner } from "react-bootstrap";
-import Axios from "axios";
+import { React, useState, useEffect } from 'react'
+import { BsPlusLg } from 'react-icons/bs'
+import { Form, Modal, Spinner } from 'react-bootstrap'
+import Axios from 'axios'
 
-import styles from "./RequestPage.module.css";
-import RequestCard from "./RequestCard";
+import styles from './RequestPage.module.css'
+import RequestCard from './RequestCard'
 
-import authService from "../../services/auth.service";
+import authService from '../../services/auth.service'
 
 const RequestPage = () => {
-  const [types, setTypes] = useState([{ leave_id: 0, type: "All" }]); //reason types          ----> this should not be reasons as now
-  const [requests, setRequests] = useState([]); //requests array
+  const [types, setTypes] = useState([{ leave_id: 0, type: 'All' }]) //reason types          ----> this should not be reasons as now
+  const [requests, setRequests] = useState([]) //requests array
   const [newRequest, setNewRequest] = useState({
     emp_id: authService.getUserID(),
-    supervisor_id: "190110V",
-    leave_id: "",
+    supervisor_id: '190110V',
+    leave_id: '',
     state_id: 3,
-    reason: "",
-    leave_begin: "",
-    leave_end: "",
-  });
-  const [type, setType] = useState("");
+    reason: '',
+    leave_begin: '',
+    leave_end: '',
+    attachment: '',
+  })
+  const [type, setType] = useState('')
 
-  const [startActive, setStartActive] = useState(true);
-  const [endActive, setEndActive] = useState(true);
-  const [endDanger, setEndDanger] = useState(true);
+  const [startActive, setStartActive] = useState(true)
+  const [endActive, setEndActive] = useState(true)
+  const [endDanger, setEndDanger] = useState(true)
 
   const [remaingLeaves, setRemainingLeaves] = useState([
     {
@@ -36,144 +37,156 @@ const RequestPage = () => {
   const [arr1, setArr1] = useState([]);
   const [validated, setValidated] = useState(false); //form validation
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [show, setShow] = useState(false); //maodal show
-  const handleClose = () => setShow(false); //handle modal close
-  const handleShow = () => setShow(true); //handle modal show
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [show, setShow] = useState(false) //maodal show
+  const handleClose = () => setShow(false) //handle modal close
+  const handleShow = () => setShow(true) //handle modal show
 
   useEffect(() => {
     //setTypes(arr2);
-    setIsLoading(true);
+    setIsLoading(true)
 
     const getTypes = async () => {
-      await Axios.get("http://localhost:3001/api/employee/getLeaveTypes", {
-        headers: { "x-auth-token": authService.getUserToken() },
+      await Axios.get('http://localhost:3001/api/employee/getLeaveTypes', {
+        headers: { 'x-auth-token': authService.getUserToken() },
       }).then((res) => {
         //console.log(res.data.result);
         setTypes((prevVal) => {
-          return [prevVal[0], ...res.data.result];
-        });
-      });
-    };
-    getTypes();
+          return [prevVal[0], ...res.data.result]
+        })
+      })
+    }
+    getTypes()
 
     const getRequests = async () => {
       await Axios.get(
-        "http://localhost:3001/api/employee/getLeaveRequests/" +
+        'http://localhost:3001/api/employee/getLeaveRequests/' +
           authService.getUserID(),
         {
-          headers: { "x-auth-token": authService.getUserToken() },
-        }
+          headers: { 'x-auth-token': authService.getUserToken() },
+        },
       ).then((res) => {
         //console.log(res.data.result);
-        setArr1(res.data.result);
-        setRequests(res.data.result);
+        setArr1(res.data.result)
+        setRequests(res.data.result)
         //console.log(requests)
-        setIsLoading(false);
-      });
-    };
-    getRequests();
+        setIsLoading(false)
+      })
+    }
+    getRequests()
 
-    document.getElementById("All-li").classList.add("active"); //default select
+    document.getElementById('All-li').classList.add('active') //default select
 
     const getExistingLeaveCount = async () => {
       await Axios.get(
-        "http://localhost:3001/api/employee/existingLeaveCount/" +
+        'http://localhost:3001/api/employee/existingLeaveCount/' +
           authService.getUserID(),
         {
-          headers: { "x-auth-token": authService.getUserToken() },
-        }
+          headers: { 'x-auth-token': authService.getUserToken() },
+        },
         // eslint-disable-next-line react-hooks/exhaustive-deps
       ).then((res) => {
-        setRemainingLeaves(res.data.result);
+        setRemainingLeaves(res.data.result)
 
         //console.log(remaingLeaves);
-      });
-    };
-    getExistingLeaveCount();
+      })
+    }
+    getExistingLeaveCount()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   //function to show only selecyed type of leaves
   function handleSort(e) {
-    const id = e.target.id;
-    const sortEls = document
-      .getElementById("pag-ul")
-      .getElementsByTagName("li");
+    const id = e.target.id
+    const sortEls = document.getElementById('pag-ul').getElementsByTagName('li')
 
     //select type
     for (var i = 0; i < sortEls.length; i++) {
-      if (sortEls[i].id === id + "-li") {
-        document.getElementById(sortEls[i].id).classList.add("active");
+      if (sortEls[i].id === id + '-li') {
+        document.getElementById(sortEls[i].id).classList.add('active')
       } else {
-        document.getElementById(sortEls[i].id).classList.remove("active");
+        document.getElementById(sortEls[i].id).classList.remove('active')
       }
     }
     //filter out only the reasons for selected type
-    if (id !== "All") {
+    if (id !== 'All') {
       setRequests(
         arr1.filter((request) => {
-          return id === request.type;
-        })
-      );
+          return id === request.type
+        }),
+      )
     } else {
-      setRequests(arr1);
+      setRequests(arr1)
     }
   }
 
   //function to handle form submission
   function handleSubmit(e) {
-    e.preventDefault();
-    const form = e.currentTarget;
+    e.preventDefault()
+    const form = e.currentTarget
     //form validation
     if (form.checkValidity() === false) {
-      e.stopPropagation();
+      e.stopPropagation()
     }
-    setValidated(true);
+    setValidated(true)
 
     if (
-      newRequest.type !== "" &&
-      newRequest.reason !== "" &&
-      newRequest.leave_begin !== "" &&
-      newRequest.leave_end !== ""
+      newRequest.type !== '' &&
+      newRequest.reason !== '' &&
+      newRequest.leave_begin !== '' &&
+      newRequest.leave_end !== ''
     ) {
+      const formData = new FormData()
+
+      formData.append('emp_id', newRequest.emp_id)
+      formData.append('supervisor_id', newRequest.supervisor_id)
+      formData.append('leave_id', newRequest.leave_id)
+      formData.append('state_id', newRequest.state_id)
+      formData.append('reason', newRequest.reason)
+      formData.append('leave_begin', newRequest.leave_begin)
+      formData.append('leave_end', newRequest.leave_end)
+      formData.append('file', newRequest.attachment)
       Axios.post(
-        "http://localhost:3001/api/employee/addLeaveRequest",
-        newRequest,
+        'http://localhost:3001/api/employee/addLeaveRequest',
+        formData,
         {
-          headers: { "x-auth-token": authService.getUserToken() },
-        }
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'x-auth-token': authService.getUserToken(),
+          },
+        },
       ).then((res) => {
         if (!res.data.success) {
-          alert("Error occured !!");
+          alert('Error occured !!')
         } else {
           setNewRequest({
             emp_id: authService.getUserID(),
-            superviser_id: "190110V",
-            leave_id: "",
+            superviser_id: '190110V',
+            leave_id: '',
             state_id: 3,
-            reason: "",
-            leave_begin: "",
-            leave_end: "",
-          });
-          handleClose();
-          window.location.reload(false); //refresh page
+            reason: '',
+            leave_begin: '',
+            leave_end: '',
+          })
+          handleClose()
+          window.location.reload(false) //refresh page
         }
-      });
+      })
     }
   }
 
   //function to handle inputs
   function handleChange(e) {
-    const value = e.target.value;
-    const name = e.target.name;
+    const value = e.target.value
+    const name = e.target.name
 
-    if (name === "reason") {
+    if (name === 'reason') {
       setNewRequest((prevVal) => {
-        return { ...prevVal, reason: value };
-      });
-    } else if (name === "d-start") {
+        return { ...prevVal, reason: value }
+      })
+    } else if (name === 'd-start') {
       setNewRequest((prevVal) => {
         return { ...prevVal, leave_begin: value };
       });
@@ -184,42 +197,42 @@ const RequestPage = () => {
       const diff = (end - start) / (60 * 60 * 24 * 1000);
       if (remaingLeaves[0]['remaining'][type] >= diff) {
         setNewRequest((prevVal) => {
-          return { ...prevVal, leave_end: value };
-        });
-        setEndDanger(true);
+          return { ...prevVal, leave_end: value }
+        })
+        setEndDanger(true)
       } else {
-        document.getElementById("invalid-end").value = "";
-        setEndDanger(false);
+        document.getElementById('invalid-end').value = ''
+        setEndDanger(false)
         setNewRequest((prevVal) => {
-          return { ...prevVal, leave_end: "" };
-        });
+          return { ...prevVal, leave_end: '' }
+        })
       }
     }
   }
 
   //function to handle select options
   function handleSelect(e) {
-    const type = e.target.value;
+    const type = e.target.value
     const temp = types.filter((cur) => {
-      return cur.type === type;
-    });
+      return cur.type === type
+    })
     setNewRequest((prevVal) => {
-      return { ...prevVal, leave_id: temp[0].leave_id };
-    });
-    setType(type);
-    setStartActive(false);
+      return { ...prevVal, leave_id: temp[0].leave_id }
+    })
+    setType(type)
+    setStartActive(false)
   }
 
   return (
     <div>
       {isLoading ? (
-        <Spinner animation="border" role="status" className={styles["spinner"]}>
+        <Spinner animation="border" role="status" className={styles['spinner']}>
           <span className="visually-hidden">Loading...</span>
         </Spinner>
       ) : (
         <>
           <div className="row">
-            <div className={`${styles["topic"]} col align-self-start h1`}>
+            <div className={`${styles['topic']} col align-self-start h1`}>
               LEAVES
             </div>
             {/* {remaingLeaves.map((cur,index)=>{return <div>{cur.remaining.Medical}</div>})}
@@ -227,15 +240,15 @@ const RequestPage = () => {
             <div className="col align-self-center">
               <nav
                 aria-label="Page navigation example"
-                className={styles["page-nav"]}
+                className={styles['page-nav']}
               >
                 <ul className={`pagination justify-content-center`} id="pag-ul">
                   {types.map((cur, index) => {
-                    return cur.type === "All" ? (
+                    return cur.type === 'All' ? (
                       <li
-                        className={`${styles["sort-el"]} page-item active`}
+                        className={`${styles['sort-el']} page-item active`}
                         onClick={handleSort}
-                        id={cur.type + "-li"}
+                        id={cur.type + '-li'}
                       >
                         <p className="page-link" id={cur.type}>
                           {cur.type}
@@ -243,22 +256,22 @@ const RequestPage = () => {
                       </li>
                     ) : (
                       <li
-                        className={`${styles["sort-el"]} page-item`}
+                        className={`${styles['sort-el']} page-item`}
                         onClick={handleSort}
-                        id={cur.type + "-li"}
+                        id={cur.type + '-li'}
                       >
                         <p className="page-link" id={cur.type}>
                           {cur.type}
                         </p>
                       </li>
-                    );
+                    )
                   })}
                 </ul>
               </nav>
             </div>
             <div className="col">
               <button
-                className={`${styles["new-leave-btn"]}`}
+                className={`${styles['new-leave-btn']}`}
                 type="button"
                 onClick={handleShow}
               >
@@ -267,7 +280,7 @@ const RequestPage = () => {
             </div>
           </div>
 
-          <div className={`${styles["list-box"]} row`}>
+          <div className={`${styles['list-box']} row`}>
             {requests?.map((cur, index) => {
               return (
                 <div className="col-lg-4 col-md-6 col-ms-12" key={index}>
@@ -279,15 +292,20 @@ const RequestPage = () => {
                     reason={cur.reason}
                   />
                 </div>
-              );
+              )
             })}
           </div>
           {/* TODO: attachement */}
           <Modal show={show} onHide={handleClose} size="lg">
             <Modal.Header closeButton>
-              <Modal.Title> APPLY LEAVE </Modal.Title>{" "}
+              <Modal.Title> APPLY LEAVE </Modal.Title>{' '}
             </Modal.Header>
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form
+              noValidate
+              validated={validated}
+              onSubmit={handleSubmit}
+              encType="multipart/form-data"
+            >
               <Modal.Body>
                 <div className="form-group row">
                   <label for="emp-id" className="col-sm-3 col-form-label m-t-5">
@@ -296,7 +314,7 @@ const RequestPage = () => {
                   <div className="col-sm-8">
                     <Form.Control
                       type="text"
-                      className={`${styles["mb-1"]} form-control`}
+                      className={`${styles['mb-1']} form-control`}
                       name="emp-id"
                       required
                       value={newRequest.emp_id}
@@ -312,7 +330,7 @@ const RequestPage = () => {
                   <div className="col-sm-8">
                     <Form.Control
                       type="text"
-                      className={`${styles["mb-1"]} form-control`}
+                      className={`${styles['mb-1']} form-control`}
                       name="sup-id"
                       required
                       value={newRequest.supervisor_id}
@@ -329,7 +347,7 @@ const RequestPage = () => {
                     <Form.Select
                       onChange={handleSelect}
                       value={newRequest.type}
-                      className={`${styles["mb-1"]} form-select`}
+                      className={`${styles['mb-1']} form-select`}
                       required
                     >
                       <option selected disabled hidden value="">
@@ -337,7 +355,7 @@ const RequestPage = () => {
                       </option>
                       {types.map((cur) => {
                         return (
-                          cur.type !== "All" && (
+                          cur.type !== 'All' && (
                             <option
                               disabled={
                                 remaingLeaves[0].remaining[cur.type] === 0
@@ -345,11 +363,11 @@ const RequestPage = () => {
                                   : false
                               }
                             >
-                              {" "}
-                              {cur.type}{" "}
+                              {' '}
+                              {cur.type}{' '}
                             </option>
                           )
-                        );
+                        )
                       })}
                     </Form.Select>
                   </div>
@@ -362,7 +380,7 @@ const RequestPage = () => {
                   <div className="col-sm-8">
                     <Form.Control
                       type="text"
-                      className={`${styles["mb-1"]} form-control`}
+                      className={`${styles['mb-1']} form-control`}
                       name="reason"
                       placeholder="Reason"
                       required
@@ -379,7 +397,7 @@ const RequestPage = () => {
                   <div className="col-sm-8">
                     <Form.Control
                       type="date"
-                      className={`${styles["mb-1"]} form-control`}
+                      className={`${styles['mb-1']} form-control`}
                       name="d-start"
                       required
                       disabled={startActive}
@@ -407,8 +425,30 @@ const RequestPage = () => {
                   </div>
                 </div>
 
+                <div className="form-group row">
+                  <label for="d-start" className="col-sm-3 col-form-label">
+                    Attachment
+                  </label>
+                  <div className="col-sm-8">
+                    <input
+                      id="attachment"
+                      type="file"
+                      className="form-control"
+                      name="attachment"
+                      required
+                      onChange={(e) => {
+                        setNewRequest({
+                          ...newRequest,
+                          attachment: e.target.files[0],
+                        })
+                      }}
+                      accept=".png,.gif,.jpg,.webp,.pdf"
+                    />
+                  </div>
+                </div>
+
                 <div
-                  className={`${styles["danger"]} row justify-content-center `}
+                  className={`${styles['danger']} row justify-content-center `}
                   hidden={endDanger}
                 >
                   You have selected days more than left!!
@@ -431,7 +471,7 @@ const RequestPage = () => {
         </>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default RequestPage;
+export default RequestPage
