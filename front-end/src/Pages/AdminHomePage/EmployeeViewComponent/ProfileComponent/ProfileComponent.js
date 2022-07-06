@@ -1,4 +1,4 @@
-import React from "react";
+import {React , useState , useEffect} from "react";
 import styles from "./ProfileComponent.module.css"
 import {
     Breadcrumb, BreadcrumbItem,
@@ -8,10 +8,8 @@ import {
     ListGroupItem,
 } from "reactstrap";
 
-import FindDepartmentById from "../../../../shared/findDepartmentById";
-import findEmployeeStatusById from "../../../../shared/findEmployeeStatusById";
-import findPayGradeByID from "../../../../shared/findPayGradeByID";
 import {Link} from "react-router-dom";
+import Axios from 'axios'
 
 function Maritalstate(isMarried){
     if(isMarried == 0){
@@ -24,6 +22,77 @@ function Maritalstate(isMarried){
 function Profile(props){
 
     const profileStyleClass = "rounded-circle " + styles["profile-dp"]
+    const [departments, setDepartments] = useState({})
+  const [empStatus, setEmpStatus] = useState({})
+  const [payGrades, setPayGrades] = useState({})
+  const [userTypes, setUserTypes] = useState({})
+
+    useEffect(() => {
+        Axios.get('http://localhost:3001/api/hrManager/getDepartments').then(
+          (res) => {
+            setDepartments(res.data.result)
+          },
+        )
+    
+        Axios.get('http://localhost:3001/api/hrManager/getStatus').then(
+          (res) => {
+            setEmpStatus(res.data.result)
+          },
+        )
+    
+        Axios.get('http://localhost:3001/api/hrManager/getPaygrades').then(
+          (res) => {
+            setPayGrades(res.data.result)
+          },
+        )
+    
+        Axios.get('http://localhost:3001/api/hrManager/getTypes').then(
+          (res) => {
+            setUserTypes(res.data.result)
+          },
+        )
+      }, [])
+    
+      const getDepartmentById = (ID)=>{
+        for(let dept_id in departments){
+            if (dept_id== ID){
+                return departments[dept_id].name;
+            }
+        }
+    }
+    
+      const getEmpStatusById = (ID)=>{
+        let status = ""
+        for(let emp_status_id in empStatus){
+           
+            if (emp_status_id == ID){
+                 status = empStatus[emp_status_id];
+            }
+        }
+    
+        let time = "full time";
+            if(status.is_full_time == 0){
+                time = "part time";
+            }
+    
+        return(status.name + " - " + time);
+      }
+    
+      const getPayGradeById = (ID)=>{
+        for(let paygrade_id in payGrades){
+            if (paygrade_id == ID){
+                return payGrades[paygrade_id].name;
+            }
+        }
+      }
+    
+      const getUserTypeById = (ID)=>{
+        for(let type in userTypes){
+            if (type.id == ID){
+                return type.type_name;
+            }
+        }
+      }
 
     return(
         <div>
@@ -49,7 +118,7 @@ function Profile(props){
                                     <div className="mt-3">
                                         <h4>{props.employee.first_name + " " + props.employee.middle_name + " " + props.employee.last_name}</h4>
                                         <p className="text-secondary mb-1">{props.employee.type_name}</p>
-                                        <p className="text-muted font-size-sm">{FindDepartmentById(props.employee.dept_id) + " Department"}</p>
+                                        <p className="text-muted font-size-sm">{getDepartmentById(props.employee.dept_id) + " Department"}</p>
                                     </div>
                                 </div>
                             </CardBody>
@@ -154,7 +223,7 @@ function Profile(props){
                                         <h6 className="mb-6">Employee Status</h6>
                                     </div>
                                     <div className="col-sm-9 text-secondary">
-                                        {findEmployeeStatusById(props.employee.emp_status_id)}
+                                        {getEmpStatusById(props.employee.emp_status_id)}
                                     </div>
                                 </div>
                                 <hr/>
@@ -164,7 +233,7 @@ function Profile(props){
                                         <h6 className="mb-6">Pay-Grade</h6>
                                     </div>
                                     <div className="col-sm-9 text-secondary">
-                                        {findPayGradeByID(props.employee.paygrade_id)}
+                                        {getPayGradeById(props.employee.paygrade_id)}
                                     </div>
                                 </div>
 
