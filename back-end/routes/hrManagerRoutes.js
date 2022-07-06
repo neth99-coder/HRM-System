@@ -17,9 +17,11 @@ router.get("/getAbsentToday", hrManagerController.getAbsentToday);
 router.get("/getAbsentTomorrow", hrManagerController.getAbsentTomorrow);
 router.get("/getWorkingToday", hrManagerController.getWorkingToday);
 router.get("/getLeaveTypesCount", hrManagerController.getLeaveTypesCount);
+router.get("/getAttendanceNotMarked", hrManagerController.getAttendanceNotMarked);
 
 router.post("/updateEmployee",hrManagerController.updateEmployee);
 router.post("/addEmployee",hrManagerController.addEmployee);
+router.post("/addAttendance",hrManagerController.addAttendance);
 router.post("/deleteEmployee",hrManagerController.deleteEmployee);
 
 

@@ -30,6 +30,7 @@
     "react-strap": "^0.0.1",
     "reactstrap": "^9.0.2",
     "styled-components": "^5.3.5",
+    "use-force-update": "^1.0.8",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

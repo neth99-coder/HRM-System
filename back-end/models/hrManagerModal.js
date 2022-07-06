@@ -275,6 +275,40 @@ function getLeaveTypesCount(){
     });  
   }
 
+ //function to get aattendance for marking
+function getAttendanceNotMarked(){
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT employee.emp_id,employee.first_name,employee.last_name,employee.dept_id,department.name FROM employee NATURAL JOIN department WHERE emp_id NOT IN (SELECT emp_id FROM attendance WHERE date = CURDATE())";
+        db.query(sql,[] ,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                //console.log(result)
+                return resolve(arrayOrganizer.attendanceArray(result));
+            }
+        });
+    });
+} 
+
+ //function to add aattendance for marking
+ function addAttendance(data){
+    return new Promise((resolve, reject) => {
+        var sql = arrayOrganizer.insertQuery(data);
+        db.query(sql,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                console.log(result)
+                return resolve(result);
+            }
+        });
+        console.log(arrayOrganizer.insertQuery(data))
+        //console.log(sql)
+    });
+} 
+
+
+
 module.exports = {
     getDepartments,
     getTypes,
@@ -291,9 +325,11 @@ module.exports = {
     getAbsentTomorrow,
     getWorkingToday,
     getLeaveTypesCount,
+    getAttendanceNotMarked,
 
     updateEmployee,
     addEmployee,
+    addAttendance,
     deleteEmployee
 
 }
