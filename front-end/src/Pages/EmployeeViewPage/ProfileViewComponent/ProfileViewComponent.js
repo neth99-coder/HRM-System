@@ -25,6 +25,7 @@ function ProfileView(props){
     const [status,setStatus] = useState([]);
     const [payGrades,setPayGrades] = useState([]);
     const [delVisibility,setDelVisibility] = useState(true);
+    const [newAttributes,setNewAttributes] = useState();
 
     const profileStyleClass = "rounded-circle " + styles["profile-dp"]
 
@@ -144,6 +145,22 @@ function ProfileView(props){
         }else{
             return(<img src={`http://localhost:3001/profilePictures/${props.employee.profile_picture}`} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>);
         }
+    }
+
+    function showExtraAttributes(col_name){
+
+        return(
+            <div className="row">
+                <hr/>
+                <div className="col-sm-3">
+                    <h6 className="mb-6">{col_name}</h6>
+                </div>
+                <div className="col-sm-9 text-secondary">
+                    {props.employeeFull[col_name] === null || props.employeeFull[col_name] === "" ? "undefined": props.employeeFull[col_name]}
+                </div>
+            </div>
+        );
+
     }
 
     return(
@@ -352,6 +369,14 @@ function ProfileView(props){
                                                 {findPayGradeByID(props.employee.paygrade_id)}
                                             </div>
                                         </div>
+
+
+                                        <div>
+                                            <p>
+                                                {Object.keys(props.employeeFull).slice(16).map(showExtraAttributes)}
+                                            </p>
+                                        </div>
+
 
 
                                     </CardBody>

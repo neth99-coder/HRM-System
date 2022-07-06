@@ -1,5 +1,5 @@
 import React, {Component, useState} from "react";
-import {Breadcrumb, BreadcrumbItem,Card, CardBody, Form,FormGroup,Label,Col,Input,FormFeedback} from "reactstrap";
+import {Breadcrumb, BreadcrumbItem,Card, CardBody, Form,FormGroup} from "reactstrap";
 import {Link} from "react-router-dom";
 import Styles from "./EditProfie.module.css";
 import {Spinner} from "react-bootstrap";
@@ -40,6 +40,9 @@ function EditProfile(props){
     const [Image,setImage] = useState({});
     const [imageName,setImageName] = useState();
     const [isDpChanged,setIsDpChanged] = useState(false);
+    const [employeeNew,setEmployeeNew] = useState({});
+    const [changeList,setChangeList] = useState([]);
+
     useEffect(()=>{
         setIsLoading(true);
 
@@ -64,7 +67,6 @@ function EditProfile(props){
                     setPaygradeID(res.data.result[0].paygrade_id);
                     setEmpStatusId(res.data.result[0].emp_status_id);
                     setImageName(res.data.result[0].profile_picture);
-                    console.log(res.data.result[0].profile_picture);
                     if(res.data.result[0].profile_picture !== undefined && res.data.result[0].profile_picture !== ""){
                         setProfilePicture("http://localhost:3001/profilePictures/" + res.data.result[0].profile_picture);
                     }else{
@@ -173,24 +175,24 @@ function EditProfile(props){
 
     async function handleSubmit(event) {
         event.preventDefault();
-        const formValues = {
-            address: address,
-            bday: bday,
-            contact_num: contactNum,
-            dept_id: deptID,
-            email: email,
-            emergency_contact: emergencyNum,
-            emp_status_id: empStatusId,
-            first_name: firstName,
-            is_married: isMarried,
-            last_name: lastName,
-            middle_name: middleName,
-            nic: nic,
-            paygrade_id: paygradeID,
-            type_id: typeID,
-            emp_id: empID,
-            profile_picture: imageName
+        const formData = [firstName,middleName,lastName,address,nic,bday,isMarried,contactNum,emergencyNum,email,deptID,paygradeID,empStatusId,typeID,imageName];
+        for(let j = 0; j < Object.keys(props.employeeFull).length - 16 ; j++){
+            const col_name = Object.keys(props.employeeFull)[16+j];
+            if(changeList.includes(col_name)){
+                formData.push(employeeNew[col_name]);
+            }else{
+                formData.push(props.employeeFull[col_name]);
+            }
         };
+        formData.push(empID);
+        const formValues = {
+            keys: Object.keys(props.employeeFull),
+            values: formData
+        };
+
+
+        console.log(formData, Object.keys(props.employeeFull));
+
         Axios.post(
             "http://localhost:3001/api/hrManager/updateEmployee",
             formValues
@@ -223,6 +225,57 @@ function EditProfile(props){
         setImageName(empID + imageList[0].file.name);
         setIsDpChanged(true);
     };
+
+
+    function showExtraAttributes(col_name){
+        const result = props.dataTypes.filter((dataType)=> dataType.COLUMN_NAME === col_name)[0].DATA_TYPE;
+        let type = "number";
+        if(result === "varchar"){
+            type = "text";
+        }
+        if(!changeList.includes(col_name)){
+            return(
+                <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                    <FormGroup>
+                        <label htmlFor={col_name}>{col_name}</label>
+                        <input type={type}
+                               className={Styles["form-control"]}
+                               id={col_name}
+                               name={col_name}
+                               required={true}
+                               value={props.employeeFull[col_name]}
+                               placeholder={"Enter " + col_name}
+                               onChange={handleInputChangeExtra}/>
+                    </FormGroup>
+                </div>
+            )
+        }else{
+            return(
+                <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                    <FormGroup>
+                        <label htmlFor={col_name}>{col_name}</label>
+                        <input type={type}
+                               className={Styles["form-control"]}
+                               id={col_name}
+                               name={col_name}
+                               required={true}
+                               value={employeeNew[col_name]}
+                               placeholder={"Enter " + col_name}
+                               onChange={handleInputChangeExtra}/>
+                    </FormGroup>
+                </div>
+            )
+        }
+    }
+
+    function handleInputChangeExtra(event){
+        const name = event.target.name;
+        const value = event.target.value;
+        const employeeTemp = JSON.parse(JSON.stringify(employeeNew));
+        employeeTemp[name] = value;
+        setEmployeeNew(JSON.parse(JSON.stringify(employeeTemp)));
+        changeList.push(name);
+    }
 
 
 
@@ -300,18 +353,6 @@ function EditProfile(props){
                                                                 </div>
                                                             )}
                                                         </ReactImageUploading>
-                                                        {/*<form onSubmit={handleImageSubmit}>*/}
-                                                        {/*    <div>*/}
-                                                        {/*        <FormGroup>*/}
-                                                        {/*            <label>Add new profile picture</label>*/}
-                                                        {/*            <input type="file"*/}
-                                                        {/*            name="profilePicture"*/}
-                                                        {/*            id="profilePicture"*/}
-                                                        {/*            required={true}*/}
-                                                        {/*            onChange={handleImageChange}/>*/}
-                                                        {/*        </FormGroup>*/}
-                                                        {/*    </div>*/}
-                                                        {/*</form>*/}
                                                     </div>
 
                                                     <h5 className="user-name">{orginalFirstName + " " + orginalLastName}</h5>
@@ -565,6 +606,10 @@ function EditProfile(props){
                                                                 {payGrades.map(({ paygrade_id, name }, index) => <option value={paygrade_id} >{name}</option>)}
                                                             </select>
                                                         </FormGroup>
+                                                    </div>
+
+                                                    <div>
+                                                        {Object.keys(props.employeeFull).slice(16).map(showExtraAttributes)}
                                                     </div>
 
                                                 </div>

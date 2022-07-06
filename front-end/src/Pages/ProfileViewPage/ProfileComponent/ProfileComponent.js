@@ -10,6 +10,7 @@ import {useState} from "react";
 import {useEffect} from "react";
 import Axios from "axios";
 import {Spinner} from "react-bootstrap";
+import defaultPic from "../../../assets/profile_picture/default.jpg";
 
 function Maritalstate(isMarried){
     if(isMarried == 0){
@@ -26,6 +27,7 @@ function Profile(props){
     const [types,setTypes] = useState([]);
     const [status,setStatus] = useState([]);
     const [payGrades,setPayGrades] = useState([]);
+    const [newAttributes,setNewAttributes] = useState();
 
     const profileStyleClass = "rounded-circle " + styles["profile-dp"]
 
@@ -111,6 +113,30 @@ function Profile(props){
         }
     }
 
+    function showProfilePicture(){
+        if(props.employee.profile_picture === undefined || props.employee.profile_picture === ""){
+            return(<img src={defaultPic} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>)
+        }else{
+            return(<img src={`http://localhost:3001/profilePictures/${props.employee.profile_picture}`} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>);
+        }
+    }
+
+    function showExtraAttributes(col_name){
+
+        return(
+            <div className="row">
+                <hr/>
+                <div className="col-sm-3">
+                    <h6 className="mb-6">{col_name}</h6>
+                </div>
+                <div className="col-sm-9 text-secondary">
+                    {props.employeeFull[col_name] === null || props.employeeFull[col_name] === "" ? "undefined": props.employeeFull[col_name]}
+                </div>
+            </div>
+        );
+
+    }
+
     return(
         <div>
             {isLoading ? (
@@ -128,7 +154,7 @@ function Profile(props){
                                 <Card>
                                     <CardBody>
                                         <div className="d-flex flex-column align-items-center text-center">
-                                            <img src={`../../../assets/profile_picture/${props.employee.profile_picture}`} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>
+                                            {showProfilePicture()}
                                             <div className="mt-3">
                                                 <h4>{props.employee.first_name + " " + props.employee.middle_name + " " + props.employee.last_name}</h4>
                                                 <p className="text-secondary mb-1">{findTypeById(props.employee.type_id)}</p>
@@ -249,6 +275,12 @@ function Profile(props){
                                             <div className="col-sm-9 text-secondary">
                                                 {findPayGradeByID(props.employee.paygrade_id)}
                                             </div>
+                                        </div>
+
+                                        <div>
+                                            <p>
+                                                {Object.keys(props.employeeFull).slice(16).map(showExtraAttributes)}
+                                            </p>
                                         </div>
 
 

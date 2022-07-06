@@ -11,6 +11,7 @@ function ProfileView(props){
     let emp_id = "190253K"
     const [isLoading, setIsLoading] = useState(true);
     const [getEmployee,setEmployee] = useState({});
+    const [employeeFull,setEmployeeFull] =useState({});
 
     useEffect(()=>{
         setIsLoading(true);
@@ -23,6 +24,16 @@ function ProfileView(props){
             );
         };
         findEmployee();
+
+        const findEmployeeFull = async () => {
+            await Axios.get("http://localhost:3001/api/hrManager/getemployeeFull/" + emp_id).then(
+                (res) => {
+                    setEmployeeFull(res.data.result[0]);
+                }
+            );
+        };
+        findEmployeeFull();
+
         setIsLoading(false);
     },[]);
 
@@ -34,7 +45,7 @@ function ProfileView(props){
                 </Spinner>
             ):(
                 <>
-                    <Profile employee={getEmployee}/>
+                    <Profile employee={getEmployee} employeeFull={employeeFull}/>
                 </>
                 )};
         </div>

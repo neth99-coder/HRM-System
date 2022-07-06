@@ -7,13 +7,57 @@ import {Spinner} from "react-bootstrap";
 
 function EmployeeEdit(props){
 
+    const [isLoading, setIsLoading] = useState(true);
+    const [getEmployee,setEmployee] = useState({});
+    const [employeeFull,setEmployeeFull] =useState({});
+    const [dataTypes,setDataTypes] = useState([]);
     let {emp_id} = useParams();
+
+    useEffect(()=>{
+        setIsLoading(true);
+
+        const findEmployee = async () => {
+            await Axios.get("http://localhost:3001/api/hrmanager/getemployee/"+ emp_id).then(
+                (res) => {
+                    setEmployee(res.data.result[0]);
+                }
+            );
+        };
+        findEmployee();
+
+        const findEmployeeFull = async () => {
+            await Axios.get("http://localhost:3001/api/hrManager/getemployeeFull/" + emp_id).then(
+                (res) => {
+                    setEmployeeFull(res.data.result[0]);
+                }
+            );
+        };
+        findEmployeeFull();
+
+        const findDataTypes = async () => {
+            await Axios.get("http://localhost:3001/api/hrManager/getDataTypes").then(
+                (res) => {
+                    setDataTypes(res.data.result);
+                }
+            );
+        };
+        findDataTypes();
+
+        setIsLoading(false);
+    },[]);
+
 
     return(
         <div>
+            {isLoading ? (
+                <Spinner animation="border" role="status" className={styles['spinner']}>
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            ):(
                 <>
-                    <EditProfile empID= {emp_id}/>
+                    <EditProfile empID= {emp_id} dataTypes = {dataTypes} employee={getEmployee} employeeFull={employeeFull}/>
                 </>
+            )}
         </div>
     );
 };

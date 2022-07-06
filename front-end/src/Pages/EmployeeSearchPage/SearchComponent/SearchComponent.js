@@ -1,40 +1,39 @@
-import React,{Component} from "react";
+import React, {Component, useState} from "react";
 import {Button,Form,FormGroup,Label,Input,Col,FormFeedback} from "reactstrap";
 import Option from "../../../Components/UI/Dropdown/Option";
 import {Link} from "react-router-dom";
+import AddNewField from "./NewFiledComponent/AddNewFieldComponent";
 
-class Search extends Component{
+function Search(props){
 
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            touched: {
-                employeeid: false
-            }
-        }
+    const [employeeId,setEmployeeId] = useState(false);
+    const [hiddenAttribute,setHiddenAttribute] = useState(true);
 
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
-    }
 
-    handleInputChange(event){
+    function handleInputChange(event){
         const target = event.target;
-        this.props.searchChange(target);
+        props.searchChange(target);
     }
 
-    handleSubmit(event){
+    function handleSubmit(event){
         event.preventDefault();
 
     }
 
-    render() {
+    function handleNewField(event){
+        event.preventDefault();
+        setHiddenAttribute(false);
+    }
 
-            const departmentList = this.props.departments.map((department) =>{
-                return(
-                    <option key={department.dept_id} value={department.dept_id}>{department.name}</option>
-                );
-            });
+    const departmentList = props.departments.map((department) =>{
+        return(
+            <option key={department.dept_id} value={department.dept_id}>{department.name}</option>
+        );
+    });
+
+
+
 
         return(
             <div className="container">
@@ -44,7 +43,7 @@ class Search extends Component{
                     </div>
 
                     <div className="col-12">
-                        <Form  onSubmit={this.handleSubmit}>
+                        <Form  onSubmit={handleSubmit}>
                             <div className="row">
                                 <div className="col-6">
                                     <FormGroup row>
@@ -52,8 +51,8 @@ class Search extends Component{
                                         <Col lg={6}>
                                             <Input type="text" id="employeeid" name="employeeid"
                                                    placeholder="Employee ID"
-                                                   value={this.props.employeeid}
-                                                   onChange={this.handleInputChange}
+                                                   value={props.employeeid}
+                                                   onChange={handleInputChange}
                                                    />
                                         </Col>
                                     </FormGroup>
@@ -64,8 +63,8 @@ class Search extends Component{
                                         <Label htmlFor="department" lg={4}>Department:</Label>
                                         <Col lg={6}>
                                             <Input type="select" id="department" name="department"
-                                                   value={this.props.department}
-                                                   onChange={this.handleInputChange}
+                                                   value={props.department}
+                                                   onChange={handleInputChange}
                                                     placeholder={"Department"}>
                                                     <option value={""} hidden={true}>Department</option>
                                                    {departmentList}
@@ -76,19 +75,30 @@ class Search extends Component{
                             </div>
                         </Form>
                     </div>
-
-                    <div>
-                        <Link to={"/hrmanager/employee/add-new"} >
-                            <button type="button" id="addNew" name="addNew"
-                                    className="btn btn-primary">Add New Employee
-                            </button>
-                        </Link>
+                <hr/>
+                    <div className="row">
+                        <div className="col-6 col-sm-3 col-md-4 col-lg-3">
+                            <Link to={"/hrmanager/employee/add-new"} >
+                                <button type="button" id="addNew" name="addNew"
+                                        className="btn btn-primary">Add New Employee
+                                </button>
+                            </Link>
+                        </div>
+                        <div className="col-6 col-sm-3 col-md-4 col-lg-3">
+                            <Form onSubmit={handleNewField} >
+                                <button type="submit" id="addNew" name="addNew"
+                                        className="btn btn-primary">Add New Attribute
+                                </button>
+                            </Form>
+                        </div>
                     </div>
+
+                    <AddNewField hidden={hiddenAttribute} setHidden={setHiddenAttribute}/>
                 </div>
             </div>
+
         );
 
-    }
 }
 
 export default Search;

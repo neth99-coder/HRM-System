@@ -101,6 +101,20 @@ function getEmployee(empId){
     });
 }
 
+//function to get all details of an employee for a given employee ID including new attributes
+function getEmployeeFull(empId){
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT * FROM employee WHERE emp_id = ? ";
+        db.query(sql,[empId] ,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(result);
+            }
+        });
+    });
+}
+
 //function to get all employee ID
 function getEmployeeIds(){
     return new Promise((resolve, reject) => {
@@ -119,6 +133,19 @@ function getEmployeeIds(){
 function getEmployees() {
     return new Promise((resolve, reject) => {
         var sql = "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id FROM employee";
+        db.query(sql, (err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(result);
+            }
+        });
+    });
+}
+
+function getOneEmployeesFull() {
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT * FROM employee LIMIT 1";
         db.query(sql, (err, result) => {
             if (err) {
                 return reject(err);
@@ -160,14 +187,24 @@ function getEmployeeType(empId){
 //function to update employee record
 function updateEmployee(data){
     return new Promise((resolve,reject)=>{
-        const sql = "UPDATE employee SET address = ? , bday = ?, contact_num = ?, dept_id = ?, email = ?, emergency_contact = ?, emp_status_id = ?, first_name = ?, is_married = ?, last_name = ?, middle_name = ?, nic = ?, paygrade_id = ?, type_id = ?, profile_picture = ? WHERE emp_id = ?";
+        const keys = data.keys;
+        const values = data.values;
+        let sql = "UPDATE employee SET ";
+        for(let i = 1; i < keys.length; i++){
+            if(i !== 1){
+                sql += ","
+            }
+            sql += "`" + keys[i] + "` = " + "?"
+        }
+        sql += "WHERE emp_id = ?";
         db.query(
             sql,
-            [data.address, data.bday, data.contact_num,data.dept_id,data.email,data.emergency_contact,data.emp_status_id, data.first_name, data.is_married, data.last_name, data.middle_name, data.nic, data.paygrade_id, data.type_id, data.profile_picture, data.emp_id],
+            values,
             (err,result) => {
                 if(result){
                     return resolve(result);
                 }else{
+                    console.log(err)
                     return reject(err);
 
                 }
@@ -179,15 +216,31 @@ function updateEmployee(data){
 //function to add employee record
 function addEmployee(data){
     return new Promise((resolve,reject)=>{
-        const sql = "INSERT INTO employee (address , bday , contact_num, dept_id, email, emergency_contact, emp_status_id, first_name, is_married, last_name, middle_name, nic, paygrade_id, type_id,profile_picture, emp_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        const keys = data.keys;
+        const values = data.values;
+        let sql = "INSERT INTO employee ("
+        for(let i = 0; i < keys.length; i++){
+            if(i !== 0){
+                sql += ",";
+            }
+            sql += " `" + keys[i] + "` ";
+        }
+        sql += ") VALUES ("
+        for(let i = 0; i < keys.length; i++){
+            if(i !== 0){
+                sql += ",";
+            }
+            sql += "?" ;
+        }
+        sql += ")";
         db.query(
             sql,
-            [data.address, data.bday, data.contact_num,data.dept_id,data.email,data.emergency_contact,data.emp_status_id, data.first_name, data.is_married, data.last_name, data.middle_name, data.nic, data.paygrade_id, data.type_id, data.profile_picture, data.emp_id],
+            values,
             (err,result) => {
                 if(result){
                     return resolve(result);
                 }else{
-                    console.log("f2efes");
+                    console.log(err);
                     return reject(err);
 
                 }
@@ -273,6 +326,7 @@ function getLeaveTypesCount(){
     });
 }
 
+//upload profile_picture
 function dpUpload(file,fileName){
     const newPath = __dirname + "/../public/profilePictures/"
 
@@ -284,6 +338,61 @@ function dpUpload(file,fileName){
 
     });
 }
+
+//function to add new column
+function addColumn(data){
+    return new Promise((resolve,reject)=>{
+        if(data.dataType === "varchar"){
+            const sql = "ALTER TABLE employee ADD COLUMN (`" + data.fieldName + "` " + data.dataType + "(" + data.maxSize + "))";
+            db.query(
+                sql,
+                [],
+                (err,result) => {
+                    if(result){
+                        return resolve(result);
+                    }else{
+                        return reject(err);
+
+                    }
+                }
+            );
+        }else{
+            const sql = "ALTER TABLE employee ADD COLUMN (`" + data.fieldName+ "` " + data.dataType + ")";
+            console.log(sql);
+            db.query(
+                sql,
+                [data.fieldName,data.dataType],
+                (err,result) => {
+                    if(result){
+                        return resolve(result);
+                    }else{
+                        console.log(err);
+                        return reject(err);
+
+                    }
+                }
+            );
+        }
+    })
+}
+
+//get data types of employee table columns
+function getDataTypes() {
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME   = 'employee' ";
+        db.query(sql, (err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(result);
+            }
+        });
+    });
+}
+
+
+
+
 
 module.exports = {
     getDepartments,
@@ -301,10 +410,14 @@ module.exports = {
     getAbsentTomorrow,
     getWorkingToday,
     getLeaveTypesCount,
+    getEmployeeFull,
+    getDataTypes,
+    getOneEmployeesFull,
 
     updateEmployee,
     addEmployee,
     deleteEmployee,
+    addColumn,
     dpUpload
 
 }
