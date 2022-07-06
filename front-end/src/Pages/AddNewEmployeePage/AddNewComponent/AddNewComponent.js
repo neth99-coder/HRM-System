@@ -1,17 +1,6 @@
-import React, { useState } from "react";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  Card,
-  CardBody,
-  Form,
-  FormGroup,
-  Label,
-  Col,
-  Input,
-  FormFeedback,
-} from "reactstrap";
-import { Link } from "react-router-dom";
+import React, {useState} from "react";
+import {Breadcrumb, BreadcrumbItem,Card, CardBody, Form,FormGroup} from "reactstrap";
+import {Link} from "react-router-dom";
 import Styles from "./AddNew.module.css";
 import { Spinner } from "react-bootstrap";
 import styles from "../../RequestPage/RequestPage.module.css";
@@ -20,33 +9,40 @@ import Axios from "axios";
 import { generateKey } from "fast-key-generator";
 import ReactImageUploading from "react-images-uploading";
 import authService from "../../../services/auth.service";
+import defaultPic from "../../../assets/profile_picture/default.jpg";
 
-function AddNewComponent(props) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [firstName, setFirstName] = useState();
-  const [middleName, setMiddleName] = useState();
-  const [lastName, setLastName] = useState();
-  const [email, setEmail] = useState();
-  const [deptID, setDeptID] = useState();
-  const [typeID, setTypeID] = useState();
-  const [address, setAddress] = useState();
-  const [nic, setNic] = useState();
-  const [bday, setBday] = useState();
-  const [isMarried, setIsMarried] = useState();
-  const [contactNum, setContactNum] = useState();
-  const [emergencyNum, setEmergencyNum] = useState();
-  const [paygradeID, setPaygradeID] = useState();
-  const [empStatusId, setEmpStatusId] = useState();
-  const [empID, setEmpID] = useState(props.empID);
-  const [departments, setDepartments] = useState([]);
-  const [types, setTypes] = useState([]);
-  const [profilePicture, setProfilePicture] = useState();
-  const [status, setStatus] = useState([]);
-  const [payGrades, setPayGrades] = useState([]);
-  const [employeeIds, setEmployeeIds] = useState([]);
-  const [isValid, setIsValid] = useState(true);
-  const [errorMsg, setErrorMsg] = useState("");
-  const [Image, setImage] = useState();
+
+function AddNewComponent(props){
+
+    const [isLoading,setIsLoading] = useState(true);
+    const [firstName,setFirstName] = useState();
+    const [middleName,setMiddleName] = useState();
+    const [lastName,setLastName] = useState();
+    const [email,setEmail] = useState();
+    const [deptID,setDeptID] = useState();
+    const [typeID,setTypeID] = useState();
+    const [address,setAddress] = useState();
+    const [nic,setNic] = useState();
+    const [bday,setBday] = useState();
+    const [isMarried,setIsMarried] = useState();
+    const [contactNum,setContactNum] = useState();
+    const [emergencyNum,setEmergencyNum] = useState();
+    const [paygradeID,setPaygradeID] = useState();
+    const [empStatusId,setEmpStatusId] = useState();
+    const [empID,setEmpID] = useState(props.empID);
+    const [departments,setDepartments] = useState([]);
+    const [types,setTypes] = useState([]);
+    const [profilePicture,setProfilePicture] = useState(defaultPic);
+    const [status,setStatus] = useState([]);
+    const [payGrades,setPayGrades] = useState([]);
+    const [employeeIds,setEmployeeIds] = useState([]);
+    const [isValid,setIsValid] = useState(true);
+    const [errorMsg, setErrorMsg] = useState("");
+    const [Image,setImage] = useState();
+    const [imageName,setImageName] = useState();
+    const [isDpChanged,setIsDpChanged] = useState(false);
+    const [employeeNew,setEmployeeNew] = useState({});
+    const [changeList,setChangeList] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -163,41 +159,95 @@ function AddNewComponent(props) {
     }
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    const formValues = {
-      address: address,
-      bday: bday,
-      contact_num: contactNum,
-      dept_id: deptID,
-      email: email,
-      emergency_contact: emergencyNum,
-      emp_status_id: empStatusId,
-      first_name: firstName,
-      is_married: isMarried,
-      last_name: lastName,
-      middle_name: middleName,
-      nic: nic,
-      paygrade_id: paygradeID,
-      type_id: typeID,
-      emp_id: empID,
-    };
-    Axios.post("http://localhost:3001/api/hrManager/addEmployee", formValues, {
-      headers: { "x-auth-token": authService.getUserToken() },
-    }).then((res) => {
-      if (!res.data.success) {
-        alert("Error occured !!");
-      } else {
-        window.open(`/hrmanager/employee/view/${empID}`);
-      }
-    });
-  }
 
-  function onImgUpload(imageList, addUpdateIndex) {
-    console.log(imageList);
-    setProfilePicture(imageList[0].dataURL);
-    setImage(imageList[0]);
-  }
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+        const formData = [empID,firstName,middleName,lastName,address,nic,bday,isMarried,contactNum,emergencyNum,email,deptID,paygradeID,empStatusId,typeID,imageName];
+        for(let j = 0; j < Object.keys(props.employeeFull).length - 16 ; j++){
+            const col_name = Object.keys(props.employeeFull)[16+j];
+            formData.push(employeeNew[col_name]);
+        };
+        const formValues = {
+            keys: Object.keys(props.employeeFull),
+            values: formData
+        };
+        Axios.post(
+            "http://localhost:3001/api/hrManager/addEmployee",
+            formValues, {
+                headers: { "x-auth-token": authService.getUserToken() },
+            }
+        ).then(async (res) => {
+            if (!res.data.success) {
+                alert("Error occured !!");
+            } else if (isDpChanged) {
+                const formData = new FormData();
+                formData.append("file", Image);
+                formData.append("fileName", imageName);
+                await Axios.post("http://localhost:3001/api/hrManager/dpUpload",
+                    formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            "x-auth-token": authService.getUserToken()
+                        }
+                    }).then((res) => {
+                    if (!res.data.success) {
+                        console.log(res);
+                    } else {
+                        window.open(`/hrmanager/employee/view/${empID}`);
+                    }
+                });
+            } else {
+                window.open(`/hrmanager/employee/view/${empID}`);
+            }
+        });
+    }
+
+    function onImgUpload(imageList,addUpdateIndex){
+        setProfilePicture(imageList[0].dataURL);
+        setImage(imageList[0].file);
+        setImageName(empID + imageList[0].file.name);
+        setIsDpChanged(true);
+    };
+
+    function showExtraAttributes(col_name){
+        try {
+            const result = props.dataTypes.filter((dataType)=> dataType.COLUMN_NAME === col_name)[0].DATA_TYPE;
+            let type = "number";
+            if(result === "varchar"){
+                type = "text";
+            }
+
+            return(
+                <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                    <FormGroup>
+                        <label htmlFor={col_name}>{col_name}</label>
+                        <input type={type}
+                               className={Styles["form-control"]}
+                               id={col_name}
+                               name={col_name}
+                               required={true}
+                               value={employeeNew[col_name]}
+                               placeholder={"Enter " + col_name}
+                               onChange={handleInputChangeExtra}/>
+                    </FormGroup>
+                </div>
+            )
+        }catch (e){
+            return (null);
+        }
+
+
+    }
+
+    function handleInputChangeExtra(event){
+        const name = event.target.name;
+        const value = event.target.value;
+        const employeeTemp = JSON.parse(JSON.stringify(employeeNew));
+        employeeTemp[name] = value;
+        setEmployeeNew(JSON.parse(JSON.stringify(employeeTemp)));
+        changeList.push(name);
+    }
 
   return (
     <div>
@@ -586,30 +636,28 @@ function AddNewComponent(props) {
                             </FormGroup>
                           </div>
 
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <FormGroup>
-                              <label htmlFor="paygradeID">Pay-Grade</label>
-                              <select
-                                className={Styles["form-control"]}
-                                id="paygradeID"
-                                name="paygradeID"
-                                placeholder="Select pay-grade"
-                                required={true}
-                                value={paygradeID}
-                                onChange={handleInputChange}
-                              >
-                                <option value="" hidden={true}>
-                                  Select Pay-Grade
-                                </option>
-                                {payGrades.map(
-                                  ({ paygrade_id, name }, index) => (
-                                    <option value={paygrade_id}>{name}</option>
-                                  )
-                                )}
-                              </select>
-                            </FormGroup>
-                          </div>
-                        </div>
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="paygradeID">Pay-Grade</label>
+                                                            <select
+                                                                className={Styles["form-control"]}
+                                                                id="paygradeID"
+                                                                name="paygradeID"
+                                                                placeholder="Select pay-grade"
+                                                                required={true}
+                                                                value={paygradeID}
+                                                                onChange={handleInputChange}>
+                                                                <option value="" hidden={true}>Select Pay-Grade</option>
+                                                                {payGrades.map(({ paygrade_id, name }, index) => <option value={paygrade_id} >{name}</option>)}
+                                                            </select>
+                                                        </FormGroup>
+                                                    </div>
+
+                                                    <div>
+                                                        {Object.keys(props.employeeFull).slice(16).map(showExtraAttributes)}
+                                                    </div>
+
+                                                </div>
 
                         <div className="row gutters">
                           <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">

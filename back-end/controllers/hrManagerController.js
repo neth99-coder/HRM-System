@@ -85,6 +85,23 @@ const getPaygrades = async (req,res) => {
             });
     };
 
+const getEmployeeFull = async (req,res) =>{
+    await hrManagerModal
+        .getEmployeeFull(req.params.empId)
+        .then((result)=>{
+            res.json({
+                success: true,
+                result,
+            });
+        })
+        .catch((err)=>{
+            res.json({
+                success: false,
+                err,
+            });
+        });
+};
+
     const getEmployeeByDeptId = async (req,res) =>{
         await hrManagerModal
             .getEmployeeByDeptId(req.params.deptId)
@@ -122,6 +139,41 @@ const getPaygrades = async (req,res) => {
 const getEmployees = async (req,res) =>{
     await hrManagerModal
         .getEmployees()
+        .then((result)=>{
+            res.json({
+                success: true,
+                result,
+            });
+        })
+        .catch((err)=>{
+            res.json({
+                success: false,
+                err,
+            });
+        });
+};
+
+const getOneEmployeesFull = async (req,res) =>{
+    await hrManagerModal
+        .getOneEmployeesFull()
+        .then((result)=>{
+            res.json({
+                success: true,
+                result,
+            });
+        })
+        .catch((err)=>{
+            res.json({
+                success: false,
+                err,
+            });
+        });
+};
+
+
+const getDataTypes = async (req,res) =>{
+    await hrManagerModal
+        .getDataTypes()
         .then((result)=>{
             res.json({
                 success: true,
@@ -215,9 +267,40 @@ const addEmployee = async (req,res)=>{
         });
 }
 
+const dpUpload = async (req,res)=>{
+    try{
+        console.log(req.body.fileName);
+        await hrManagerModal
+            .dpUpload(req.files.file,req.body.fileName);
+        res.json({ success: true });
+    }catch (err){
+        console.log(err);
+        res.json({
+            success: false,
+            err,
+        });
+    }
+
+
+}
+
 const deleteEmployee = async (req,res)=>{
     await hrManagerModal
         .deleteEmployee(req.body)
+        .then((result) => {
+            res.json({ success: true, result });
+        })
+        .catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
+const addColumn = async (req,res)=>{
+    await hrManagerModal
+        .addColumn(req.body)
         .then((result) => {
             res.json({ success: true, result });
         })
@@ -313,9 +396,14 @@ module.exports = {
     getAbsentTomorrow,
     getWorkingToday,
     getLeaveTypesCount,
+    getEmployeeFull,
+    getDataTypes,
+    getOneEmployeesFull,
 
     updateEmployee,
     addEmployee,
-    deleteEmployee
+    deleteEmployee,
+    addColumn,
+    dpUpload
 
 }
