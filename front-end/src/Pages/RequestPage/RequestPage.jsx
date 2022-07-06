@@ -26,7 +26,13 @@ const RequestPage = () => {
   const [endActive, setEndActive] = useState(true);
   const [endDanger, setEndDanger] = useState(true);
 
-  const [remaingLeaves, setRemainingLeaves] = useState([]);
+  const [remaingLeaves, setRemainingLeaves] = useState([
+    {
+      leaveCount: { Medical: 0, Casual: 0, Annual: 0 },
+      allowedCount: { Medical: 0, Casual: 0, Annual: 0 },
+      remaining: { Medical: 0, Casual: 0, Annual: 0 }
+    }
+  ]);
   const [arr1, setArr1] = useState([]);
   const [validated, setValidated] = useState(false); //form validation
 
@@ -176,7 +182,7 @@ const RequestPage = () => {
       const start = new Date(newRequest.leave_begin);
       const end = new Date(value);
       const diff = (end - start) / (60 * 60 * 24 * 1000);
-      if (remaingLeaves[0].remaining[type] >= diff) {
+      if (remaingLeaves[0]['remaining'][type] >= diff) {
         setNewRequest((prevVal) => {
           return { ...prevVal, leave_end: value };
         });

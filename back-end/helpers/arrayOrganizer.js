@@ -82,9 +82,14 @@ function insertQuery(data){
     var filteredArray = [];
     var sql = 'INSERT INTO  attendance(emp_id,date,is_present) VALUES '
 
-    filteredAllArray = allArray.filter((employee) => {
-      return employee.name === department 
-    })
+    if(department !== 'All'){
+      filteredAllArray = allArray.filter((employee) => {
+        return employee.name === department 
+      })
+    }else{
+        filteredAllArray = allArray ;
+    }
+
 
     // filteredArray = attendance.forEach(element => {
     //   console.log(element)

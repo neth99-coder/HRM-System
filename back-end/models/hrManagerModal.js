@@ -253,6 +253,7 @@ function getWorkingToday(){
                 return reject(err);
             } else {
                 //console.log(arrayOrganizer.todayWorkingArray(result));
+               // console.log(result)
                 return resolve(arrayOrganizer.todayWorkingArray(result));
             }
         });
@@ -267,7 +268,7 @@ function getLeaveTypesCount(){
         if (err) {
           return reject(err);
         } else {
-  
+                
           return resolve(arrayOrganizer.todayLeaveArray(result));
         }
       });
