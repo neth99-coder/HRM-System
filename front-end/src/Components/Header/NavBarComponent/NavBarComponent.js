@@ -104,7 +104,7 @@ class NavBar extends Component {
         if(this.state.employeeLevel === 2){
             return(
                 <NavItem>
-                    <NavLink className="nav-link" href="/supervisor">
+                    <NavLink className="nav-link" href="/supervisor/handle-leaves">
                         <span className={"fa fa-2x fa-envelope-open fa-lg "}></span> Leave Requests
                     </NavLink>
                 </NavItem>

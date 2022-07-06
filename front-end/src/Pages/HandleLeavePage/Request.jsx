@@ -3,11 +3,13 @@ import styles from './Request.module.css'
 import { Modal } from 'react-bootstrap'
 import Axios from 'axios'
 import { saveAs } from 'file-saver'
+import authService from "../../services/auth.service";
 
 const Request = (props) => {
   const [showA, setShowA] = useState(false)
   const handleCloseA = () => setShowA(false)
   const handleShowA = () => setShowA(true)
+
 
   const [showR, setShowR] = useState(false)
   const handleCloseR = () => setShowR(false)
@@ -17,35 +19,35 @@ const Request = (props) => {
     e.preventDefault()
     const value = e.target.name
     //console.log(e.target.name);
-    const data = { leave_request_id: value }
-    await Axios.post('http://localhost:3001/api/supervisor/approve', data).then(
-      (res) => {
-        if (!res.data.success) {
-          alert('Error occured !!')
-        } else {
-          handleCloseA()
-          window.location.reload(false)
-        }
-      },
-    )
-  }
+    const data = { leave_request_id: value };
+    await Axios.post("http://localhost:3001/api/supervisor/approve", data, {
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then((res) => {
+      if (!res.data.success) {
+        alert("Error occured !!");
+      } else {
+        handleCloseA();
+        window.location.reload(false);
+      }
+    });
+  };
 
   const handleReject = async (e) => {
     e.preventDefault()
     const value = e.target.name
     const data = { leave_request_id: value }
     //console.log(e.target.name);
-    await Axios.post('http://localhost:3001/api/supervisor/reject', data).then(
-      (res) => {
-        if (!res.data.success) {
-          alert('Error occured !!')
-        } else {
-          handleCloseA()
-          window.location.reload(false)
-        }
-      },
-    )
-  }
+    await Axios.post("http://localhost:3001/api/supervisor/reject", data, {
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then((res) => {
+      if (!res.data.success) {
+        alert("Error occured !!");
+      } else {
+        handleCloseA();
+        window.location.reload(false);
+      }
+    });
+  };
 
   return (
     <div
