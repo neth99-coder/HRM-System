@@ -22,6 +22,7 @@ import Header from "../Components/Header/Header";
 import NavBar from "../Components/Header/NavBarComponent/NavBarComponent";
 import HeaderPage from "../Pages/HeaderPage";
 import ProfileView from "../Pages/ProfileViewPage/ProfileViewPage";
+import PageNotFound from "../Pages/PageNotFoundPage";
 
 
 export default function AppRouter() {
@@ -79,6 +80,7 @@ export default function AppRouter() {
           ):(
               <Route path="home" element={<HomePage/>} />
           )}
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </>
     </BrowserRouter>
