@@ -1,7 +1,6 @@
 import React from "react";
 //import { Card } from "react-bootstrap";
 import { Chart } from "react-google-charts";
-
 import styled from "./index.module.css";
 
 import Header from "../../Components/Header/Header";
@@ -10,6 +9,8 @@ import { useState } from "react";
 import Axios from "axios";
 import ChartCard from "./ChartCard";
 import authService from "../../services/auth.service"
+import defaultDp from "../../assets/profile_picture/default.jpg";
+
 
 function HrManagerHomePage() {
   // Need to import these details from the server
@@ -174,7 +175,7 @@ function HrManagerHomePage() {
                 <div key={profile.emp_id} className={styled["avatar"]}>
                   <img
                     className={styled["avatar-img"]}
-                    src={(profile.profile_picture)?(`../../assets/profile_picture/${profile.profile_picture}`):(`../../assets/profile_picture/default.jpg`)}
+                    src={(profile.profile_picture)?(`http://localhost:3001/profilePictures/${profile.profile_picture}`):(defaultDp)}
                     alt={profile.emp_id}
                   />
                 </div>
@@ -196,7 +197,7 @@ function HrManagerHomePage() {
                   <div key={profile.emp_id} className={styled["avatar"]}>
                     <img
                       className={styled["avatar-img"]}
-                      src={(profile.profile_picture !== '')?(`../../assets/profile_picture/${profile.profile_picture}`):(`../../assets/profile_picture/default.jpg`)}
+                      src={(profile.profile_picture !== '')?(`http://localhost:3001/profilePictures/${profile.profile_picture}`):(defaultDp)}
                       alt={profile["emp_id"]}
                     />
                   </div>
