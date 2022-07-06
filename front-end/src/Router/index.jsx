@@ -9,6 +9,8 @@ import {
 // Route imports
 import LoginPage from "../Pages/LoginPage";
 import RequestPage from "../Pages/RequestPage/RequestPage";
+import AttendancePage from "../Pages/AttendancePage";
+import LeaveConfigPage from "../Pages/LeaveConfigPage";
 import EmployeeSearch from "../Pages/EmployeeSearchPage/EmployeeSearchPage";
 import EmployeeEdit from "../Pages/EmployeeEditPage/EmpoloyeeEditPage";
 import EmployeeView from "../Pages/EmployeeViewPage/EmployeeViewPage";
@@ -32,6 +34,7 @@ import AdminHomePage from "../Pages/AdminHomePage/index";
 
 
 import authService from "../services/auth.service"
+
 
 export default function AppRouter() {
 
@@ -59,6 +62,7 @@ export default function AppRouter() {
     <BrowserRouter>
       <>
         <Routes>
+
           {/* <Route exact path="/login" element={<LoginPage/>} /> */}
           <Route path="/" element={<LoginPage/>} />
 
@@ -100,6 +104,8 @@ export default function AppRouter() {
                 <Route path="employee/edit/:emp_id" element={<EmployeeEdit companyDetails={companyDetails} profileDetails={profileDetails} />} />
                 <Route path="employee/add-new" element={<AddNewEmployeePage />} />
                 <Route path="my-profile" element={<ProfileView />} />
+                <Route path="attendance" element={<AttendancePage />} />
+                <Route path="leave-config" element={<LeaveConfigPage />} />
                 <Route path="*" element={<NotFound/>} />
               </Route>
               <Route path="*" element={<Unauth/>} />

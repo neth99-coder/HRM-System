@@ -62,4 +62,58 @@ function todayWorkingArray(sqlArray){
 
 }
 
-module.exports = {todayLeaveArray, todayWorkingArray};
+function attendanceArray(sqlArray){
+
+  var result = {}
+  sqlArray?.map((emp)=>{
+    result[emp.emp_id] = false;
+  });
+
+  resultArray = [sqlArray,result]
+  return resultArray;
+}
+
+function insertQuery(data){
+
+    const department = data.department;
+    const attendance = data.result;
+    const allArray = data.all;
+    var filteredAllArray = [];
+    var filteredArray = [];
+    var sql = 'INSERT INTO  attendance(emp_id,date,is_present) VALUES '
+
+    if(department !== 'All'){
+      filteredAllArray = allArray.filter((employee) => {
+        return employee.name === department 
+      })
+    }else{
+        filteredAllArray = allArray ;
+    }
+
+
+    // filteredArray = attendance.forEach(element => {
+    //   console.log(element)
+    // });
+    
+    filteredAllArray.map((employee)=>{
+      filteredArray.push({'emp_id':employee.emp_id, is_present: attendance[employee.emp_id] })
+    })
+   
+   // return filteredArray
+   const today = "CURDATE()";
+  
+
+   filteredArray.map((cur)=>{
+    sql += '("' + cur.emp_id + '",' + today + ',' + cur.is_present + '),' ;
+   })
+
+
+
+   return sql.substring(0,sql.length-1);
+
+
+
+
+}
+
+module.exports = {todayLeaveArray, todayWorkingArray, attendanceArray, insertQuery};

@@ -307,6 +307,7 @@ function getWorkingToday(){
                 return reject(err);
             } else {
                 //console.log(arrayOrganizer.todayWorkingArray(result));
+               // console.log(result)
                 return resolve(arrayOrganizer.todayWorkingArray(result));
             }
         });
@@ -321,12 +322,45 @@ function getLeaveTypesCount(){
         if (err) {
           return reject(err);
         } else {
-  
+                
           return resolve(arrayOrganizer.todayLeaveArray(result));
         }
       });
     });  
   }
+
+
+ //function to get aattendance for marking
+function getAttendanceNotMarked(){
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT employee.emp_id,employee.first_name,employee.last_name,employee.dept_id,department.name FROM employee NATURAL JOIN department WHERE emp_id NOT IN (SELECT emp_id FROM attendance WHERE date = CURDATE())";
+        db.query(sql,[] ,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                //console.log(result)
+                return resolve(arrayOrganizer.attendanceArray(result));
+            }
+        });
+    });
+} 
+
+ //function to add aattendance for marking
+ function addAttendance(data){
+    return new Promise((resolve, reject) => {
+        var sql = arrayOrganizer.insertQuery(data);
+        db.query(sql,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                console.log(result)
+                return resolve(result);
+            }
+        });
+        console.log(arrayOrganizer.insertQuery(data))
+        //console.log(sql)
+    });
+} 
 
 //upload profile_picture
 function dpUpload(file,fileName){
@@ -395,7 +429,6 @@ function getDataTypes() {
 
 
 
-
 module.exports = {
     getDepartments,
     getTypes,
@@ -412,14 +445,20 @@ module.exports = {
     getAbsentTomorrow,
     getWorkingToday,
     getLeaveTypesCount,
+    getAttendanceNotMarked,
+
+
+
     getEmployeeFull,
     getDataTypes,
     getOneEmployeesFull,
 
     updateEmployee,
     addEmployee,
+    addAttendance,
     deleteEmployee,
     addColumn,
     dpUpload
+
 
 }

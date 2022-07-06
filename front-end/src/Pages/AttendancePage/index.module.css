@@ -1,0 +1,36 @@
+.main-header{
+    background-color: rgba(178, 204, 253, 0.705);
+}
+
+.table{
+    background-color: rgba(255, 255, 255, 0.432);
+    backdrop-filter: blur(10px);
+}
+
+.absent-header{
+    width: 220px;
+
+    text-align: center;
+}
+
+.main{
+
+    padding: 50px 10px;
+    padding-bottom: 100px;
+
+    background-color: rgba(198, 224, 248, 0.404);
+    
+}
+
+.employee-select-container{
+    margin-bottom: 10px;
+}
+
+
+.save-button{
+    float: right;
+
+    width: 220px;
+
+    margin-top: 10px;
+}
