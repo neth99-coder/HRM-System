@@ -4,13 +4,14 @@ import Axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import Profile from './ProfileComponent/profile.js'
 import { Modal } from 'react-bootstrap'
-import {generateKey} from "fast-key-generator";
+import { generateKey } from 'fast-key-generator'
+import authService from '../../services/auth.service'
 
 const Index = (props) => {
   const [employees, setEmployees] = useState([])
   const [hrmanager, setHrmanager] = useState([])
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const [newEmployee, setNewEmployee] = useState({
     emp_id: '',
@@ -28,7 +29,7 @@ const Index = (props) => {
     paygrade_id: '',
     emp_status_id: '',
   })
-  const [employeeIds,setEmployeeIds] = useState([]);
+  const [employeeIds, setEmployeeIds] = useState([])
 
   const [imgUrl, setImgUrl] = useState('')
 
@@ -41,22 +42,22 @@ const Index = (props) => {
   const handleShow = () => setShowI(true)
 
   useEffect(() => {
-    Axios.get('http://localhost:3001/api/employee/getemployeetypes').then(
-      (res) => {
-        res.data.result.map((employee) => {
-          if (employee.type_name === 'HR Manager') {
-            setHrmanager(employee)
-          }
-        })
-        setEmployees(res.data.result)
-      },
-    )
+    Axios.get('http://localhost:3001/api/employee/getemployeetypes', {
+      headers: { 'x-auth-token': authService.getUserToken() },
+    }).then((res) => {
+      res.data.result.map((employee) => {
+        if (employee.type_name === 'HR Manager') {
+          setHrmanager(employee)
+        }
+      })
+      setEmployees(res.data.result)
+    })
 
-    Axios.get('http://localhost:3001/api/hrManager/getEmployeeIds').then(
-      (res) => {
-        setEmployeeIds(res.data.result)
-      },
-    )
+    Axios.get('http://localhost:3001/api/hrManager/getEmployeeIds', {
+      headers: { 'x-auth-token': authService.getUserToken() },
+    }).then((res) => {
+      setEmployeeIds(res.data.result)
+    })
 
     const GenerateEmpId = () => {
       const excludeList = []
@@ -70,7 +71,7 @@ const Index = (props) => {
       })
     }
 
-    setNewEmployee({ ...newEmployee,emp_id:GenerateEmpId()})
+    setNewEmployee({ ...newEmployee, emp_id: GenerateEmpId() })
   }, [])
 
   const addRecord = (e) => {
@@ -97,14 +98,15 @@ const Index = (props) => {
     Axios.post('http://localhost:3001/api/employee/addemployee', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+
+        'x-auth-token': authService.getUserToken(),
       },
     }).then((res) => {
       if (res.data.success) {
         alert('successfully added')
         handleCloseAdd()
-        navigate('/admin/home')
+        navigate('/admin')
       } else {
-        
       }
     })
   }
@@ -170,7 +172,7 @@ const Index = (props) => {
         ) : (
           <div className={`${styles['profiles']}`}>
             {employees.map((employee) => {
-              if (employee.type_name !== 'HR Manager') {
+              if (employee.type_name !== 'HR Manager' && employee.type_name !== 'Admin') {
                 return (
                   <div className={`${styles['profile']}`}>
                     <Link
@@ -503,9 +505,7 @@ const Index = (props) => {
       {/* modal for adding img */}
       <Modal show={showI} onHide={handleClose} centered>
         <Modal.Header style={{ backgroundColor: '#f5f6fa' }}>
-          <Modal.Title>
-            Upload your image here..
-          </Modal.Title>
+          <Modal.Title>Upload your image here..</Modal.Title>
         </Modal.Header>
         <form
           onSubmit={addImage}

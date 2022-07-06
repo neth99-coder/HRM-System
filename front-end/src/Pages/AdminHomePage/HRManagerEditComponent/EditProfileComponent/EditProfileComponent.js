@@ -10,6 +10,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom'
 import Styles from './EditProfie.module.css'
 import Axios from 'axios'
+import authService from "../../../../services/auth.service"
 
 function EditProfile(props) {
   const [employee, setEmployee] = useState({
@@ -37,39 +38,49 @@ function EditProfile(props) {
   const [userTypes, setUserTypes] = useState({})
 
   useEffect(() => {
-    Axios.get('http://localhost:3001/api/hrManager/getDepartments').then(
+    Axios.get('http://localhost:3001/api/hrManager/getDepartments',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then(
       (res) => {
         setDepartments(res.data.result)
       },
     )
 
-    Axios.get('http://localhost:3001/api/hrManager/getStatus').then((res) => {
+    Axios.get('http://localhost:3001/api/hrManager/getStatus',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then((res) => {
       setEmpStatus(res.data.result)
     })
 
-    Axios.get('http://localhost:3001/api/hrManager/getPaygrades').then(
+    Axios.get('http://localhost:3001/api/hrManager/getPaygrades',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then(
       (res) => {
         setPayGrades(res.data.result)
       },
     )
 
-    Axios.get('http://localhost:3001/api/hrManager/getTypes').then((res) => {
+    Axios.get('http://localhost:3001/api/hrManager/getTypes',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then((res) => {
       setUserTypes(res.data.result)
     })
   }, [])
 
-  const getDepartmentById = (ID) => {
-    for (let dept_id in departments) {
-      if (dept_id == ID) {
-        return departments[dept_id].name
-      }
+  const getDepartmentById = (ID)=>{
+    for(let dept_id in departments){
+        if (departments[dept_id].dept_id == ID){
+            return departments[dept_id].name;
+        }
     }
-  }
+}
+
+  
 
   const getUserTypeById = (ID) => {
     console.log(payGrades)
     for (let type in userTypes) {
-      if (type = ID) {
+      if (userTypes[type].type_id= ID) {
         return userTypes[type].type_name
       }
     }
@@ -81,11 +92,13 @@ function EditProfile(props) {
     e.preventDefault()
     Axios.post(
       'http://localhost:3001/api/employee/updateemployee',
-      employee,
+      employee,{
+        headers: { "x-auth-token": authService.getUserToken() },
+      }
     ).then((res) => {
       if (res.data.success) {
         alert('successfully updated')
-        navigate('/admin/home')
+        navigate('/admin')
       } else {
         alert('a fail')
       }
@@ -96,7 +109,7 @@ function EditProfile(props) {
       <div>
         <Breadcrumb>
           <BreadcrumbItem>
-            <Link to="/admin/home" className={Styles['breadcrumb-link']}>
+            <Link to="/admin" className={Styles['breadcrumb-link']}>
               {employee.first_name + ' ' + employee.last_name}
             </Link>
           </BreadcrumbItem>
@@ -430,7 +443,7 @@ function EditProfile(props) {
                   <div className="row gutters">
                     <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                       <div className="text-right">
-                        <Link to={'/admin/home' + employee.emp_id}>
+                        <Link to={'/admin' + employee.emp_id}>
                           <button
                             type="button"
                             id="cancel"

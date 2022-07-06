@@ -1,5 +1,6 @@
 import {React , useState , useEffect} from "react";
 import styles from "./ProfileComponent.module.css"
+import authService from "../../../../services/auth.service"
 import {
     Breadcrumb, BreadcrumbItem,
     Card,
@@ -28,25 +29,33 @@ function Profile(props){
   const [userTypes, setUserTypes] = useState({})
 
     useEffect(() => {
-        Axios.get('http://localhost:3001/api/hrManager/getDepartments').then(
+        Axios.get('http://localhost:3001/api/hrManager/getDepartments',{
+            headers: { "x-auth-token": authService.getUserToken() },
+          }).then(
           (res) => {
             setDepartments(res.data.result)
           },
         )
     
-        Axios.get('http://localhost:3001/api/hrManager/getStatus').then(
+        Axios.get('http://localhost:3001/api/hrManager/getStatus',{
+            headers: { "x-auth-token": authService.getUserToken() },
+          }).then(
           (res) => {
             setEmpStatus(res.data.result)
           },
         )
     
-        Axios.get('http://localhost:3001/api/hrManager/getPaygrades').then(
+        Axios.get('http://localhost:3001/api/hrManager/getPaygrades',{
+            headers: { "x-auth-token": authService.getUserToken() },
+          }).then(
           (res) => {
             setPayGrades(res.data.result)
           },
         )
     
-        Axios.get('http://localhost:3001/api/hrManager/getTypes').then(
+        Axios.get('http://localhost:3001/api/hrManager/getTypes',{
+            headers: { "x-auth-token": authService.getUserToken() },
+          }).then(
           (res) => {
             setUserTypes(res.data.result)
           },
@@ -55,7 +64,7 @@ function Profile(props){
     
       const getDepartmentById = (ID)=>{
         for(let dept_id in departments){
-            if (dept_id== ID){
+            if (departments[dept_id].dept_id == ID){
                 return departments[dept_id].name;
             }
         }
@@ -65,7 +74,7 @@ function Profile(props){
         let status = ""
         for(let emp_status_id in empStatus){
            
-            if (emp_status_id == ID){
+            if (empStatus[emp_status_id].emp_status_id== ID){
                  status = empStatus[emp_status_id];
             }
         }
@@ -80,26 +89,20 @@ function Profile(props){
     
       const getPayGradeById = (ID)=>{
         for(let paygrade_id in payGrades){
-            if (paygrade_id == ID){
+            if (payGrades[paygrade_id].paygrade_id == ID){
                 return payGrades[paygrade_id].name;
             }
         }
       }
     
-      const getUserTypeById = (ID)=>{
-        for(let type in userTypes){
-            if (type.id == ID){
-                return type.type_name;
-            }
-        }
-      }
+
 
     return(
         <div>
             <div className={styles["main-body"]}>
             <Breadcrumb>
                         <BreadcrumbItem>
-                            <Link to='/admin/home' style={{textDecoration:"none",color:"#1a202c"}}>
+                            <Link to='/admin' style={{textDecoration:"none",color:"#1a202c"}}>
                                 Staff
                             </Link>
                         </BreadcrumbItem>

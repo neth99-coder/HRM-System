@@ -99,7 +99,7 @@ function addEmployee(data) {
 
 //deletes an employee
 function deleteEmployee(data) {
-  fs.unlinkSync(`${__dirname}/../public/images/${data.profile_picture}`)
+  // fs.unlinkSync(`${__dirname}/../public/images/${data.profile_picture}`)
   return new Promise((resolve, reject) => {
     var sql = 'DELETE FROM EMPLOYEE WHERE emp_id = ?'
     db.query(sql, [data.emp_id], (err, result) => {
