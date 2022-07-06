@@ -16,6 +16,7 @@ function EmployeeView(props){
     const [isLoading, setIsLoading] = useState(true);
     const [getEmployee,setEmployee] = useState({});
     const [employeeFull,setEmployeeFull] =useState({});
+    const [supervisor,setSupervisor] = useState();
 
     let {emp_id} = useParams();
     if(emp_id === null){
@@ -48,6 +49,18 @@ function EmployeeView(props){
             );
         };
         findEmployeeFull();
+
+      const findSupervisor = async () => {
+          await Axios.get("http://localhost:3001/api/hrManager/getSupervisorByEmpId/" + emp_id, {
+              headers: { "x-auth-token": authService.getUserToken() },
+          }).then((res) => {
+              setSupervisor(res.data.result[0].supervisor_id + " - " + res.data.result[0].first_name + " " + res.data.result[0].last_name);
+          });
+      };
+
+      findSupervisor();
+
+      setIsLoading(false);
     },[]);
 
 
@@ -55,7 +68,13 @@ function EmployeeView(props){
 
 
         <div>
-            <ProfileView employee={getEmployee} employeeFull={employeeFull}/>
+            {isLoading ? (
+                <Spinner animation="border" role="status" className={styles['spinner']}>
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            ):(
+                <ProfileView employee={getEmployee} employeeFull={employeeFull} supervisor={supervisor}/>
+                )}
         </div>
     );
 }

@@ -43,6 +43,8 @@ function AddNewComponent(props){
     const [isDpChanged,setIsDpChanged] = useState(false);
     const [employeeNew,setEmployeeNew] = useState({});
     const [changeList,setChangeList] = useState([]);
+    const [supervisor,setSupervisor] = useState();
+    const [supervisorsList,setSupervisorList] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -91,6 +93,15 @@ function AddNewComponent(props){
       });
     };
     findEmployeeIds();
+
+      const findSupervisorID = async () => {
+          await Axios.get("http://localhost:3001/api/hrManager/getSupervisorId", {
+              headers: { "x-auth-token": authService.getUserToken() },
+          }).then((res) => {
+              setSupervisorList(res.data.result);
+          });
+      };
+      findSupervisorID();
 
     const GenerateEmpId = async () => {
       const excludeList = [];
@@ -156,6 +167,8 @@ function AddNewComponent(props){
     } else if (name === "empID") {
       setEmpID(value);
       validate(value);
+    }else if(name == "supervisorId"){
+        setSupervisor(value);
     }
   }
 
@@ -170,7 +183,8 @@ function AddNewComponent(props){
         };
         const formValues = {
             keys: Object.keys(props.employeeFull),
-            values: formData
+            values: formData,
+            supervisor: supervisor
         };
         Axios.post(
             "http://localhost:3001/api/hrManager/addEmployee",
@@ -194,13 +208,42 @@ function AddNewComponent(props){
                     if (!res.data.success) {
                         console.log(res);
                     } else {
-                        window.open(`/hrmanager/employee/view/${empID}`);
+                        const formValues2 = {
+                            emp_id: empID,
+                            supervisor_id: supervisor
+                        };
+                        Axios.post(
+                            "http://localhost:3001/api/hrManager/addSupervisor",
+                            formValues2, {
+                                headers: { "x-auth-token": authService.getUserToken() },
+                            }
+                        ).then(async (res) => {
+                            if (!res.data.success) {
+                                alert("Error occured !!");
+                            } else{
+                                window.open(`/hrmanager/employee/view/${empID}`);
+                            }
+                        });
                     }
                 });
             } else {
-                window.open(`/hrmanager/employee/view/${empID}`);
-            }
-        });
+                const formValues2 = {
+                    emp_id: empID,
+                    supervisor_id: supervisor
+                };
+                Axios.post(
+                    "http://localhost:3001/api/hrManager/addSupervisor",
+                    formValues2, {
+                        headers: { "x-auth-token": authService.getUserToken() },
+                    }
+                ).then(async (res) => {
+                    if (!res.data.success) {
+                        alert("Error occured !!");
+                    } else{
+                        window.open(`/hrmanager/employee/view/${empID}`);
+                    }
+            });
+        }});
     }
 
     function onImgUpload(imageList,addUpdateIndex){
@@ -652,6 +695,24 @@ function AddNewComponent(props){
                                                             </select>
                                                         </FormGroup>
                                                     </div>
+
+
+                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <FormGroup>
+                                    <label htmlFor="supervisorId">Supervisor</label>
+                                    <select
+                                        className={Styles["form-control"]}
+                                        id="supervisorId"
+                                        name="supervisorId"
+                                        placeholder="Select supervisor"
+                                        required={true}
+                                        value={supervisor}
+                                        onChange={handleInputChange}>
+                                        <option value="" hidden={true}>Select Supervisor</option>
+                                        {supervisorsList.map(({ emp_id, first_name,last_name }, index) => <option value={emp_id} >{emp_id + " - " + first_name + " " + last_name}</option>)}
+                                    </select>
+                                </FormGroup>
+                            </div>
 
                                                     <div>
                                                         {Object.keys(props.employeeFull).slice(16).map(showExtraAttributes)}

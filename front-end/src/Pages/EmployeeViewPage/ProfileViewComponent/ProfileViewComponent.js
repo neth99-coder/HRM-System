@@ -68,6 +68,8 @@ function ProfileView(props){
     };
     findPaygrades();
 
+
+
     setIsLoading(false);
   }, []);
 
@@ -395,6 +397,16 @@ function ProfileView(props){
                       </div>
                       <div className="col-sm-9 text-secondary">
                         {findEmployeeStatusById(props.employee.emp_status_id)}
+                      </div>
+                    </div>
+                    <hr />
+
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <h6 className="mb-6">Employee Supervisor</h6>
+                      </div>
+                      <div className="col-sm-9 text-secondary">
+                        {props.supervisor}
                       </div>
                     </div>
                     <hr />

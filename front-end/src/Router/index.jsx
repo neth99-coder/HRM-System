@@ -106,6 +106,7 @@ export default function AppRouter() {
                 <Route path="my-profile" element={<ProfileView />} />
                 <Route path="attendance" element={<AttendancePage />} />
                 <Route path="leave-config" element={<LeaveConfigPage />} />
+                <Route path="handle-leaves" element={<HandleLeavePage/>}/>
                 <Route path="*" element={<NotFound/>} />
               </Route>
               <Route path="*" element={<Unauth/>} />

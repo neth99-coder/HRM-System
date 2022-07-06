@@ -102,6 +102,34 @@ function getEmployee(empId){
     });
 }
 
+//function to get supervisor by employee id
+function getSupervisorByEmpId(empId){
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT supervisor_id, first_name, last_name FROM employee,supervisor WHERE supervisor.emp_id = ? AND supervisor.supervisor_id = employee.emp_id";
+        db.query(sql,[empId] ,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(result);
+            }
+        });
+    });
+}
+
+//function to get employee ids of supervisors
+function getSupervisorId(){
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT emp_id, first_name, last_name FROM employee WHERE type_id = 2 OR type_id = 3";
+        db.query(sql ,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(result);
+            }
+        });
+    });
+}
+
 //function to get all details of an employee for a given employee ID including new attributes
 function getEmployeeFull(empId){
     return new Promise((resolve, reject) => {
@@ -214,6 +242,28 @@ function updateEmployee(data){
     })
 }
 
+//function to update employee_supervisor record
+function updateSupervisor(data){
+    return new Promise((resolve,reject)=>{
+        let sql = "UPDATE supervisor SET supervisor_id = ? WHERE emp_id = ?";
+        db.query(
+            sql,
+            [data.supervisor_id,data.emp_id],
+            (err,result) => {
+                if(result){
+                    return resolve(result);
+                }else{
+                    console.log(err)
+                    return reject(err);
+
+                }
+            }
+        );
+    })
+}
+
+
+
 //function to add employee record
 function addEmployee(data){
     return new Promise((resolve,reject)=>{
@@ -269,6 +319,28 @@ function deleteEmployee(data){
         );
     })
 }
+
+//function to add Superviosor
+function addSupervisor(data){
+    return new Promise((resolve,reject)=>{
+        const sql = "INSERT INTO supervisor (emp_id,supervisor_id) VALUES(?,?)";
+        db.query(
+            sql,
+            [data.emp_id,data.supervisor_id],
+            (err,result) => {
+                if(result){
+                    return resolve(result);
+                }else{
+                    console.log(err);
+                    return reject(err);
+
+                }
+            }
+        );
+    })
+}
+
+
 
 //function to get all details of all employees who are absent today
 function getAbsentToday(){
@@ -360,7 +432,7 @@ function getAttendanceNotMarked(){
         console.log(arrayOrganizer.insertQuery(data))
         //console.log(sql)
     });
-} 
+}
 
 //upload profile_picture
 function dpUpload(file,fileName){
@@ -446,19 +518,23 @@ module.exports = {
     getWorkingToday,
     getLeaveTypesCount,
     getAttendanceNotMarked,
+    getSupervisorByEmpId,
 
 
 
     getEmployeeFull,
     getDataTypes,
     getOneEmployeesFull,
+    getSupervisorId,
 
     updateEmployee,
     addEmployee,
     addAttendance,
     deleteEmployee,
     addColumn,
-    dpUpload
+    dpUpload,
+    addSupervisor,
+    updateSupervisor
 
 
 }

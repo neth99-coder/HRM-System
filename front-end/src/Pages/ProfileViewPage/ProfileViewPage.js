@@ -12,6 +12,7 @@ function ProfileView(props){
     const [isLoading, setIsLoading] = useState(true);
     const [getEmployee,setEmployee] = useState({});
     const [employeeFull,setEmployeeFull] =useState({});
+    const [supervisor,setSupervisor] = useState();
 
   useEffect(() => {
     setIsLoading(true);
@@ -40,6 +41,16 @@ function ProfileView(props){
         };
         findEmployeeFull();
 
+      const findSupervisor = async () => {
+          await Axios.get("http://localhost:3001/api/hrManager/getSupervisorByEmpId/" + emp_id, {
+              headers: { "x-auth-token": authService.getUserToken() },
+          }).then((res) => {
+              setSupervisor(res.data.result[0].supervisor_id + " - " + res.data.result[0].first_name + " " + res.data.result[0].last_name);
+          });
+      };
+
+      findSupervisor();
+
         setIsLoading(false);
     },[]);
 
@@ -51,7 +62,7 @@ function ProfileView(props){
                 </Spinner>
             ):(
                 <>
-                    <Profile employee={getEmployee} employeeFull={employeeFull}/>
+                    <Profile employee={getEmployee} employeeFull={employeeFull} supervisor={supervisor}/>
                 </>
                 )};
         </div>

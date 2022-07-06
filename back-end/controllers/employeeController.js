@@ -33,6 +33,8 @@ const getEmployees = async (req, res) => {
       })
     })
 }
+
+
 const getLeaveTypes = async (req, res) => {
   await employeeModal
     .getLeaveTypes()

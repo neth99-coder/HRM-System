@@ -13,7 +13,6 @@ const RequestPage = () => {
   const [requests, setRequests] = useState([]) //requests array
   const [newRequest, setNewRequest] = useState({
     emp_id: authService.getUserID(),
-    supervisor_id: '190110V',
     leave_id: '',
     state_id: 3,
     reason: '',
@@ -141,7 +140,6 @@ const RequestPage = () => {
       const formData = new FormData()
 
       formData.append('emp_id', newRequest.emp_id)
-      formData.append('supervisor_id', newRequest.supervisor_id)
       formData.append('leave_id', newRequest.leave_id)
       formData.append('state_id', newRequest.state_id)
       formData.append('reason', newRequest.reason)
@@ -163,7 +161,6 @@ const RequestPage = () => {
         } else {
           setNewRequest({
             emp_id: authService.getUserID(),
-            superviser_id: '190110V',
             leave_id: '',
             state_id: 3,
             reason: '',
@@ -318,22 +315,6 @@ const RequestPage = () => {
                       name="emp-id"
                       required
                       value={newRequest.emp_id}
-                      readOnly
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group row">
-                  <label for="sup-name" className="col-sm-3 col-form-label">
-                    Supervisor ID
-                  </label>
-                  <div className="col-sm-8">
-                    <Form.Control
-                      type="text"
-                      className={`${styles['mb-1']} form-control`}
-                      name="sup-id"
-                      required
-                      value={newRequest.supervisor_id}
                       readOnly
                     />
                   </div>
