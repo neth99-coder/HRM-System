@@ -380,6 +380,42 @@ const getLeaveTypesCount = async (req, res) => {
         });
 };
 
+const getAttendanceNotMarked = async (req, res) => {
+    await hrManagerModal
+        .getAttendanceNotMarked()
+        .then((result) => {
+            res.json({
+                success: true,
+                result,
+            });
+        })
+        .catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+};
+
+const addAttendance = async (req,res) =>{
+    await hrManagerModal
+        .addAttendance(req.body)
+        .then((result)=>{
+            res.json({
+                success: true,
+                result,
+            });
+        })
+        .catch((err)=>{
+            res.json({
+                success: false, 
+                err,
+            });
+        });  
+};
+
+
+
 module.exports = {
     getDepartments,
     getTypes,
@@ -396,14 +432,19 @@ module.exports = {
     getAbsentTomorrow,
     getWorkingToday,
     getLeaveTypesCount,
+    getAttendanceNotMarked,
+
+
     getEmployeeFull,
     getDataTypes,
     getOneEmployeesFull,
 
     updateEmployee,
     addEmployee,
+    addAttendance,
     deleteEmployee,
     addColumn,
     dpUpload
+
 
 }

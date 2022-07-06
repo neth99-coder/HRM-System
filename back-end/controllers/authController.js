@@ -9,7 +9,7 @@ const signupUser = async (req,res) =>{
                 result,
             });
         })
-        .catch((err)=>{
+        .catch((err)=>{   
             res.json({
                 success: false,
                 err,
