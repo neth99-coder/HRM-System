@@ -260,7 +260,7 @@ function deleteEmployee(data){
                 if(result){
                     return resolve(result);
                 }else{
-                    console.log("f2efes");
+                    console.log(err);
                     return reject(err);
 
                 }

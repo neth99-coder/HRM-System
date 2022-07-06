@@ -129,7 +129,7 @@ function ProfileView(props){
       }
     ).then((res) => {
       if (!res.data.success) {
-        alert("Error occured !!");
+        alert("Error occured w!!");
       } else {
         window.open(`/hrmanager/employee`);
       }

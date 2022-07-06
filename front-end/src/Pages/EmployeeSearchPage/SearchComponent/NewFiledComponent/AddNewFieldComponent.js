@@ -2,6 +2,7 @@ import {React, useState} from "react";
 import {Form, FormGroup} from "reactstrap";
 import Styles from "./AddNewFieldComponent.module.css";
 import Axios from "axios";
+import authService from "../../../../services/auth.service";
 
 function AddNewField(props){
 
@@ -19,7 +20,9 @@ function AddNewField(props){
         }
         Axios.post(
             "http://localhost:3001/api/hrManager/addColumn",
-            newFieldData).then(async (res) => {
+            newFieldData,{
+            headers: { "x-auth-token": authService.getUserToken() },
+        }).then(async (res) => {
                 if(!res.data.success) {
                     alert("Error occured!");
                 }else{

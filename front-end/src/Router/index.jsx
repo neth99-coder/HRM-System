@@ -28,10 +28,7 @@ import EmployeeHomePage from "../Pages/EmployeeHomePage";
 import HrManagerHomePage from "../Pages/HrManagerHomePage"
 import Unauth from "../Pages/ErrorPages/Unauth";
 import NotFound from "../Pages/ErrorPages/NotFound";
-import AdminHomePage from "../Pages/AdminHomePage/index"
-import HRManagerView from "../Pages/AdminHomePage/HRManagerViewComponent/ProfileViewComponent/ProfileViewComponent";
-import HRManagerEdit from "../Pages/AdminHomePage/HRManagerEditComponent/EmpoloyeeEditPage";
-import EmployeeProfileView from "../Pages/AdminHomePage/EmployeeViewComponent/ProfileViewPage";
+import AdminHomePage from "../Pages/AdminHomePage/index";
 
 
 import authService from "../services/auth.service"

@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import Axios from "axios";
 import {Spinner} from "react-bootstrap";
 import styles from "../RequestPage/RequestPage.module.css";
+import authService from "../../services/auth.service";
 
 function AddNewEmployeePage(props){
 
@@ -15,7 +16,9 @@ function AddNewEmployeePage(props){
         setIsLoading(true);
 
         const findEmployeeFull = async () => {
-            await Axios.get("http://localhost:3001/api/hrManager/getOneEmployeesFull").then(
+            await Axios.get("http://localhost:3001/api/hrManager/getOneEmployeesFull",{
+                headers: { "x-auth-token": authService.getUserToken() },
+            }).then(
                 (res) => {
                     setEmployeeFull(res.data.result[0]);
                 }
@@ -24,7 +27,9 @@ function AddNewEmployeePage(props){
         findEmployeeFull();
 
         const findDataTypes = async () => {
-            await Axios.get("http://localhost:3001/api/hrManager/getDataTypes").then(
+            await Axios.get("http://localhost:3001/api/hrManager/getDataTypes",{
+                headers: { "x-auth-token": authService.getUserToken() },
+            }).then(
                 (res) => {
                     setDataTypes(res.data.result);
                 }

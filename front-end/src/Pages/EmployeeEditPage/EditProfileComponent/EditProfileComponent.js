@@ -48,7 +48,7 @@ function EditProfile(props){
     setIsLoading(true);
 
         const findEmployee = async () => {
-            await Axios.get("http://localhost:3001/api/hrManager/getemployee/"+ authService.getUserID(),{
+            await Axios.get("http://localhost:3001/api/hrManager/getemployee/"+ empID,{
                 headers: { "x-auth-token": authService.getUserToken() },
             }).then(
                 (res) => {
@@ -210,7 +210,7 @@ function EditProfile(props){
             }
         ).then(async (res) => {
             if (!res.data.success) {
-                alert("Error occured !!");
+                alert("Error occured!!");
             } else if(isDpChanged) {
                 const formData = new FormData();
                 formData.append("file", Image);
