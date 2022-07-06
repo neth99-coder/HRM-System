@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import Axios from "axios";
 import { Spinner } from "react-bootstrap";
 import authService from "../../../services/auth.service";
+import defaultPic from "../../../assets/profile_picture/default.jpg";
 
 function Maritalstate(isMarried) {
   if (isMarried == 0) {
@@ -15,12 +16,14 @@ function Maritalstate(isMarried) {
   }
 }
 
-function Profile(props) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [departments, setDepartments] = useState([]);
-  const [types, setTypes] = useState([]);
-  const [status, setStatus] = useState([]);
-  const [payGrades, setPayGrades] = useState([]);
+function Profile(props){
+
+    const [isLoading,setIsLoading] = useState(true);
+    const [departments,setDepartments] = useState([]);
+    const [types,setTypes] = useState([]);
+    const [status,setStatus] = useState([]);
+    const [payGrades,setPayGrades] = useState([]);
+    const [newAttributes,setNewAttributes] = useState();
 
   const profileStyleClass = "rounded-circle " + styles["profile-dp"];
 
@@ -111,50 +114,56 @@ function Profile(props) {
     }
   }
 
-  return (
-    <div>
-      {isLoading ? (
-        <Spinner animation="border" role="status" className={styles["spinner"]}>
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      ) : (
-        <>
-          <div className={styles["main-body"]}>
-            <div className="row gutters-sm">
-              <div className="col-md-4 mb-3">
-                {/*Profile picture and basic information*/}
-                <Card>
-                  <CardBody>
-                    <div className="d-flex flex-column align-items-center text-center">
-                      <img
-                        src={`../../../assets/profile_picture/${props.employee.profile_picture}`}
-                        alt={
-                          props.employee.first_name +
-                          " " +
-                          props.employee.last_name
-                        }
-                        className={profileStyleClass}
-                        width="150"
-                      />
-                      <div className="mt-3">
-                        <h4>
-                          {props.employee.first_name +
-                            " " +
-                            props.employee.middle_name +
-                            " " +
-                            props.employee.last_name}
-                        </h4>
-                        <p className="text-secondary mb-1">
-                          {findTypeById(props.employee.type_id)}
-                        </p>
-                        <p className="text-muted font-size-sm">
-                          {findDepartmentById(props.employee.dept_id) +
-                            " Department"}
-                        </p>
-                      </div>
-                    </div>
-                  </CardBody>
-                </Card>
+    function showProfilePicture(){
+        if(props.employee.profile_picture === undefined || props.employee.profile_picture === ""){
+            return(<img src={defaultPic} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>)
+        }else{
+            return(<img src={`http://localhost:3001/profilePictures/${props.employee.profile_picture}`} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>);
+        }
+    }
+
+    function showExtraAttributes(col_name){
+
+        return(
+            <div className="row">
+                <hr/>
+                <div className="col-sm-3">
+                    <h6 className="mb-6">{col_name}</h6>
+                </div>
+                <div className="col-sm-9 text-secondary">
+                    {props.employeeFull[col_name] === null || props.employeeFull[col_name] === "" ? "undefined": props.employeeFull[col_name]}
+                </div>
+            </div>
+        );
+
+    }
+
+    return(
+        <div>
+            {isLoading ? (
+                <Spinner animation="border" role="status" className={styles['spinner']}>
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            ):(
+                <>
+                    <div className={styles["main-body"]}>
+
+                        <div className="row gutters-sm">
+                            <div className="col-md-4 mb-3">
+
+                                {/*Profile picture and basic information*/}
+                                <Card>
+                                    <CardBody>
+                                        <div className="d-flex flex-column align-items-center text-center">
+                                            {showProfilePicture()}
+                                            <div className="mt-3">
+                                                <h4>{props.employee.first_name + " " + props.employee.middle_name + " " + props.employee.last_name}</h4>
+                                                <p className="text-secondary mb-1">{findTypeById(props.employee.type_id)}</p>
+                                                <p className="text-muted font-size-sm">{findDepartmentById(props.employee.dept_id) + " Department"}</p>
+                                            </div>
+                                        </div>
+                                    </CardBody>
+                                </Card>
 
                 {/*Contact information*/}
                 <Card className="mt-3">
@@ -172,34 +181,23 @@ function Profile(props) {
                       </div>
                     </ListGroupItem>
 
-                    <ListGroupItem className="d-flex justify-content-between align-items-center flex-wrap">
-                      {/*<i className="fa fa-envelope fa-2x"></i>*/}
-                      <div className="col-1">
-                        <h6 className="fa fa-phone fa-1x"></h6>
-                      </div>
-                      <div className="col-2">
-                        <h6>Mobile</h6>
-                      </div>
-                      <div className="col-8">
-                        <h6>{props.employee.contact_num}</h6>
-                      </div>
-                    </ListGroupItem>
+                                        <ListGroupItem className="d-flex justify-content-between align-items-center flex-wrap">
+                                            {/*<i className="fa fa-envelope fa-2x"></i>*/}
+                                            <div className="col-1"><h6 className="fa fa-phone fa-1x"></h6></div>
+                                            <div className="col-2"><h6>Mobile</h6></div>
+                                            <div className="col-8"><h6>{props.employee.contact_num}</h6></div>
+                                        </ListGroupItem>
 
-                    <ListGroupItem className="d-flex justify-content-between align-items-center flex-wrap">
-                      {/*<i className="fa fa-envelope fa-2x"></i>*/}
-                      <div className="col-1">
-                        <h6 className="fa fa-home fa-1x"></h6>
-                      </div>
-                      <div className="col-2">
-                        <h6>Post</h6>
-                      </div>
-                      <div className="col-8">
-                        <h6>{props.employee.address}</h6>
-                      </div>
-                    </ListGroupItem>
-                  </ListGroup>
-                </Card>
-              </div>
+                                        <ListGroupItem className="d-flex justify-content-between align-items-center flex-wrap">
+                                            {/*<i className="fa fa-envelope fa-2x"></i>*/}
+                                            <div className="col-1"><h6 className="fa fa-home fa-1x"></h6></div>
+                                            <div className="col-2"><h6>Post</h6></div>
+                                            <div className="col-8"><h6>{props.employee.address}</h6></div>
+                                        </ListGroupItem>
+                                    </ListGroup>
+                                </Card>
+
+                            </div>
 
               <div className="col-md-8">
                 <Card className="mb-3">
@@ -278,23 +276,32 @@ function Profile(props) {
                     </div>
                     <hr />
 
-                    <div className="row">
-                      <div className="col-sm-3">
-                        <h6 className="mb-6">Pay-Grade</h6>
-                      </div>
-                      <div className="col-sm-9 text-secondary">
-                        {findPayGradeByID(props.employee.paygrade_id)}
-                      </div>
+                                        <div className="row">
+                                            <div className="col-sm-3">
+                                                <h6 className="mb-6">Pay-Grade</h6>
+                                            </div>
+                                            <div className="col-sm-9 text-secondary">
+                                                {findPayGradeByID(props.employee.paygrade_id)}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <p>
+                                                {Object.keys(props.employeeFull).slice(16).map(showExtraAttributes)}
+                                            </p>
+                                        </div>
+
+
+                                    </CardBody>
+                                </Card>
+                            </div>
+                        </div>
                     </div>
-                  </CardBody>
-                </Card>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
-    </div>
-  );
+                </>
+                )}
+        </div>
+
+    );
 }
 
 export default Profile;
