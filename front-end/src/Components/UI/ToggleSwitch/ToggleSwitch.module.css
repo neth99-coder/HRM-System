@@ -51,6 +51,7 @@
     .switch {
     display: block;
     width: 24px;
+    height: 25px;
     margin: 5px;
     background: #fff;
     position: absolute;
