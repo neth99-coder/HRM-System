@@ -26,12 +26,14 @@ function AddNewComponent(props){
     const [bday,setBday] = useState();
     const [isMarried,setIsMarried] = useState();
     const [contactNum,setContactNum] = useState();
+    const [jobType,setJobType] = useState();
     const [emergencyNum,setEmergencyNum] = useState();
     const [paygradeID,setPaygradeID] = useState();
     const [empStatusId,setEmpStatusId] = useState();
     const [empID,setEmpID] = useState(props.empID);
     const [departments,setDepartments] = useState([]);
     const [types,setTypes] = useState([]);
+    const [jobs,setJobs] = useState([]);
     const [profilePicture,setProfilePicture] = useState(defaultPic);
     const [status,setStatus] = useState([]);
     const [payGrades,setPayGrades] = useState([]);
@@ -66,6 +68,15 @@ function AddNewComponent(props){
       });
     };
     findTypes();
+
+      const findJobs = async () => {
+          await Axios.get("http://localhost:3001/api/hrManager/getJobTypes", {
+              headers: { "x-auth-token": authService.getUserToken() },
+          }).then((res) => {
+              setJobs(res.data.result);
+          });
+      };
+      findJobs();
 
     const findStatus = async () => {
       await Axios.get("http://localhost:3001/api/hrManager/getStatus", {
@@ -169,6 +180,8 @@ function AddNewComponent(props){
       validate(value);
     }else if(name == "supervisorId"){
         setSupervisor(value);
+    }else if(name == "jobID"){
+        setJobType(value);
     }
   }
 
@@ -176,9 +189,9 @@ function AddNewComponent(props){
 
     async function handleSubmit(event) {
         event.preventDefault();
-        const formData = [empID,firstName,middleName,lastName,address,nic,bday,isMarried,contactNum,emergencyNum,email,deptID,paygradeID,empStatusId,typeID,imageName];
-        for(let j = 0; j < Object.keys(props.employeeFull).length - 16 ; j++){
-            const col_name = Object.keys(props.employeeFull)[16+j];
+        const formData = [empID,firstName,middleName,lastName,address,nic,bday,isMarried,contactNum,emergencyNum,email,deptID,paygradeID,empStatusId,typeID,imageName,jobType];
+        for(let j = 0; j < Object.keys(props.employeeFull).length - 17 ; j++){
+            const col_name = Object.keys(props.employeeFull)[17+j];
             formData.push(employeeNew[col_name]);
         };
         const formValues = {
@@ -629,27 +642,45 @@ function AddNewComponent(props){
                             </FormGroup>
                           </div>
 
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <FormGroup>
-                              <label htmlFor="typeID">Designation</label>
-                              <select
-                                className={Styles["form-control"]}
-                                id="typeID"
-                                name="typeID"
-                                placeholder="Select Designation"
-                                required={true}
-                                value={typeID}
-                                onChange={handleInputChange}
-                              >
-                                <option value="" hidden={true}>
-                                  Select Designation
-                                </option>
-                                {types.map(({ type_id, type_name }, index) => (
-                                  <option value={type_id}>{type_name}</option>
-                                ))}
-                              </select>
-                            </FormGroup>
-                          </div>
+                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <FormGroup>
+                                    <label htmlFor="typeID">Employee Type</label>
+                                    <select
+                                        className={Styles["form-control"]}
+                                        id="typeID"
+                                        name="typeID"
+                                        placeholder="Select Employee Type"
+                                        required={true}
+                                        value={typeID}
+                                        onChange={handleInputChange}
+                                    >
+                                        <option value="" hidden={true}>Select Employee Type</option>
+                                        {types.filter((type) => type.type_id !== 3 && type.type_id !== 4).map(({ type_id, type_name }, index) => (
+                                            <option value={type_id}>{type_name}</option>
+                                        ))}
+                                    </select>
+                                </FormGroup>
+                            </div>
+
+                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <FormGroup>
+                                    <label htmlFor="jobID">Designation</label>
+                                    <select
+                                        className={Styles["form-control"]}
+                                        id="jobID"
+                                        name="jobID"
+                                        placeholder="Select Designation"
+                                        required={true}
+                                        value={jobType}
+                                        onChange={handleInputChange}
+                                    >
+                                        <option value="" hidden={true}>Select Designation</option>
+                                        {jobs.filter((job) => job.job_type_title !== "HR Manager").map(({ job_type_id, job_type_title }, index) => (
+                                            <option value={job_type_id}>{job_type_title}</option>
+                                        ))}
+                                    </select>
+                                </FormGroup>
+                            </div>
 
                           <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <FormGroup>
@@ -715,7 +746,7 @@ function AddNewComponent(props){
                             </div>
 
                                                     <div>
-                                                        {Object.keys(props.employeeFull).slice(16).map(showExtraAttributes)}
+                                                        {Object.keys(props.employeeFull).slice(17).map(showExtraAttributes)}
                                                     </div>
 
                                                 </div>

@@ -17,6 +17,23 @@ const getDepartments = async (req,res) => {
         });
 }
 
+const getJobTypes = async (req,res) => {
+    await hrManagerModal
+        .getJobTypes()
+        .then((result) => {
+            res.json({
+                success: true,
+                result,
+            });
+        })
+        .catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
 const getTypes = async (req,res) => {
     await hrManagerModal
         .getTypes()
@@ -497,11 +514,10 @@ module.exports = {
     getAttendanceNotMarked,
     getSupervisorId,
     getSupervisorByEmpId,
-
-
     getEmployeeFull,
     getDataTypes,
     getOneEmployeesFull,
+    getJobTypes,
 
     updateEmployee,
     addEmployee,
@@ -511,6 +527,4 @@ module.exports = {
     dpUpload,
     addSupervisor,
     updateSupervisor
-
-
 }

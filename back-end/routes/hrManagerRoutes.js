@@ -3,6 +3,7 @@ const router = express.Router();
 const hrManagerController = require("../controllers/hrManagerController");
 
 router.get("/getDepartments",hrManagerController.getDepartments);
+router.get("/getJobTypes",hrManagerController.getJobTypes);
 router.get("/getTypes",hrManagerController.getTypes);
 router.get("/getSupervisorId",hrManagerController.getSupervisorId);
 router.get("/getStatus",hrManagerController.getStauts);

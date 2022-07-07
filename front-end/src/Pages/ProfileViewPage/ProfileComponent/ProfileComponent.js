@@ -24,6 +24,7 @@ function Profile(props){
     const [status,setStatus] = useState([]);
     const [payGrades,setPayGrades] = useState([]);
     const [newAttributes,setNewAttributes] = useState();
+    const [jobs,setJobs] = useState([]);
 
   const profileStyleClass = "rounded-circle " + styles["profile-dp"];
 
@@ -38,6 +39,15 @@ function Profile(props){
       });
     };
     findDepartments();
+
+    const findJobs = async () => {
+      await Axios.get("http://localhost:3001/api/hrManager/getJobTypes", {
+        headers: { "x-auth-token": authService.getUserToken() },
+      }).then((res) => {
+        setJobs(res.data.result);
+      });
+    };
+    findJobs();
 
     const findTypes = async () => {
       await Axios.get("http://localhost:3001/api/hrmanager/getTypes", {
@@ -75,6 +85,15 @@ function Profile(props){
       return "";
     } else {
       return department[0].name;
+    }
+  }
+
+  function findJobById(job_type_id) {
+    let job = jobs.filter((job) => job.job_type_id === job_type_id);
+    if (job.length === 0) {
+      return "";
+    } else {
+      return job[0].job_type_title;
     }
   }
 
@@ -278,6 +297,16 @@ function Profile(props){
 
                     <div className="row">
                       <div className="col-sm-3">
+                        <h6 className="mb-6">Designation</h6>
+                      </div>
+                      <div className="col-sm-9 text-secondary">
+                        {findJobById(props.employee.job_type_id)}
+                      </div>
+                    </div>
+                    <hr />
+
+                    <div className="row">
+                      <div className="col-sm-3">
                         <h6 className="mb-6">Employee Supervisor</h6>
                       </div>
                       <div className="col-sm-9 text-secondary">
@@ -297,7 +326,7 @@ function Profile(props){
 
                                         <div>
                                             <p>
-                                                {Object.keys(props.employeeFull).slice(16).map(showExtraAttributes)}
+                                                {Object.keys(props.employeeFull).slice(17).map(showExtraAttributes)}
                                             </p>
                                         </div>
 

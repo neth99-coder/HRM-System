@@ -18,6 +18,21 @@ function getDepartments() {
     });
 }
 
+//function to get all details of all job Types
+function getJobTypes() {
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT * FROM job_type";
+        db.query(sql, (err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+
+                return resolve(result);
+            }
+        });
+    });
+}
+
 //function to get all details of all employee types
 function getTypes() {
     return new Promise((resolve, reject) => {
@@ -91,7 +106,7 @@ function getEmployeeByDeptId(deptId){
 //function to get all details of an employee for a given employee ID
 function getEmployee(empId){
     return new Promise((resolve, reject) => {
-        var sql = "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture FROM employee WHERE emp_id = ? ";
+        var sql = "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture,job_type_id FROM employee WHERE emp_id = ? ";
         db.query(sql,[empId] ,(err, result) => {
             if (err) {
                 return reject(err);
@@ -520,9 +535,7 @@ module.exports = {
     getLeaveTypesCount,
     getAttendanceNotMarked,
     getSupervisorByEmpId,
-
-
-
+    getJobTypes,
     getEmployeeFull,
     getDataTypes,
     getOneEmployeesFull,
@@ -536,6 +549,4 @@ module.exports = {
     dpUpload,
     addSupervisor,
     updateSupervisor
-
-
 }
