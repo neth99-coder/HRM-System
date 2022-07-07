@@ -24,6 +24,7 @@ router.get("/getAbsentTomorrow", hrManagerController.getAbsentTomorrow);
 router.get("/getWorkingToday", hrManagerController.getWorkingToday);
 router.get("/getLeaveTypesCount", hrManagerController.getLeaveTypesCount);
 router.get("/getAttendanceNotMarked", hrManagerController.getAttendanceNotMarked);
+router.get("/getConfigValues/:paygrade_id",hrManagerController.getleaveConfig);
 
 router.post("/updateEmployee",hrManagerController.updateEmployee);
 router.post("/updateSupervisor",hrManagerController.updateSupervisor);
@@ -33,6 +34,7 @@ router.post("/deleteEmployee",hrManagerController.deleteEmployee);
 router.post("/addSupervisor",hrManagerController.addSupervisor);
 router.post("/addColumn",hrManagerController.addColumn);
 router.post("/dpUpload",hrManagerController.dpUpload);
+router.post("/updateleaveConfig",hrManagerController.updateleaveConfig);
 
 
 

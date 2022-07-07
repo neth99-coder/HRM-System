@@ -21,6 +21,7 @@ const getJobTypes = async (req,res) => {
     await hrManagerModal
         .getJobTypes()
         .then((result) => {
+
             res.json({
                 success: true,
                 result,
@@ -363,13 +364,43 @@ const deleteEmployee = async (req,res)=>{
         });
 }
 
+
 const addSupervisor = async (req,res)=>{
     await hrManagerModal
         .addSupervisor(req.body)
+         .then((result) => {
+            res.json({ success: true, result });
+        })
+        .catch((err) => {
+            console.log(err)
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
+const updateleaveConfig = async (req,res)=>{
+    await hrManagerModal
+        .updateleaveConfig(req.body)
         .then((result) => {
             res.json({ success: true, result });
         })
         .catch((err) => {
+            console.log(err)
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
+const getleaveConfig = async (req,res)=>{
+    await hrManagerModal
+        .getleaveConfig(req.params.paygrade_id)
+        .then((result) => {
+            res.json({ success: true, result });
+        }).catch((err) => {
             res.json({
                 success: false,
                 err,
@@ -518,6 +549,7 @@ module.exports = {
     getDataTypes,
     getOneEmployeesFull,
     getJobTypes,
+    getleaveConfig,
 
     updateEmployee,
     addEmployee,
@@ -525,6 +557,8 @@ module.exports = {
     deleteEmployee,
     addColumn,
     dpUpload,
+    updateleaveConfig,
     addSupervisor,
     updateSupervisor
+
 }

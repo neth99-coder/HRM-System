@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styles from './ProfileViewComponent.module.css'
+import authService from '../../../../services/auth.service'
 import {
   Nav,
   Breadcrumb,
@@ -12,7 +13,6 @@ import {
   Button,
   NavLink,
 } from 'reactstrap'
-
 
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Axios from 'axios'
@@ -73,17 +73,18 @@ function ProfileView(props) {
 
   const getDepartmentById = (ID)=>{
     for(let dept_id in departments){
-        if (dept_id== ID){
+        if (departments[dept_id].dept_id == ID){
             return departments[dept_id].name;
         }
     }
 }
+
   const getEmpStatusById = (ID)=>{
+    console.log(empStatus)
     let status = ""
-    
     for(let emp_status_id in empStatus){
        
-        if (emp_status_id == ID){
+        if (empStatus[emp_status_id].emp_status_id== ID){
              status = empStatus[emp_status_id];
         }
     }
@@ -97,17 +98,10 @@ function ProfileView(props) {
   }
 
   const getPayGradeById = (ID)=>{
+    
     for(let paygrade_id in payGrades){
-        if (paygrade_id == ID){
+        if (payGrades[paygrade_id].paygrade_id == ID){
             return payGrades[paygrade_id].name;
-        }
-    }
-  }
-
-  const getUserTypeById = (ID)=>{
-    for(let type in userTypes){
-        if (type.id == ID){
-            return type.type_name;
         }
     }
   }
@@ -117,12 +111,11 @@ function ProfileView(props) {
       emp_id: hrmanager.emp_id,
       profile_picture: hrmanager.profile_picture,
     }
-    Axios.post(
-      `http://localhost:3001/api/employee/hr-manager-delete`,
-      data,
-    ).then((res) => {
+    Axios.post(`http://localhost:3001/api/employee/hr-manager-delete`, data, {
+      headers: { 'x-auth-token': authService.getUserToken() },
+    }).then((res) => {
       if (res.data.success) {
-        navigate('/admin/home')
+        navigate('/admin')
       } else {
         alert('a fail')
       }
@@ -130,13 +123,12 @@ function ProfileView(props) {
   }
 
   return (
-   
     <div>
       <div className={styles['main-body']}>
         <div className="row">
           <Breadcrumb>
             <BreadcrumbItem>
-              <Link to="/admin/home" className={styles['breadcrumb-link']}>
+              <Link to="/admin" className={styles['breadcrumb-link']}>
                 Staff
               </Link>
             </BreadcrumbItem>
