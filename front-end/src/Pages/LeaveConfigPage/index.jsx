@@ -1,93 +1,173 @@
-import React, {useState} from "react";
-import Header from "../../Components/Header/Header";
+import React, { useState, useEffect } from 'react'
+import Header from '../../Components/Header/Header'
 
-import { Button, Dropdown, Container, Nav, Form } from "react-bootstrap";
+import { Button, Dropdown, Container, Nav, Form } from 'react-bootstrap'
 
-import styled from "./index.module.css";
+import styled from './index.module.css'
+import Axios from 'axios'
+import authService from '../../services/auth.service'
+import { useNavigate } from 'react-router-dom'
 
 function LeaveConfigForm() {
+  const [paygrade, setPaygrade] = useState('Select Paygrade')
+  const [paygrades, setPaygrades] = useState([])
+  const [leaves, setLeaves] = useState({
+    Casual: 0,
+    Medical: 0,
+    Annual: 0,
+  })
+  const navigate = useNavigate()
 
-  const [paygrade, setPaygrade] = useState("Select Paygrade");
+  useEffect(() => {
+    Axios.get('http://localhost:3001/api/hrManager/getPaygrades', {
+      headers: { 'x-auth-token': authService.getUserToken() },
+    }).then((res) => {
+      setPaygrades(res.data.result)
+    })
+  }, [])
 
-  return (
-    <>
-      <Form className={`${styled["main-form"]} ${styled["admin-form"]}`}>
-        <h3 className={styled["form-title"]}>Leave Configeration</h3>
 
-        <Dropdown className={styled["paygrade-select-container"]}>
-          <Dropdown.Toggle className={styled["paygrade-select"]} variant="primary" id="dropdown-basic">
-            <span className={styled["paygrade-text"]}>{paygrade}</span>
-          </Dropdown.Toggle>
+  const loadConfigData = (paygrade_id)=>{
+    Axios.get(`http://localhost:3001/api/hrManager/getConfigValues/${paygrade_id}`,{
+      headers: { 'x-auth-token': authService.getUserToken() },
+    }).then((res) => {
+      let values = {}
+      if(res.data.result.length != 0){
+        res.data.result.map((row)=>{
+          const type = Object.keys(leaves)[row.leave_id-1];
+          values[type] = row.num_of_leaves;
+        })
+      }else{
+        values = {
+          Casual:0,
+          Medical:0,
+          Annual:0
+        }
+      }
+      setLeaves(values)
+  })
+    
+  }
+  
 
-          <Dropdown.Menu>
-            <Dropdown.Item onClick={()=>{setPaygrade("Paygrade 1")}}>Paygrade 1</Dropdown.Item>
-            <Dropdown.Item onClick={()=>{setPaygrade("Paygrade 2")}}>Paygrade 2</Dropdown.Item>
-            <Dropdown.Item onClick={()=>{setPaygrade("Paygrade 3")}}>Paygrade 3</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
 
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Casual Leaves</Form.Label>
-          <Form.Control
-            type="number"
-            placeholder="Enter number of casual leaves"
-          />
-        </Form.Group>
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    let success = false
+    for(let i=0 ; i < Object.keys(leaves).length ; i++){
+      const data = {
+        paygrade_id: paygrade,
+        leave_id: i + 1,
+        leaves: parseInt(leaves[Object.keys(leaves)[i]])
+      }
 
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Medical Leaves</Form.Label>
-          <Form.Control
-            type="number"
-            placeholder="Enter number of casual leaves"
-          />
-        </Form.Group>
+        await Axios.post('http://localhost:3001/api/hrManager/updateleaveConfig', data, {
+          headers: {
+            'x-auth-token': authService.getUserToken(),
+          },
+        }).then((res) => {
+          success = res.data.success
+        })
+    }
+    if(success){
+      setLeaves({
+        Casual:0,
+        Medical:0,
+        Annual:0
+      })
+      alert("successfully added")
+    }else{
+      alert("failed")
+    }
+  }
 
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Annual Leaves</Form.Label>
-          <Form.Control
-            type="number"
-            placeholder="Enter number of casual leaves"
-          />
-        </Form.Group>
+return (
+  <>
+    <Form
+      className={`${styled['main-form']} ${styled['admin-form']}`}
+      onSubmit={handleSubmit}
+    >
+      <h3 className={styled['form-title']}>Leave Configeration</h3>
 
-        {/* Validation part before changing the Leaves */}
-        <div className={styled["form-validation-container"]}>
-          <Form.Group
-            className={`mb-3 ${styled["form-validation"]}`}
-            controlId="formBasicPassword"
-          >
-            <Form.Label className={styled["validation-label"]}>
-              User Email
-            </Form.Label>
-            <Form.Control type="email" placeholder="Enter user email" />
-          </Form.Group>
-          <Form.Group
-            className={`mb-3 ${styled["form-validation"]}`}
-            controlId="formBasicPassword"
-          >
-            <Form.Label className={styled["validation-label"]}>
-              Password
-            </Form.Label>
-            <Form.Control type="password" placeholder="Password" />
-          </Form.Group>
-        </div>
+      <Dropdown className={styled['paygrade-select-container']}>
+        <Dropdown.Toggle
+          className={styled['paygrade-select']}
+          variant="primary"
+          id="dropdown-basic"
+        >
+          <span className={styled['paygrade-text']}>{paygrades[paygrade - 1]?paygrades[paygrade - 1 ].name:"Select Paygrade"}</span>
+        </Dropdown.Toggle>
 
-        <Button variant="primary" type="submit">
-          Save Changes
-        </Button>
-      </Form>
-    </>
-  );
-}
+        <Dropdown.Menu>
+          {paygrades.map(({ paygrade_id, name }, index) => (
+            <Dropdown.Item
+              onClick={() => {
+                loadConfigData(paygrade_id)
+                setPaygrade(paygrade_id)
+              }}
+            >
+              {name}
+            </Dropdown.Item>
+          ))}
+        </Dropdown.Menu>
+      </Dropdown>
 
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>Casual Leaves</Form.Label>
+        <Form.Control
+          type="number"
+          value={leaves['Casual']}
+          onChange={(e) => {
+            setLeaves({ ...leaves, Casual: e.target.value })
+          }}
+          placeholder="Enter number of casual leaves"
+          required
+        />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>Medical Leaves</Form.Label>
+        <Form.Control
+          type="number"
+          value={leaves['Medical']}
+          onChange={(e) => {
+            setLeaves({ ...leaves, Medical: e.target.value })
+          }}
+          placeholder="Enter number of casual leaves"
+          required
+        />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>Annual Leaves</Form.Label>
+        <Form.Control
+          type="number"
+          value={leaves['Annual']}
+          onChange={(e) => {
+            setLeaves({ ...leaves, Annual: e.target.value })
+          }}
+          placeholder="Enter number of casual leaves"
+          required
+        />
+      </Form.Group>
+
+      {/* Validation part before changing the Leaves */}
+
+      <Button variant="primary" type="submit" onSubmit={handleSubmit}>
+        Save Changes
+      </Button>
+    </Form>
+  </>
+)
+        }
 function LeaveConfigPage() {
   // Need to import these details from the server
   const companyDetails = {
-    logo: "logo.png",
-    name: "Jupiter Apperels",
-    addressLine1: "paravi Island",
-    addressLine2: "Matara",
-  };
+    logo: 'logo.png',
+    name: 'Jupiter Apperels',
+    addressLine1: 'paravi Island',
+    addressLine2: 'Matara',
+  }
 
   // Current User leave data
   // const profileDetails = {
@@ -108,7 +188,7 @@ function LeaveConfigPage() {
         <LeaveConfigForm />
       </main>
     </>
-  );
+  )
 }
 
-export default LeaveConfigPage;
+export default LeaveConfigPage

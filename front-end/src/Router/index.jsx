@@ -105,7 +105,7 @@ export default function AppRouter() {
                 <Route path="employee/add-new" element={<AddNewEmployeePage />} />
                 <Route path="my-profile" element={<ProfileView />} />
                 <Route path="attendance" element={<AttendancePage />} />
-                <Route path="leave-config" element={<LeaveConfigPage />} />
+                <Route path="leave-config" element={<LeaveConfigPage companyDetails={companyDetails} profileDetails={profileDetails} />} />
                 <Route path="*" element={<NotFound/>} />
               </Route>
               <Route path="*" element={<Unauth/>} />

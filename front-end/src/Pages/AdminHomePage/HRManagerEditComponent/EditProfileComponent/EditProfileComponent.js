@@ -32,10 +32,10 @@ function EditProfile(props) {
     emp_id: props.employee.emp_id,
   })
 
-  const [departments, setDepartments] = useState({})
-  const [empStatus, setEmpStatus] = useState({})
-  const [payGrades, setPayGrades] = useState({})
-  const [userTypes, setUserTypes] = useState({})
+  const [departments, setDepartments] = useState([])
+  const [empStatus, setEmpStatus] = useState([])
+  const [payGrades, setPayGrades] = useState([])
+  const [userTypes, setUserTypes] = useState([])
 
   useEffect(() => {
     Axios.get('http://localhost:3001/api/hrManager/getDepartments',{

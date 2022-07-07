@@ -298,6 +298,34 @@ const deleteEmployee = async (req,res)=>{
         });
 }
 
+const updateleaveConfig = async (req,res)=>{
+    console.log(req.body)
+    await hrManagerModal
+        .updateleaveConfig(req.body)
+        .then((result) => {
+            res.json({ success: true, result });
+        })
+        .catch((err) => {
+            console.log(err)
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+const getleaveConfig = async (req,res)=>{
+    await hrManagerModal
+        .getleaveConfig(req.params.paygrade_id)
+        .then((result) => {
+            res.json({ success: true, result });
+        }).catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
 const addColumn = async (req,res)=>{
     await hrManagerModal
         .addColumn(req.body)
@@ -444,7 +472,7 @@ module.exports = {
     addAttendance,
     deleteEmployee,
     addColumn,
-    dpUpload
-
-
+    dpUpload,
+    updateleaveConfig,
+    getleaveConfig
 }

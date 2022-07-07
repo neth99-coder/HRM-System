@@ -75,6 +75,7 @@ function ProfileView(props) {
 }
 
   const getEmpStatusById = (ID)=>{
+    console.log(empStatus)
     let status = ""
     for(let emp_status_id in empStatus){
        

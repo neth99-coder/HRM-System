@@ -46,7 +46,7 @@ const Index = (props) => {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       res.data.result.map((employee) => {
-        if (employee.type_name === 'HR Manager') {
+        if (employee.job_type_title === 'HR Manager') {
           setHrmanager(employee)
         }
       })
@@ -143,7 +143,7 @@ const Index = (props) => {
             >
               <Profile
                 name={hrmanager.first_name + ' ' + hrmanager.last_name}
-                jobRole={hrmanager.type_name}
+                jobRole={hrmanager.job_type_title}
                 img={hrmanager.profile_picture}
               />
             </Link>
@@ -172,7 +172,7 @@ const Index = (props) => {
         ) : (
           <div className={`${styles['profiles']}`}>
             {employees.map((employee) => {
-              if (employee.type_name !== 'HR Manager' && employee.type_name !== 'Admin') {
+              if (employee.job_type_title !== 'HR Manager') {
                 return (
                   <div className={`${styles['profile']}`}>
                     <Link
@@ -182,7 +182,7 @@ const Index = (props) => {
                     >
                       <Profile
                         name={employee.first_name + ' ' + employee.last_name}
-                        jobRole={employee.type_name}
+                        jobRole={employee.job_type_title}
                         img={employee.profile_picture}
                       />
                     </Link>
