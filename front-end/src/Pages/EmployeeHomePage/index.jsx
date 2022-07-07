@@ -1,5 +1,5 @@
 import React from "react";
-//import { Card } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 
 
 import styled from "./index.module.css";
@@ -12,28 +12,15 @@ import ChartCard from "./ChartCard";
 import authService from "../../services/auth.service"
 
 function EmployeeHomePage() {
-  // Need to import these details from the server
-  const companyDetails = {
-    logo: "logo.png",
-    name: "Jupiter Apperels",
-    addressLine1: "paravi Island",
-    addressLine2: "Matara",
-  };
-
-  // Current User leave data
-  const profileDetails = {
-    dp: "profile-pic.JPG",
-    name: "Nethmi Jayakody",
-    post: "Admin",
-  };
 
 
   const [leaveData, setLeaveData] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false) 
 
 
   useEffect(() => {
     const loadLeaves = async () => {
+      setIsLoading(true)
       await Axios.get(
         "http://localhost:3001/api/employee/leaveChart/"+  authService.getUserID(),
         {
@@ -42,6 +29,7 @@ function EmployeeHomePage() {
       ).then((res) => {
         console.log(res.data.result);
         setLeaveData([...res.data.result]);
+        setIsLoading(false);
       });
     };
     loadLeaves();
@@ -51,6 +39,12 @@ function EmployeeHomePage() {
 
  
   return (
+    <>
+          {isLoading ? (
+        <Spinner animation="border" role="status" className={styled['spinner']}>
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      ) : (
     <div className={styled["page-holder"]}>
       {/* <Header
         profileDetails={profileDetails}
@@ -74,7 +68,8 @@ function EmployeeHomePage() {
         </div>
       </section>
 
-    </div>
+    </div>)}
+    </>
   );
 }
 

@@ -1,11 +1,11 @@
 const { json } = require("express");
 
 //function to count remaing leave according to types
-//"Medical"=> 2, "Casual"=> 1, "Annual"=> 3
+//"Maternity"=> 2, "Casual"=> 1, "Annual"=> 3
 
 function getLeaveCounts(emp_arr, paygrade_arr) {
-  var leaveCount = { "Medical": 0, "Casual": 0, "Annual": 0 };
-  var allowedCount = { "Medical": 0, "Casual": 0, "Annual": 0 };
+  var leaveCount = { "Maternity": 0, "Casual": 0, "Annual": 0, "No Pay": 0 };
+  var allowedCount =  { "Maternity": 0, "Casual": 0, "Annual": 0, "No Pay": 0 };
 
   emp_arr.map((cur) => {
     //leaveCount += cur['difference']
@@ -14,11 +14,14 @@ function getLeaveCounts(emp_arr, paygrade_arr) {
         leaveCount["Casual"] += cur["difference"];
         break;
       case 2:
-        leaveCount["Medical"] += cur["difference"];
+        leaveCount["Maternity"] += cur["difference"];
         break;
       case 3:
         leaveCount["Annual"] += cur["difference"];
         break;
+        case 4:
+          leaveCount["No Pay"] += cur["difference"];
+          break;
     }
   });
 
@@ -29,10 +32,13 @@ function getLeaveCounts(emp_arr, paygrade_arr) {
             allowedCount["Casual"] += cur["num_of_leaves"];
           break;
         case 2:
-            allowedCount["Medical"] += cur["num_of_leaves"];
+            allowedCount["Maternity"] += cur["num_of_leaves"];
           break;
         case 3:
             allowedCount["Annual"] += cur["num_of_leaves"];
+          break;
+          case 4:
+            allowedCount["No Pay"] += cur["num_of_leaves"];
           break;
       }
   });
@@ -40,13 +46,13 @@ function getLeaveCounts(emp_arr, paygrade_arr) {
   return [{
     leaveCount: leaveCount,
     allowedCount: allowedCount,
-    remaining: { "Medical": allowedCount["Medical"] - leaveCount["Medical"], "Casual":allowedCount["Casual"] - leaveCount["Casual"] , "Annual": allowedCount["Annual"] - leaveCount["Annual"] }
+    remaining: { "Maternity": allowedCount["Maternity"] - leaveCount["Maternity"], "Casual":allowedCount["Casual"] - leaveCount["Casual"] , "Annual": allowedCount["Annual"] - leaveCount["Annual"],"No Pay": allowedCount["No Pay"] - leaveCount["No Pay"] }
   }];
 }
 
 function getLeaveCountsEmpty(arr){
-  var leaveCount = { "Medical": 0, "Casual": 0, "Annual": 0 };
-  var allowedCount = { "Medical": 0, "Casual": 0, "Annual": 0 }; 
+  var leaveCount = { "Maternity": 0, "Casual": 0, "Annual": 0, "No Pay": 0 };
+  var allowedCount =  { "Maternity": 0, "Casual": 0, "Annual": 0, "No Pay": 0 };
   arr.map((cur) => {
     //allowedCount += cur["num_of_leaves"];
     switch (cur["leave_id"]) {
@@ -54,10 +60,13 @@ function getLeaveCountsEmpty(arr){
             allowedCount["Casual"] += cur["num_of_leaves"];
           break;
         case 2:
-            allowedCount["Medical"] += cur["num_of_leaves"];
+            allowedCount["Maternity"] += cur["num_of_leaves"];
           break;
         case 3:
             allowedCount["Annual"] += cur["num_of_leaves"];
+          break;
+          case 4:
+            allowedCount["No Pay"] += cur["num_of_leaves"];
           break;
       }
   });
@@ -65,15 +74,15 @@ function getLeaveCountsEmpty(arr){
   return [{
     leaveCount: leaveCount,
     allowedCount: allowedCount,
-    remaining: { "Medical": allowedCount["Medical"] - leaveCount["Medical"], "Casual":allowedCount["Casual"] - leaveCount["Casual"] , "Annual": allowedCount["Annual"] - leaveCount["Annual"] }
+    remaining: { "Maternity": allowedCount["Maternity"] - leaveCount["Maternity"], "Casual":allowedCount["Casual"] - leaveCount["Casual"] , "Annual": allowedCount["Annual"] - leaveCount["Annual"],"No Pay": allowedCount["No Pay"] - leaveCount["No Pay"] }
   }];
   
 }
 
 
 function getLeavesForChart(emp_arr, paygrade_arr) {
-  var leaveCount = { "Medical": 0, "Casual": 0, "Annual": 0 };
-  var allowedCount = { "Medical": 0, "Casual": 0, "Annual": 0 };
+  var leaveCount = { "Maternity": 0, "Casual": 0, "Annual": 0, "No Pay": 0 };
+  var allowedCount =  { "Maternity": 0, "Casual": 0, "Annual": 0, "No Pay": 0 };
 
   emp_arr.map((cur) => {
     //leaveCount += cur['difference']
@@ -82,11 +91,14 @@ function getLeavesForChart(emp_arr, paygrade_arr) {
         leaveCount["Casual"] += cur["difference"];
         break;
       case 2:
-        leaveCount["Medical"] += cur["difference"];
+        leaveCount["Maternity"] += cur["difference"];
         break;
       case 3:
         leaveCount["Annual"] += cur["difference"];
         break;
+        case 4:
+          leaveCount["No Pay"] += cur["difference"];
+          break;
     }
   });
 
@@ -97,26 +109,31 @@ function getLeavesForChart(emp_arr, paygrade_arr) {
             allowedCount["Casual"] += cur["num_of_leaves"];
           break;
         case 2:
-            allowedCount["Medical"] += cur["num_of_leaves"];
+            allowedCount["Maternity"] += cur["num_of_leaves"];
           break;
         case 3:
             allowedCount["Annual"] += cur["num_of_leaves"];
+          break;
+          case 4:
+            allowedCount["No Pay"] += cur["num_of_leaves"];
           break;
       }
   });
 
   const result = [
-    {allowed: allowedCount.Medical, taken: leaveCount.Medical, remaining: allowedCount["Medical"] - leaveCount["Medical"], title: "Medical"},
+    {allowed: allowedCount.Maternity, taken: leaveCount.Maternity, remaining: allowedCount["Maternity"] - leaveCount["Maternity"], title: "Maternity"},
     {allowed: allowedCount.Casual, taken: leaveCount.Casual, remaining: allowedCount["Casual"] - leaveCount["Casual"], title: "Casual" },
     {allowed: allowedCount.Annual, taken: leaveCount.Annual, remaining: allowedCount["Annual"] - leaveCount["Annual"], title: "Annual" },
+    {allowed: allowedCount["No Pay"] , taken: leaveCount["No Pay"], remaining: allowedCount["No Pay"] - leaveCount["No Pay"], title: "No Pay"}
   ]
+  
 
   return result;
 }
 
 function getLeavesForChartEmpty(arr){
-  var leaveCount = { "Medical": 0, "Casual": 0, "Annual": 0 };
-  var allowedCount = { "Medical": 0, "Casual": 0, "Annual": 0 };
+  var leaveCount = { "Maternity": 0, "Casual": 0, "Annual": 0, "No Pay": 0};
+  var allowedCount = { "Maternity": 0, "Casual": 0, "Annual": 0, "No Pay": 0 };
   arr.map((cur) => {
     //allowedCount += cur["num_of_leaves"];
     switch (cur["leave_id"]) {
@@ -124,18 +141,22 @@ function getLeavesForChartEmpty(arr){
             allowedCount["Casual"] += cur["num_of_leaves"];
           break;
         case 2:
-            allowedCount["Medical"] += cur["num_of_leaves"];
+            allowedCount["Maternity"] += cur["num_of_leaves"];
           break;
         case 3:
             allowedCount["Annual"] += cur["num_of_leaves"];
+          break;
+          case 4:
+            allowedCount["No Pay"] += cur["num_of_leaves"];
           break;
       }
   });
 
   const result = [
-    {allowed: allowedCount.Medical, taken: leaveCount.Medical, remaining: allowedCount["Medical"] - leaveCount["Medical"], title: "Medical"},
+    {allowed: allowedCount.Maternity, taken: leaveCount.Maternity, remaining: allowedCount["Maternity"] - leaveCount["Maternity"], title: "Maternity"},
     {allowed: allowedCount.Casual, taken: leaveCount.Casual, remaining: allowedCount["Casual"] - leaveCount["Casual"], title: "Casual" },
     {allowed: allowedCount.Annual, taken: leaveCount.Annual, remaining: allowedCount["Annual"] - leaveCount["Annual"], title: "Annual" },
+    {allowed: allowedCount["No Pay"] , taken: leaveCount["No Pay"], remaining: allowedCount["No Pay"] - leaveCount["No Pay"], title: "No Pay"}
   ]
 
   return result;

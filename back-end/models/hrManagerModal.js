@@ -197,12 +197,13 @@ function updateEmployee(data){
             }
             sql += "`" + keys[i] + "` = " + "?"
         }
-        sql += "WHERE emp_id = ?";
+        sql += " WHERE emp_id = ?";
         db.query(
             sql,
             values,
             (err,result) => {
                 if(result){
+                    //console.log(result+ "SUCCESS")
                     return resolve(result);
                 }else{
                     console.log(err)
@@ -353,11 +354,11 @@ function getAttendanceNotMarked(){
             if (err) {
                 return reject(err);
             } else {
-                console.log(result)
+                //console.log(result)
                 return resolve(result);
             }
         });
-        console.log(arrayOrganizer.insertQuery(data))
+        //console.log(arrayOrganizer.insertQuery(data))
         //console.log(sql)
     });
 } 
@@ -394,7 +395,7 @@ function addColumn(data){
             );
         }else{
             const sql = "ALTER TABLE employee ADD COLUMN (`" + data.fieldName+ "` " + data.dataType + ")";
-            console.log(sql);
+            //console.log(sql);
             db.query(
                 sql,
                 [data.fieldName,data.dataType],
