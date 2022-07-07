@@ -31,6 +31,7 @@ import HrManagerHomePage from "../Pages/HrManagerHomePage"
 import Unauth from "../Pages/ErrorPages/Unauth";
 import NotFound from "../Pages/ErrorPages/NotFound";
 import AdminHomePage from "../Pages/AdminHomePage/index";
+import CompanyDetailsPage from "../Pages/CompanyDetailsPage/CompanyDetailsPage";
 
 
 import authService from "../services/auth.service"
@@ -118,6 +119,7 @@ export default function AppRouter() {
                 <Route path="emp-profile" element={<EmployeeProfileView />} />
                 <Route path="hr-profile" element={<HRManagerView />} />
                 <Route path="hr-profile/edit" element={<HRManagerEdit departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE}/>} />
+                <Route path="companyDetails" element={<CompanyDetailsPage />} />
                 <Route path="*" element={<NotFound/>} />
               </Route>
               <Route path="*" element={<Unauth/>} />

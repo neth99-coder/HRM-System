@@ -97,6 +97,14 @@ class NavBar extends Component {
                     </NavLink>
                 </NavItem>
             );
+        }else if(this.state.employeeLevel === 4){
+            return(
+                <NavItem>
+                    <NavLink className="nav-link" href="/admin">
+                        <span className="fa fa-2x fa-home fa-lg"></span> Home
+                    </NavLink>
+                </NavItem>
+            );
         }
     }
 
@@ -148,6 +156,18 @@ class NavBar extends Component {
         }
     }
 
+    editCompanyDetailsNav(){
+        if(this.state.employeeLevel === 4){
+            return(
+                <NavItem>
+                    <NavLink className="nav-link" href="/admin/companyDetails">
+                        <span className="fa fa-2x fa-pencil fa-lg"></span> Company Details
+                    </NavLink>
+                </NavItem>
+            );
+        }
+    }
+
     render() {
         return(
             <div>
@@ -163,6 +183,7 @@ class NavBar extends Component {
                                 {this.leaveRequestsNav()}
                                 {this.reportNav()}
                                 {this.leaveConfNav()}
+                                {this.editCompanyDetailsNav()}
 
                             </Nav>
                         </Collapse>

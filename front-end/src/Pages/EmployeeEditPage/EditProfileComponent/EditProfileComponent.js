@@ -612,6 +612,8 @@ function EditProfile(props){
                                 className={Styles["form-control"]}
                                 id="bday"
                                 name="bday"
+                                min="1999-05-10"
+                                max={Date()}
                                 required={true}
                                 value={bday}
                                 placeholder="Select Birthday"

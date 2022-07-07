@@ -10,6 +10,7 @@ import {
 
 import {Link} from "react-router-dom";
 import Axios from 'axios'
+import authService from "../../../../services/auth.service";
 
 function Maritalstate(isMarried){
     if(isMarried == 0){
@@ -28,25 +29,33 @@ function Profile(props){
   const [userTypes, setUserTypes] = useState({})
 
     useEffect(() => {
-        Axios.get('http://localhost:3001/api/hrManager/getDepartments').then(
+        Axios.get('http://localhost:3001/api/hrManager/getDepartments',{
+            headers: { "x-auth-token": authService.getUserToken() },
+        }).then(
           (res) => {
             setDepartments(res.data.result)
           },
         )
     
-        Axios.get('http://localhost:3001/api/hrManager/getStatus').then(
+        Axios.get('http://localhost:3001/api/hrManager/getStatus',{
+            headers: { "x-auth-token": authService.getUserToken() },
+        }).then(
           (res) => {
             setEmpStatus(res.data.result)
           },
         )
     
-        Axios.get('http://localhost:3001/api/hrManager/getPaygrades').then(
+        Axios.get('http://localhost:3001/api/hrManager/getPaygrades',{
+            headers: { "x-auth-token": authService.getUserToken() },
+        }).then(
           (res) => {
             setPayGrades(res.data.result)
           },
         )
     
-        Axios.get('http://localhost:3001/api/hrManager/getTypes').then(
+        Axios.get('http://localhost:3001/api/hrManager/getTypes',{
+            headers: { "x-auth-token": authService.getUserToken() },
+        }).then(
           (res) => {
             setUserTypes(res.data.result)
           },
@@ -114,7 +123,7 @@ function Profile(props){
                         <Card>
                             <CardBody>
                                 <div className="d-flex flex-column align-items-center text-center">
-                                    <img src={`http://localhost:3001/images/${props.employee.profile_picture}`} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>
+                                    <img src={`http://localhost:3001/profilePictures/${props.employee.profile_picture}`} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>
                                     <div className="mt-3">
                                         <h4>{props.employee.first_name + " " + props.employee.middle_name + " " + props.employee.last_name}</h4>
                                         <p className="text-secondary mb-1">{props.employee.type_name}</p>

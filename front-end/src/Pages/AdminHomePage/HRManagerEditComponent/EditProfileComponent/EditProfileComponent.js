@@ -10,6 +10,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom'
 import Styles from './EditProfie.module.css'
 import Axios from 'axios'
+import authService from "../../../../services/auth.service";
 
 function EditProfile(props) {
   const [employee, setEmployee] = useState({
@@ -31,29 +32,37 @@ function EditProfile(props) {
     emp_id: props.employee.emp_id,
   })
 
-  const [departments, setDepartments] = useState({})
-  const [empStatus, setEmpStatus] = useState({})
-  const [payGrades, setPayGrades] = useState({})
-  const [userTypes, setUserTypes] = useState({})
+  const [departments, setDepartments] = useState([])
+  const [empStatus, setEmpStatus] = useState([])
+  const [payGrades, setPayGrades] = useState([])
+  const [userTypes, setUserTypes] = useState([])
 
   useEffect(() => {
-    Axios.get('http://localhost:3001/api/hrManager/getDepartments').then(
+    Axios.get('http://localhost:3001/api/hrManager/getDepartments',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then(
       (res) => {
         setDepartments(res.data.result)
       },
     )
 
-    Axios.get('http://localhost:3001/api/hrManager/getStatus').then((res) => {
+    Axios.get('http://localhost:3001/api/hrManager/getStatus',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then((res) => {
       setEmpStatus(res.data.result)
     })
 
-    Axios.get('http://localhost:3001/api/hrManager/getPaygrades').then(
+    Axios.get('http://localhost:3001/api/hrManager/getPaygrades',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then(
       (res) => {
         setPayGrades(res.data.result)
       },
     )
 
-    Axios.get('http://localhost:3001/api/hrManager/getTypes').then((res) => {
+    Axios.get('http://localhost:3001/api/hrManager/getTypes',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then((res) => {
       setUserTypes(res.data.result)
     })
   }, [])
@@ -81,7 +90,9 @@ function EditProfile(props) {
     e.preventDefault()
     Axios.post(
       'http://localhost:3001/api/employee/updateemployee',
-      employee,
+      employee,{
+          headers: { "x-auth-token": authService.getUserToken() },
+        }
     ).then((res) => {
       if (res.data.success) {
         alert('successfully updated')

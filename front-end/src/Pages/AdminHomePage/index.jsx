@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Profile from './ProfileComponent/profile.js'
 import { Modal } from 'react-bootstrap'
 import {generateKey} from "fast-key-generator";
+import authService from "../../services/auth.service";
 
 const Index = (props) => {
   const [employees, setEmployees] = useState([])
@@ -41,7 +42,9 @@ const Index = (props) => {
   const handleShow = () => setShowI(true)
 
   useEffect(() => {
-    Axios.get('http://localhost:3001/api/employee/getemployeetypes').then(
+    Axios.get('http://localhost:3001/api/employee/getemployeetypes',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then(
       (res) => {
         res.data.result.map((employee) => {
           if (employee.type_name === 'HR Manager') {
@@ -52,7 +55,9 @@ const Index = (props) => {
       },
     )
 
-    Axios.get('http://localhost:3001/api/hrManager/getEmployeeIds').then(
+    Axios.get('http://localhost:3001/api/hrManager/getEmployeeIds',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then(
       (res) => {
         setEmployeeIds(res.data.result)
       },
@@ -97,6 +102,7 @@ const Index = (props) => {
     Axios.post('http://localhost:3001/api/employee/addemployee', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        "x-auth-token": authService.getUserToken()
       },
     }).then((res) => {
       if (res.data.success) {
