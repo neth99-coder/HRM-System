@@ -97,6 +97,14 @@ class NavBar extends Component {
                     </NavLink>
                 </NavItem>
             );
+        }else if(this.state.employeeLevel === 4){
+            return(
+                <NavItem>
+                    <NavLink className="nav-link" href="/admin">
+                        <span className="fa fa-2x fa-home fa-lg"></span> Home
+                    </NavLink>
+                </NavItem>
+            );
         }
     }
 
@@ -137,6 +145,26 @@ class NavBar extends Component {
                     </NavLink>
                 </NavItem>
             );
+        }else if(this.state.employeeLevel === 3){
+            return(
+                <NavItem>
+                    <NavLink className="nav-link" href="/hrmanager/handle-leaves">
+                        <span className={"fa fa-2x fa-envelope-open fa-lg "}></span> Leave Requests
+                    </NavLink>
+                </NavItem>
+            );
+        }
+    }
+
+    editCompanyDetailsNav(){
+        if(this.state.employeeLevel === 4){
+            return(
+                <NavItem>
+                    <NavLink className="nav-link" href="/admin/companyDetails">
+                        <span className="fa fa-2x fa-pencil fa-lg"></span> Company Details
+                    </NavLink>
+                </NavItem>
+            );
         }
     }
 
@@ -155,6 +183,7 @@ class NavBar extends Component {
                                 {this.leaveRequestsNav()}
                                 {this.reportNav()}
                                 {this.leaveConfNav()}
+                                {this.editCompanyDetailsNav()}
 
                             </Nav>
                         </Collapse>

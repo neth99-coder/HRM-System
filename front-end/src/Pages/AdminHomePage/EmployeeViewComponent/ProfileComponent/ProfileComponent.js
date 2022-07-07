@@ -12,6 +12,7 @@ import {
 
 import { Link } from 'react-router-dom'
 import Axios from 'axios'
+import authService from "../../../../services/auth.service";
 
 function Maritalstate(isMarried) {
   if (isMarried == 0) {
@@ -24,9 +25,10 @@ function Maritalstate(isMarried) {
 function Profile(props) {
   const profileStyleClass = 'rounded-circle ' + styles['profile-dp']
   const [departments, setDepartments] = useState({})
-  const [empStatus, setEmpStatus] = useState({})
-  const [payGrades, setPayGrades] = useState({})
-  const [userTypes, setUserTypes] = useState({})
+  const [empStatus, setEmpStatus] = useState([])
+  const [payGrades, setPayGrades] = useState([])
+  const [userTypes, setUserTypes] = useState([])
+
 
   useEffect(() => {
     Axios.get('http://localhost:3001/api/hrManager/getDepartments', {
@@ -86,7 +88,7 @@ function Profile(props) {
     }
   }
 
-  return (
+   return (
     <div>
       <div className={styles['main-body']}>
         <Breadcrumb>
@@ -109,7 +111,7 @@ function Profile(props) {
               <CardBody>
                 <div className="d-flex flex-column align-items-center text-center">
                   <img
-                    src={`http://localhost:3001/images/${props.employee.profile_picture}`}
+                    src={`http://localhost:3001/profilePictures/${props.employee.profile_picture}`}
                     alt={
                       props.employee.first_name + ' ' + props.employee.last_name
                     }

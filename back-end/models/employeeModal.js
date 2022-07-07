@@ -2,18 +2,21 @@ const { json } = require("express");
 const db = require("../config/db");
 const fs = require("fs");
 const leaveCounter = require("../helpers/leaveCounter");
-const waterfall = require("waterfall");
+
 
 
 //function to get all details of an employee for a given employee ID
 function getEmployee(empId) {
   return new Promise((resolve, reject) => {
+    
     var sql =
-      "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture FROM employee WHERE emp_id = ? ";
+      "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, employee.job_type_id AS job_type_id, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture,job_type_title FROM employee INNER JOIN job_type ON employee.job_type_id = job_type.job_type_id WHERE emp_id = ?";
     db.query(sql, [empId], (err, result) => {
       if (err) {
+        
         return reject(err);
       } else {
+       //console.log(result)
         return resolve(result);
       }
     });
@@ -138,7 +141,7 @@ function updateEmployee(data) {
 function getLeaveRequests(empId) {
   return new Promise((resolve, reject) => {
     var sql =
-      "SELECT leave_id,leave_request_id,emp_id,supervisor_id,state_id,reason,attachment,type, DATE_FORMAT(leave_begin, '%d-%m-%Y') AS leave_begin, DATE_FORMAT(leave_end, '%d-%m-%Y') AS leave_end FROM leave_request NATURAL JOIN leave_type WHERE emp_id = ?";
+      "SELECT leave_id,leave_request_id,emp_id,state_id,reason,attachment,type, DATE_FORMAT(leave_begin, '%d-%m-%Y') AS leave_begin, DATE_FORMAT(leave_end, '%d-%m-%Y') AS leave_end FROM leave_request NATURAL JOIN leave_type WHERE emp_id = ?";
     db.query(sql, [empId], (err, result) => {
       if (err) {
         return reject(err);
@@ -153,13 +156,12 @@ function getLeaveRequests(empId) {
 function addLeaveRequest(data) {
   return new Promise((resolve, reject) => {
     const sql =
-      'INSERT INTO leave_request (emp_id,supervisor_id,leave_id,state_id,reason,leave_begin,leave_end,attachment) VALUES (?,?,?,?,?,?,?,?)'
+      'INSERT INTO leave_request (emp_id,leave_id,state_id,reason,leave_begin,leave_end,attachment) VALUES (?,?,?,?,?,?,?)'
 
     db.query(
       sql,
       [
         data.emp_id,
-        data.supervisor_id,
         data.leave_id,
         data.state_id,
         data.reason,
@@ -172,7 +174,7 @@ function addLeaveRequest(data) {
           // console.log("inserted");
           return resolve(result);
         } else {
-          // console.log(err);
+          console.log(err);
           return reject(err);
         }
       }

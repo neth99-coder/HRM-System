@@ -4,6 +4,8 @@ import { Modal } from 'react-bootstrap'
 import Axios from 'axios'
 import { saveAs } from 'file-saver'
 import authService from "../../services/auth.service";
+import DefaultDP from "../../assets/profile_picture/default.jpg";
+import defaultDp from "../../assets/profile_picture/default.jpg";
 
 const Request = (props) => {
   const [showA, setShowA] = useState(false)
@@ -55,7 +57,8 @@ const Request = (props) => {
     >
       <div className="col text-center ">
         <div>
-          <img src={props.dp} alt="prof-pic" className={`${styles['dp']}`} />
+          <img src={(props.cur.profile_picture !== '')?(`http://localhost:3001/profilePictures/${props.cur.profile_picture}`):(defaultDp)}
+               alt="prof-pic" className={`${styles['dp']}`} />
           {props.cur.first_name + ' ' + props.cur.last_name}
         </div>
       </div>

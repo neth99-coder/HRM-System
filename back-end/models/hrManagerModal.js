@@ -17,6 +17,21 @@ function getDepartments() {
   })
 }
 
+//function to get all details of all job Types
+function getJobTypes() {
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT * FROM job_type";
+        db.query(sql, (err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+
+                return resolve(result);
+            }
+        });
+    });
+}
+
 //function to get all details of all employee types
 function getTypes() {
   return new Promise((resolve, reject) => {
@@ -88,18 +103,45 @@ function getEmployeeByDeptId(deptId) {
 }
 
 //function to get all details of an employee for a given employee ID
-function getEmployee(empId) {
-  return new Promise((resolve, reject) => {
-    var sql =
-      "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture FROM employee WHERE emp_id = ? "
-    db.query(sql, [empId], (err, result) => {
-      if (err) {
-        return reject(err)
-      } else {
-        return resolve(result)
-      }
-    })
-  })
+function getEmployee(empId){
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture,job_type_id FROM employee WHERE emp_id = ? ";
+        db.query(sql,[empId] ,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(result);
+            }
+        });
+    });
+}
+
+//function to get supervisor by employee id
+function getSupervisorByEmpId(empId){
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT supervisor_id, first_name, last_name FROM employee,supervisor WHERE supervisor.emp_id = ? AND supervisor.supervisor_id = employee.emp_id";
+        db.query(sql,[empId] ,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(result);
+            }
+        });
+    });
+}
+
+//function to get employee ids of supervisors
+function getSupervisorId(){
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT emp_id, first_name, last_name FROM employee WHERE type_id = 2 OR type_id = 3";
+        db.query(sql ,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(result);
+            }
+        });
+    });
 }
 
 //function to get all details of an employee for a given employee ID including new attributes
@@ -189,28 +231,57 @@ function getEmployeeType(empId) {
 }
 
 //function to update employee record
-function updateEmployee(data) {
-  return new Promise((resolve, reject) => {
-    const keys = data.keys
-    const values = data.values
-    let sql = 'UPDATE employee SET '
-    for (let i = 1; i < keys.length; i++) {
-      if (i !== 1) {
-        sql += ','
-      }
-      sql += '`' + keys[i] + '` = ' + '?'
-    }
-    sql += 'WHERE emp_id = ?'
-    db.query(sql, values, (err, result) => {
-      if (result) {
-        return resolve(result)
-      } else {
-        console.log(err)
-        return reject(err)
-      }
+function updateEmployee(data){
+    return new Promise((resolve,reject)=>{
+        const keys = data.keys;
+        const values = data.values;
+        let sql = "UPDATE employee SET ";
+        for(let i = 1; i < keys.length; i++){
+            if(i !== 1){
+                sql += ","
+            }
+            sql += "`" + keys[i] + "` = " + "?"
+        }
+        sql += " WHERE emp_id = ?";
+        db.query(
+            sql,
+            values,
+            (err,result) => {
+                if(result){
+                    //console.log(result+ "SUCCESS")
+                    return resolve(result);
+                }else{
+                    console.log(err)
+                    return reject(err);
+
+                }
+            }
+        );
     })
   })
 }
+
+//function to update employee_supervisor record
+function updateSupervisor(data){
+    return new Promise((resolve,reject)=>{
+        let sql = "UPDATE supervisor SET supervisor_id = ? WHERE emp_id = ?";
+        db.query(
+            sql,
+            [data.supervisor_id,data.emp_id],
+            (err,result) => {
+                if(result){
+                    return resolve(result);
+                }else{
+                    console.log(err)
+                    return reject(err);
+
+                }
+            }
+        );
+    })
+}
+
+
 
 //function to add employee record
 function addEmployee(data) {
@@ -302,6 +373,28 @@ function deleteEmployee(data) {
   })
 }
 
+//function to add Superviosor
+function addSupervisor(data){
+    return new Promise((resolve,reject)=>{
+        const sql = "INSERT INTO supervisor (emp_id,supervisor_id) VALUES(?,?)";
+        db.query(
+            sql,
+            [data.emp_id,data.supervisor_id],
+            (err,result) => {
+                if(result){
+                    return resolve(result);
+                }else{
+                    console.log(err);
+                    return reject(err);
+
+                }
+            }
+        );
+    })
+}
+
+
+
 //function to get all details of all employees who are absent today
 function getAbsentToday() {
   return new Promise((resolve, reject) => {
@@ -380,21 +473,37 @@ function getAttendanceNotMarked() {
   })
 }
 
-//function to add aattendance for marking
-function addAttendance(data) {
-  return new Promise((resolve, reject) => {
-    var sql = arrayOrganizer.insertQuery(data)
-    db.query(sql, (err, result) => {
-      if (err) {
-        return reject(err)
-      } else {
-        console.log(result)
-        return resolve(result)
-      }
-    })
-    console.log(arrayOrganizer.insertQuery(data))
-    //console.log(sql)
-  })
+
+ //function to get aattendance for marking
+function getAttendanceNotMarked(){
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT employee.emp_id,employee.first_name,employee.last_name,employee.dept_id,department.name FROM employee NATURAL JOIN department WHERE emp_id NOT IN (SELECT emp_id FROM attendance WHERE date = CURDATE())";
+        db.query(sql,[] ,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                //console.log(result)
+                return resolve(arrayOrganizer.attendanceArray(result));
+            }
+        });
+    });
+} 
+
+ //function to add aattendance for marking
+ function addAttendance(data){
+    return new Promise((resolve, reject) => {
+        var sql = arrayOrganizer.insertQuery(data);
+        db.query(sql,(err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                //console.log(result)
+                return resolve(result);
+            }
+        });
+        //console.log(arrayOrganizer.insertQuery(data))
+        //console.log(sql)
+    });
 }
 
 //upload profile_picture
@@ -410,22 +519,38 @@ function dpUpload(file, fileName) {
 }
 
 //function to add new column
-function addColumn(data) {
-  return new Promise((resolve, reject) => {
-    if (data.dataType === 'varchar') {
-      const sql =
-        'ALTER TABLE employee ADD COLUMN (`' +
-        data.fieldName +
-        '` ' +
-        data.dataType +
-        '(' +
-        data.maxSize +
-        '))'
-      db.query(sql, [], (err, result) => {
-        if (result) {
-          return resolve(result)
-        } else {
-          return reject(err)
+function addColumn(data){
+    return new Promise((resolve,reject)=>{
+        if(data.dataType === "varchar"){
+            const sql = "ALTER TABLE employee ADD COLUMN (`" + data.fieldName + "` " + data.dataType + "(" + data.maxSize + "))";
+            db.query(
+                sql,
+                [],
+                (err,result) => {
+                    if(result){
+                        return resolve(result);
+                    }else{
+                        return reject(err);
+
+                    }
+                }
+            );
+        }else{
+            const sql = "ALTER TABLE employee ADD COLUMN (`" + data.fieldName+ "` " + data.dataType + ")";
+            //console.log(sql);
+            db.query(
+                sql,
+                [data.fieldName,data.dataType],
+                (err,result) => {
+                    if(result){
+                        return resolve(result);
+                    }else{
+                        console.log(err);
+                        return reject(err);
+
+                    }
+                }
+            );
         }
       })
     } else {
@@ -464,34 +589,38 @@ function getDataTypes() {
 }
 
 module.exports = {
-  getDepartments,
-  getTypes,
-  getStatus,
-  getPaygrades,
-  getEmployeeByEmpIdDeptId,
-  getEmployeeByDeptId,
-  getEmployee,
-  getEmployees,
-  getEmployeeDepartment,
-  getEmployeeType,
-  getEmployeeIds,
-  getAbsentToday,
-  getAbsentTomorrow,
-  getWorkingToday,
-  getLeaveTypesCount,
-  getAttendanceNotMarked,
+    getDepartments,
+    getTypes,
+    getStatus,
+    getPaygrades,
+    getEmployeeByEmpIdDeptId,
+    getEmployeeByDeptId,
+    getEmployee,
+    getEmployees,
+    getEmployeeDepartment,
+    getEmployeeType,
+    getEmployeeIds,
+    getAbsentToday,
+    getAbsentTomorrow,
+    getWorkingToday,
+    getLeaveTypesCount,
+    getAttendanceNotMarked,
+    getSupervisorByEmpId,
+    getJobTypes,
+    getEmployeeFull,
+    getDataTypes,
+    getOneEmployeesFull,
+    getSupervisorId,
+    getleaveConfig,
 
-  getEmployeeFull,
-  getDataTypes,
-  getOneEmployeesFull,
-
-  updateEmployee,
-  addEmployee,
-  addAttendance,
-  deleteEmployee,
-  addColumn,
-  dpUpload,
-  updateleaveConfig,
-  getleaveConfig,
-
+    updateEmployee,
+    addEmployee,
+    addAttendance,
+    deleteEmployee,
+    addColumn,
+    dpUpload,
+    addSupervisor,
+    updateSupervisor,
+     updateleaveConfig,
 }
+

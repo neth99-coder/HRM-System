@@ -16,6 +16,7 @@ import {
 
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Axios from 'axios'
+import authService from "../../../../services/auth.service";
 
 function Maritalstate(isMarried) {
   if (isMarried == 0) {
@@ -31,39 +32,43 @@ function ProfileView(props) {
   const hrmanager = location.state
   const navigate = useNavigate()
 
-  const [departments, setDepartments] = useState({})
-  const [empStatus, setEmpStatus] = useState({})
-  const [payGrades, setPayGrades] = useState({})
-  const [userTypes, setUserTypes] = useState({})
+  const [departments, setDepartments] = useState([])
+  const [empStatus, setEmpStatus] = useState([])
+  const [payGrades, setPayGrades] = useState([])
+  const [userTypes, setUserTypes] = useState([])
 
   useEffect(() => {
-    Axios.get('http://localhost:3001/api/hrManager/getDepartments',
-    {
-      headers: { 'x-auth-token': authService.getUserToken() },
-    }).then((res) => {
-      setDepartments(res.data.result)
-    })
+    Axios.get('http://localhost:3001/api/hrManager/getDepartments',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then(
+      (res) => {
+        setDepartments(res.data.result)
+      },
+    )
 
-    Axios.get('http://localhost:3001/api/hrManager/getStatus',
-    {
-      headers: { 'x-auth-token': authService.getUserToken() },
-    }).then((res) => {
-      setEmpStatus(res.data.result)
-    })
+    Axios.get('http://localhost:3001/api/hrManager/getStatus',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then(
+      (res) => {
+        setEmpStatus(res.data.result)
+      },
+    )
 
-    Axios.get('http://localhost:3001/api/hrManager/getPaygrades', 
-    {
-      headers: { 'x-auth-token': authService.getUserToken() },
-    }).then((res) => {
-      setPayGrades(res.data.result)
-    })
+    Axios.get('http://localhost:3001/api/hrManager/getPaygrades',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then(
+      (res) => {
+        setPayGrades(res.data.result)
+      },
+    )
 
-    Axios.get('http://localhost:3001/api/hrManager/getTypes', 
-    {
-      headers: { 'x-auth-token': authService.getUserToken() },
-    }).then((res) => {
-      setUserTypes(res.data.result)
-    })
+    Axios.get('http://localhost:3001/api/hrManager/getTypes',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then(
+      (res) => {
+        setUserTypes(res.data.result)
+      },
+    )
   }, [])
 
   const getDepartmentById = (ID)=>{

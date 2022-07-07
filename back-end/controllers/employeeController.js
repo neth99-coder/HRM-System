@@ -4,6 +4,7 @@ const getEmployee = async (req, res) => {
   await employeeModal
     .getEmployee(req.params.empId)
     .then((result) => {
+      
       res.json({
         success: true,
         result,
@@ -33,6 +34,8 @@ const getEmployees = async (req, res) => {
       })
     })
 }
+
+
 const getLeaveTypes = async (req, res) => {
   await employeeModal
     .getLeaveTypes()

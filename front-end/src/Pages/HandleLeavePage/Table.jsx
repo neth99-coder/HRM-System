@@ -1,7 +1,6 @@
 import { React, useState, useEffect } from "react";
 import Axios from "axios";
 import styles from "./Table.module.css";
-import dp from "../../Images/profile-pic.JPG"; // TODO: change to correct dp from db
 import Request from "./Request";
 
 import { CgAttachment } from "react-icons/cg";
@@ -47,7 +46,7 @@ const Table = () => {
           </div>
 
           <table
-            className={`${styles["table"]} table table-dark table-striped table-hover`}
+            className={`${styles["table"]} table table-primary table-striped table-hover`}
           >
             <thead>
               <div
@@ -65,7 +64,7 @@ const Table = () => {
               {requests?.map((cur, index) => {
                 return (
                   <tr>
-                    <Request cur={cur} dp={dp} />
+                    <Request cur={cur}/>
                   </tr>
                 );
               })}

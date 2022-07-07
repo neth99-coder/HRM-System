@@ -160,6 +160,7 @@ return (
   </>
 )
         }
+
 function LeaveConfigPage() {
   // Need to import these details from the server
   const companyDetails = {

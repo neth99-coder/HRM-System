@@ -10,7 +10,8 @@ import {
 import { Link, useNavigate } from 'react-router-dom'
 import Styles from './EditProfie.module.css'
 import Axios from 'axios'
-import authService from "../../../../services/auth.service"
+import authService from "../../../../services/auth.service";
+
 
 function EditProfile(props) {
   const [employee, setEmployee] = useState({
@@ -92,8 +93,9 @@ function EditProfile(props) {
     Axios.post(
       'http://localhost:3001/api/employee/updateemployee',
       employee,{
-        headers: { "x-auth-token": authService.getUserToken() },
-      }
+          headers: { "x-auth-token": authService.getUserToken() },
+        }
+
     ).then((res) => {
       if (res.data.success) {
         alert('successfully updated')

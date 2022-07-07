@@ -17,6 +17,24 @@ const getDepartments = async (req,res) => {
         });
 }
 
+const getJobTypes = async (req,res) => {
+    await hrManagerModal
+        .getJobTypes()
+        .then((result) => {
+
+            res.json({
+                success: true,
+                result,
+            });
+        })
+        .catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
 const getTypes = async (req,res) => {
     await hrManagerModal
         .getTypes()
@@ -85,6 +103,23 @@ const getPaygrades = async (req,res) => {
             });
     };
 
+const getSupervisorByEmpId = async (req,res) =>{
+    await hrManagerModal
+        .getSupervisorByEmpId(req.params.empId)
+        .then((result)=>{
+            res.json({
+                success: true,
+                result,
+            });
+        })
+        .catch((err)=>{
+            res.json({
+                success: false,
+                err,
+            });
+        });
+};
+
 const getEmployeeFull = async (req,res) =>{
     await hrManagerModal
         .getEmployeeFull(req.params.empId)
@@ -139,6 +174,23 @@ const getEmployeeFull = async (req,res) =>{
 const getEmployees = async (req,res) =>{
     await hrManagerModal
         .getEmployees()
+        .then((result)=>{
+            res.json({
+                success: true,
+                result,
+            });
+        })
+        .catch((err)=>{
+            res.json({
+                success: false,
+                err,
+            });
+        });
+};
+
+const getSupervisorId = async (req,res) =>{
+    await hrManagerModal
+        .getSupervisorId()
         .then((result)=>{
             res.json({
                 success: true,
@@ -253,6 +305,20 @@ const updateEmployee = async (req,res)=>{
         });
 }
 
+const updateSupervisor = async (req,res)=>{
+    await hrManagerModal
+        .updateSupervisor(req.body)
+        .then((result) => {
+            res.json({ success: true, result });
+        })
+        .catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
 const addEmployee = async (req,res)=>{
     await hrManagerModal
         .addEmployee(req.body)
@@ -298,8 +364,23 @@ const deleteEmployee = async (req,res)=>{
         });
 }
 
+
+const addSupervisor = async (req,res)=>{
+    await hrManagerModal
+        .addSupervisor(req.body)
+         .then((result) => {
+            res.json({ success: true, result });
+        })
+        .catch((err) => {
+            console.log(err)
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
 const updateleaveConfig = async (req,res)=>{
-    console.log(req.body)
     await hrManagerModal
         .updateleaveConfig(req.body)
         .then((result) => {
@@ -313,6 +394,7 @@ const updateleaveConfig = async (req,res)=>{
             });
         });
 }
+
 const getleaveConfig = async (req,res)=>{
     await hrManagerModal
         .getleaveConfig(req.params.paygrade_id)
@@ -461,11 +543,13 @@ module.exports = {
     getWorkingToday,
     getLeaveTypesCount,
     getAttendanceNotMarked,
-
-
+    getSupervisorId,
+    getSupervisorByEmpId,
     getEmployeeFull,
     getDataTypes,
     getOneEmployeesFull,
+    getJobTypes,
+    getleaveConfig,
 
     updateEmployee,
     addEmployee,
@@ -474,5 +558,7 @@ module.exports = {
     addColumn,
     dpUpload,
     updateleaveConfig,
-    getleaveConfig
+    addSupervisor,
+    updateSupervisor
+
 }

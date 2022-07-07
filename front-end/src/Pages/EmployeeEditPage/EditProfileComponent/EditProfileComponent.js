@@ -26,6 +26,7 @@ function EditProfile(props){
     const [isMarried,setIsMarried] = useState();
     const [contactNum,setContactNum] = useState();
     const [emergencyNum,setEmergencyNum] = useState();
+    const [jobType,setJobType] = useState();
     const [paygradeID,setPaygradeID] = useState();
     const [empStatusId,setEmpStatusId] = useState();
     const [empID,setEmpID] = useState(props.empID);
@@ -33,6 +34,7 @@ function EditProfile(props){
     const [types,setTypes] = useState([]);
     const [profilePicture,setProfilePicture] = useState();
     const [status,setStatus] = useState([]);
+    const [jobs,setJobs] = useState([]);
     const [payGrades,setPayGrades] = useState([]);
     const [orginalFirstName,setOrginalFirstName] = useState();
     const [orginalLastName,setOrginalLastName] = useState();
@@ -43,6 +45,8 @@ function EditProfile(props){
     const [isDpChanged,setIsDpChanged] = useState(false);
     const [employeeNew,setEmployeeNew] = useState({});
     const [changeList,setChangeList] = useState([]);
+    const [supervisor,setSupervisor] = useState();
+    const [supervisorsList,setSupervisorList] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -62,6 +66,7 @@ function EditProfile(props){
                     setDeptID(res.data.result[0].dept_id);
                     setTypeID(res.data.result[0].type_id);
                     setAddress(res.data.result[0].address);
+                    setJobType(res.data.result[0].job_type_id);
                     setNic(res.data.result[0].nic);
                     setBday(res.data.result[0].bday.substring(0,10));
                     setIsMarried(res.data.result[0].is_married);
@@ -88,6 +93,15 @@ function EditProfile(props){
       });
     };
     findDepartments();
+
+      const findJobs = async () => {
+          await Axios.get("http://localhost:3001/api/hrManager/getJobTypes", {
+              headers: { "x-auth-token": authService.getUserToken() },
+          }).then((res) => {
+              setJobs(res.data.result);
+          });
+      };
+      findJobs();
 
     const findTypes = async () => {
       await Axios.get("http://localhost:3001/api/hrManager/getTypes", {
@@ -142,6 +156,24 @@ function EditProfile(props){
     };
     findEmployeeType();
 
+      const findSupervisorID = async () => {
+          await Axios.get("http://localhost:3001/api/hrManager/getSupervisorId", {
+              headers: { "x-auth-token": authService.getUserToken() },
+          }).then((res) => {
+              setSupervisorList(res.data.result);
+          });
+      };
+      findSupervisorID();
+
+      const findSupervisor = async () => {
+          await Axios.get("http://localhost:3001/api/hrManager/getSupervisorByEmpId/" + empID, {
+              headers: { "x-auth-token": authService.getUserToken() },
+          }).then((res) => {
+              setSupervisor(res.data.result[0].supervisor_id);
+          });
+      };
+      findSupervisor();
+
     setIsLoading(false);
   }, []);
 
@@ -179,15 +211,19 @@ function EditProfile(props){
       setEmpStatusId(value);
     } else if (name === "paygradeID") {
       setPaygradeID(value);
+    }else if(name == "supervisorId"){
+        setSupervisor(value);
+    }else if(name == "jobID"){
+        setJobType(value);
     }
   }
 
 
     async function handleSubmit(event) {
         event.preventDefault();
-        const formData = [firstName,middleName,lastName,address,nic,bday,isMarried,contactNum,emergencyNum,email,deptID,paygradeID,empStatusId,typeID,imageName];
-        for(let j = 0; j < Object.keys(props.employeeFull).length - 16 ; j++){
-            const col_name = Object.keys(props.employeeFull)[16+j];
+        const formData = [firstName,middleName,lastName,address,nic,bday,isMarried,contactNum,emergencyNum,email,deptID,paygradeID,empStatusId,typeID,imageName,jobType];
+        for(let j = 0; j < Object.keys(props.employeeFull).length - 17 ; j++){
+            const col_name = Object.keys(props.employeeFull)[17+j];
             if(changeList.includes(col_name)){
                 formData.push(employeeNew[col_name]);
             }else{
@@ -223,11 +259,41 @@ function EditProfile(props){
                     if (!res.data.success) {
                         console.log(res);
                     } else {
-                        window.open(`/hrmanager/employee/view/${empID}`);
+                        const formValues2 = {
+                            emp_id: empID,
+                            supervisor_id: supervisor
+                        };
+                        Axios.post(
+                            "http://localhost:3001/api/hrManager/updateSupervisor",
+                            formValues2, {
+                                headers: { "x-auth-token": authService.getUserToken() },
+                            }
+                        ).then(async (res) => {
+                            if (!res.data.success) {
+                                alert("Error occured !!");
+                            } else{
+                                window.open(`/hrmanager/employee/view/${empID}`);
+                            }
+                        });
                     }
                 });
             }else{
-                window.open(`/hrmanager/employee/view/${empID}`);
+                const formValues2 = {
+                    emp_id: empID,
+                    supervisor_id: supervisor
+                };
+                Axios.post(
+                    "http://localhost:3001/api/hrManager/updateSupervisor",
+                    formValues2, {
+                        headers: { "x-auth-token": authService.getUserToken() },
+                    }
+                ).then(async (res) => {
+                    if (!res.data.success) {
+                        alert("Error occured !!");
+                    } else{
+                        window.open(`/hrmanager/employee/view/${empID}`);
+                    }
+                });
             }
         });
     }
@@ -238,6 +304,97 @@ function EditProfile(props){
         setImageName(empID + imageList[0].file.name);
         setIsDpChanged(true);
     };
+
+    function showType(typeId){
+        if(typeId === 3 || typeId === 4){
+            return(
+                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <FormGroup>
+                        <label htmlFor="typeID">Employee Type</label>
+                        <select
+                            className={Styles["form-control"]}
+                            id="typeID"
+                            name="typeID"
+                            placeholder="Select Employee Type"
+                            required={true}
+                            value={typeID}
+                        >
+                            {types.filter((type) => type.type_id === typeId).map(({ type_id, type_name }, index) => (
+                                <option value={type_id}>{type_name}</option>
+                            ))}
+                        </select>
+                    </FormGroup>
+                </div>
+            )
+        }else{
+            return (
+                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <FormGroup>
+                        <label htmlFor="typeID">Employee Type</label>
+                        <select
+                            className={Styles["form-control"]}
+                            id="typeID"
+                            name="typeID"
+                            placeholder="Select Employee Type"
+                            required={true}
+                            value={typeID}
+                            onChange={handleInputChange}
+                        >
+                            {types.filter((type) => type.type_id !== 3 && type.type_id !== 4).map(({ type_id, type_name }, index) => (
+                                <option value={type_id}>{type_name}</option>
+                            ))}
+                        </select>
+                    </FormGroup>
+                </div>
+            )
+        }
+    }
+
+    function showDesignation(typeId,jobId){
+        if(typeId === 3){
+            return (
+                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <FormGroup>
+                        <label htmlFor="jobID">Designation</label>
+                        <select
+                            className={Styles["form-control"]}
+                            id="jobID"
+                            name="jobID"
+                            placeholder="Select Designation"
+                            required={true}
+                            value={jobId}
+                        >
+                            {jobs.filter((job) => job.job_type_title === "HR Manager").map(({ job_type_id, job_type_title }, index) => (
+                                <option value={job_type_id}>{job_type_title}</option>
+                            ))}
+                        </select>
+                    </FormGroup>
+                </div>
+            )
+
+        }else{
+            return(
+                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <FormGroup>
+                        <label htmlFor="jobID">Designation</label>
+                        <select
+                            className={Styles["form-control"]}
+                            id="jobID"
+                            name="jobID"
+                            placeholder="Select Designation"
+                            required={true}
+                            value={jobId}
+                            onChange={handleInputChange}
+                        >
+                            {jobs.filter((job) => job.job_type_title !== "HR Manager").map(({ job_type_id, job_type_title }, index) => (
+                                <option value={job_type_id}>{job_type_title}</option>
+                            ))}
+                        </select>
+                    </FormGroup>
+                </div>
+            )
+        }
+    }
 
 
     function showExtraAttributes(col_name){
@@ -400,10 +557,10 @@ function EditProfile(props){
                           <h6 className="user-email">{email}</h6>
                         </div>
                         <div className={Styles["about"]}>
-                          <h5>About</h5>
-                          <p>
+                          <h3>About</h3>
+                          <h5>
                             {employeeType.type_name} - {employeeDepartment.name}
-                          </p>
+                          </h5>
                         </div>
                       </div>
                     </div>
@@ -560,6 +717,8 @@ function EditProfile(props){
                                 className={Styles["form-control"]}
                                 id="bday"
                                 name="bday"
+                                min="1999-05-10"
+                                max={Date()}
                                 required={true}
                                 value={bday}
                                 placeholder="Select Birthday"
@@ -632,24 +791,9 @@ function EditProfile(props){
                             </FormGroup>
                           </div>
 
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <FormGroup>
-                              <label htmlFor="typeID">Designation</label>
-                              <select
-                                className={Styles["form-control"]}
-                                id="typeID"
-                                name="typeID"
-                                placeholder="Select Designation"
-                                required={true}
-                                value={typeID}
-                                onChange={handleInputChange}
-                              >
-                                {types.map(({ type_id, type_name }, index) => (
-                                  <option value={type_id}>{type_name}</option>
-                                ))}
-                              </select>
-                            </FormGroup>
-                          </div>
+                            {showType(typeID)}
+
+                            {showDesignation(typeID,jobType)}
 
                           <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <FormGroup>
@@ -676,6 +820,22 @@ function EditProfile(props){
                             </FormGroup>
                           </div>
 
+                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <FormGroup>
+                                    <label htmlFor="supervisorId">Supervisor</label>
+                                    <select
+                                        className={Styles["form-control"]}
+                                        id="supervisorId"
+                                        name="supervisorId"
+                                        placeholder="Select Supervisor"
+                                        required={true}
+                                        value={supervisor}
+                                        onChange={handleInputChange}>
+                                        {supervisorsList.map(({ emp_id,first_name,last_name }, index) => <option value={emp_id} >{emp_id + " - " + first_name + " " + last_name}</option>)}
+                                    </select>
+                                </FormGroup>
+                            </div>
+
                                                     <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                                         <FormGroup>
                                                             <label htmlFor="paygradeID">Pay-Grade</label>
@@ -693,7 +853,7 @@ function EditProfile(props){
                                                     </div>
 
                                                     <div>
-                                                        {Object.keys(props.employeeFull).slice(16).map(showExtraAttributes)}
+                                                        {Object.keys(props.employeeFull).slice(17).map(showExtraAttributes)}
                                                     </div>
 
                                                 </div>
