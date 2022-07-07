@@ -24,13 +24,6 @@ const getUserType = () => {
   return null;
 };
 
-const getUserName = () => {
-  if (localStorage.getItem("user")) {
-    const { name } = jwt_decode(localStorage.user);
-    return name;
-  }
-  return null;
-};
 
 const logout = () => {
   if (localStorage.getItem("user")) {
@@ -51,7 +44,7 @@ const authService = {
   getUserID,
   getUserType,
   getUserToken,
-  getUserName
+
 };
 
 export default authService;

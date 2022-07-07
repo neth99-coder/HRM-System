@@ -2,18 +2,21 @@ const { json } = require("express");
 const db = require("../config/db");
 const fs = require("fs");
 const leaveCounter = require("../helpers/leaveCounter");
-const waterfall = require("waterfall");
+
 
 
 //function to get all details of an employee for a given employee ID
 function getEmployee(empId) {
   return new Promise((resolve, reject) => {
+    
     var sql =
-      "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture FROM employee WHERE emp_id = ? ";
+      "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture,job_type_title FROM employee INNER JOIN job_type ON employee.job_type_id = job_type.job_type_id WHERE emp_id = '190253K'";
     db.query(sql, [empId], (err, result) => {
       if (err) {
+        
         return reject(err);
       } else {
+       //console.log(result)
         return resolve(result);
       }
     });

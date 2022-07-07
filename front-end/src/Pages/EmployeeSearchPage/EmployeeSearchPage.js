@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Axios from "axios";
 import authService from "../../services/auth.service";
+import { Spinner } from "react-bootstrap";
+import styles from "./EmployeeSearch.module.css";
 
 function EmployeeSearch(props) {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +32,7 @@ function EmployeeSearch(props) {
         headers: { "x-auth-token": authService.getUserToken() },
       }).then((res) => {
         setEmployees(res.data.result);
+        setIsLoading(false);
       });
     };
     findEmployees();
@@ -47,19 +50,27 @@ function EmployeeSearch(props) {
   };
 
   return (
-    <div className="mt-1">
-      <Search
-        departments={getDepartments}
-        department={getDepartment}
-        employeeid={getEmpId}
-        searchChange={SearchChange}
-      />
-      <Result
-        employees={getEmployees}
-        employeeid={getEmpId}
-        departments={getDepartments}
-        department={getDepartment}
-      />
+    <div>
+      {isLoading ? (
+        <Spinner animation="border" role="status" className={styles["spinner"]}>
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      ) : (
+        <div className="mt-1">
+          <Search
+            departments={getDepartments}
+            department={getDepartment}
+            employeeid={getEmpId}
+            searchChange={SearchChange}
+          />
+          <Result
+            employees={getEmployees}
+            employeeid={getEmpId}
+            departments={getDepartments}
+            department={getDepartment}
+          />
+        </div>
+      )}
     </div>
   );
 }

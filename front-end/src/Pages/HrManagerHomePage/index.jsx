@@ -1,5 +1,5 @@
 import React from "react";
-//import { Card } from "react-bootstrap";
+import { Spinner} from "react-bootstrap";
 import { Chart } from "react-google-charts";
 import styled from "./index.module.css";
 
@@ -9,33 +9,22 @@ import { useState } from "react";
 import Axios from "axios";
 import ChartCard from "./ChartCard";
 import authService from "../../services/auth.service"
-import defaultDp from "../../assets/profile_picture/default.jpg";
+import defaultDp from "../../assets/profile_picture/default.jpg"; 
 
 
 function HrManagerHomePage() {
   // Need to import these details from the server
-  const companyDetails = {
-    logo: "logo.png",
-    name: "Jupiter Apperels",
-    addressLine1: "paravi Island",
-    addressLine2: "Matara",
-  };
-
-  // Current User leave data
-  const profileDetails = {
-    dp: "profile-pic.JPG",
-    name: "Nethmi Jayakody",
-    post: "Admin",
-  };
-
+ 
 
   const [leaveData, setLeaveData] = useState([]);
   const [leavePieChart, setLeavePieChart] = useState([]);
   const [workingPieChart, setworkingPieChart] = useState([]);
   const [absentToday, setAbsentToday] = useState([]);
   const [absentTomorrow, setAbsentTomorrow] = useState([]);
+  const [isLoading, setIsLoading] = useState(false) 
 
   useEffect(() => {
+    setIsLoading(true)
     const loadLeaves = async () => {
       await Axios.get(
         "http://localhost:3001/api/employee/leaveChart/"+  authService.getUserID(),
@@ -71,6 +60,7 @@ function HrManagerHomePage() {
       ).then((res) => {
         //console.log(res.data.result);
         setworkingPieChart(res.data.result)
+        
       });
     };
     loadWorkingPieChart();
@@ -97,15 +87,22 @@ function HrManagerHomePage() {
       ).then((res) => {
         //console.log(res.data.result);
         setAbsentTomorrow(res.data.result)
+        
       });
     };
     loadAbsentTomorrow();
 
-
+    setIsLoading(false)
   }, []);
 
  
   return (
+    <>
+          {isLoading ? (
+        <Spinner animation="border" role="status" className={styled['spinner']}>
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      ) : (
     <div className={styled["page-holder"]}>
       {/* <Header
         profileDetails={profileDetails}
@@ -207,7 +204,8 @@ function HrManagerHomePage() {
           </div>
         </div>
       </section>
-    </div>
+    </div>)}
+    </>
   );
 }
 

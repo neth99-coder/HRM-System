@@ -4,7 +4,6 @@ const getDepartments = async (req,res) => {
     await hrManagerModal
         .getDepartments()
         .then((result) => {
-            console.log(result)
             res.json({
                 success: true,
                 result,
