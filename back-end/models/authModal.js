@@ -62,15 +62,16 @@ function loginUser(employee) {
       }
       if (isUserIn.emp_id) {
 
-        let sql = "SELECT password,type_id,first_name,last_name FROM employee NATURAL JOIN login WHERE emp_id = ?";
+        let sql = "SELECT password,type_id,first_name,last_name,profile_picture FROM employee NATURAL JOIN login WHERE emp_id = ?";
         db.query(sql, [empId], (err, result) => {
 
           bcrypt.compare(password, result[0].password, function (err, result1) {
             if (result1) {
                 const empType = result[0].type_id;
-                const name = result[0].first_name + " " + result[0].last_name ;
+                
+                
           const token = JWT.sign(
-            { id:empId, type:empType, name: name },
+            { id:empId, type:empType},
             process.env.ACCESS_TOKEN_SECRET,
             {
               expiresIn: "2d",

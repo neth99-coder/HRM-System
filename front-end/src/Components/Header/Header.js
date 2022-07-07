@@ -14,9 +14,9 @@ import {Link} from "react-router-dom";
 
 import authService from "../../services/auth.service.js";
 
+
 function Header(props) {
   const [dropdown, setDropdown] = useState("");
-  const empName  = authService.getUserName();
   var empType = 'Default' ;
     switch (authService.getUserType()){
       
@@ -44,12 +44,6 @@ function Header(props) {
     }
   
 
-  const profileDetails = {
-    dp: "profile-pic.JPG",
-    name: empName,
-    post: empType,
-  };
-
   const profileLink = () =>{
       if(props.type === 1){
           return(
@@ -72,10 +66,10 @@ function Header(props) {
     if (dropdown === "") {
       setDropdown(
         <Dropdown className={styles["dropdown"]}>
-          <div className={styles["profile-details"]}>
+          {/* <div className={styles["profile-details"]}>
             <h2>{empName}</h2>
             <h3>{empType}</h3>
-          </div>
+          </div> */}
           <Option className={styles['option__first-child']} icon={<FiSettings />} name="Settings" />
             {profileLink()}
           <Option icon={<FiLogOut />} name="Logout" handleClick={handleLogout}/>
@@ -95,7 +89,7 @@ function Header(props) {
       <header className={`${styles["header"]} ${props.className}`}>
         <CompanyCard companyDetails={props.companyDetails} />
         <ProfileCard
-          profileDetails={profileDetails}
+    
           dropdownHandler={dropdownHandler}
         />
       </header>

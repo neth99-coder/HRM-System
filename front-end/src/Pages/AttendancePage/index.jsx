@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 import React, { useState } from "react";
-import { Table, Dropdown, Button, Modal } from "react-bootstrap";
+import { Table, Dropdown, Button, Modal, Spinner } from "react-bootstrap";
 
 import styled from "./index.module.css";
 import authService from "../../services/auth.service";
@@ -21,7 +21,10 @@ function AttendancePage() {
   const handleClose = () => setShow(false); //handle modal close
   const handleShow = () => setShow(true); //handle modal show
 
+  const [isLoading, setIsLoading] = useState(false) ;
+
   useEffect(() => {
+    setIsLoading(true)
     const getEmployees = async () => {
       await Axios.get(
         "http://localhost:3001/api/hrManager/getAttendanceNotMarked",
@@ -43,6 +46,7 @@ function AttendancePage() {
       }).then((res) => {
         //console.log(res.data.result);
         setDepartments(res.data.result);
+        setIsLoading(false)
       });
     };
 
@@ -98,7 +102,11 @@ const handleSubmit = async(e)=>{
   return (
     <>
       {/* <Header className={styled["main-header"]} profileDetails={profileDetails} companyDetails={companyDetails} /> */}
-
+      {isLoading ? (
+        <Spinner animation="border" role="status" className={styled['spinner']}>
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      ) : (
       <main className={styled["main"]}>
         <Dropdown className={styled["employee-select-container"]}>
           <Dropdown.Toggle
@@ -180,6 +188,7 @@ const handleSubmit = async(e)=>{
 
           </Modal>
       </main>
+      )}
     </>
   );
 }
