@@ -1,14 +1,15 @@
 const { json } = require("express");
 
 function todayLeaveArray(sqlArray) {
-  var medical = 0;
+  var maternity = 0;
   var casual = 0;
   var annual = 0;
+  var nopay = 0 ;
 
   sqlArray?.map((cur) => {
     switch (cur.type) {
-      case "Medical":
-        medical += cur.leave_type_count;
+      case "Maternity":
+        maternity += cur.leave_type_count;
         break;
       case "Casual":
         casual += cur.leave_type_count;
@@ -16,14 +17,18 @@ function todayLeaveArray(sqlArray) {
       case "Annual":
         annual += cur.leave_type_count;
         break;
+      case "No Pay" :
+        nopay += cur.leave_type_count;
+        break; 
     }
   });
 
   return [
     ["Leave Type", "Number of Leaves"],
-    ["Medical", medical],
+    ["Maternity", maternity],
     ["Casual", casual],
     ["Annual", annual],
+    ["No Pay", nopay]
   ];
 }
 

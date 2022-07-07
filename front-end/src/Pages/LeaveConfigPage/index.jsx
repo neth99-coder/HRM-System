@@ -35,7 +35,7 @@ function LeaveConfigForm() {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Medical Leaves</Form.Label>
+          <Form.Label>Maternity Leaves</Form.Label>
           <Form.Control
             type="number"
             placeholder="Enter number of casual leaves"
