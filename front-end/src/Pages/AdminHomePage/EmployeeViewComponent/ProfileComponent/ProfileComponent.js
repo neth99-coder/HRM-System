@@ -12,7 +12,6 @@ import {
 
 import { Link } from 'react-router-dom'
 import Axios from 'axios'
-import authService from "../../../../services/auth.service";
 
 function Maritalstate(isMarried) {
   if (isMarried == 0) {
@@ -28,7 +27,6 @@ function Profile(props) {
   const [empStatus, setEmpStatus] = useState([])
   const [payGrades, setPayGrades] = useState([])
   const [userTypes, setUserTypes] = useState([])
-
 
   useEffect(() => {
     Axios.get('http://localhost:3001/api/hrManager/getDepartments', {
@@ -88,7 +86,29 @@ function Profile(props) {
     }
   }
 
-   return (
+  function showExtraAttributes(col_name) {
+    if(col_name != "profile_picture" && col_name != "job_type_title"){
+      return (
+        <div>
+          <hr />
+          <div className="row">
+            <div className="col-sm-3">
+              <h6 className="mb-6">{col_name.split('_').join(" ")}</h6>
+            </div>
+            <div className="col-sm-9 text-secondary">
+              {props.employee[col_name] === null ||
+              props.employee[col_name] === ''
+                ? 'undefined'
+                : props.employee[col_name]}
+            </div>
+          </div>
+        </div>
+      )
+    }
+    
+  }
+
+  return (
     <div>
       <div className={styles['main-body']}>
         <Breadcrumb>
@@ -267,6 +287,24 @@ function Profile(props) {
                   <div className="col-sm-9 text-secondary">
                     {getPayGradeById(props.employee.paygrade_id)}
                   </div>
+                </div>
+
+                <hr />
+                <div className="row">
+                  <div className="col-sm-3">
+                    <h6 className="mb-6">Designation</h6>
+                  </div>
+                  <div className="col-sm-9 text-secondary">
+                    {props.employee.job_type_title}
+                  </div>
+                </div>
+
+                <div>
+                  <p>
+                    {Object.keys(props.employee)
+                      .slice(17)
+                      .map(showExtraAttributes)}
+                  </p>
                 </div>
               </CardBody>
             </Card>

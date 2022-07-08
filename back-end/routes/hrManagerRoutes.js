@@ -26,6 +26,7 @@ router.get("/getLeaveTypesCount", hrManagerController.getLeaveTypesCount);
 router.get("/getAttendanceNotMarked", hrManagerController.getAttendanceNotMarked);
 router.get("/getConfigValues/:paygrade_id",hrManagerController.getleaveConfig);
 
+router.post("/getAttendance",hrManagerController.getAttendace);
 router.post("/updateEmployee",hrManagerController.updateEmployee);
 router.post("/updateSupervisor",hrManagerController.updateSupervisor);
 router.post("/addEmployee",hrManagerController.addEmployee);

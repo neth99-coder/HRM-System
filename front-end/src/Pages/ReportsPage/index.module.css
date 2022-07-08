@@ -1,0 +1,31 @@
+.employee-profiles {
+  margin: 20px;
+  padding: 70px;
+  border: 1px solid rgb(199, 195, 195);
+  border-radius: 10px;
+  background-color: rgb(208, 213, 228);
+}
+
+.employee-img {
+  font-size: 4em;
+  color: rgb(91, 120, 214);
+  border: 1.5px solid rgb(128, 122, 122);
+  border-radius: 50%;
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: rgb(226, 219, 219);
+}
+
+.employee-message p {
+  display: flex;
+  justify-content: center;
+  font-size: 1.2em;
+  color:black;
+  font-weight: 500;
+}
+
+.employee-img-container {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}

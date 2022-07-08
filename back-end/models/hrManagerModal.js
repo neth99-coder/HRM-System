@@ -258,8 +258,8 @@ function updateEmployee(data){
             }
         );
     })
-  })
-}
+  }
+
 
 //function to update employee_supervisor record
 function updateSupervisor(data){
@@ -313,20 +313,6 @@ function addEmployee(data) {
     })
   })
 }
-
-//retrieves existing leave config values
-// function getLeaveConfigDetails(paygrade_id,leave_id) {
-//   return new Promise((resolve, reject) => {
-//     const sql = `SELECT * FROM paygrade_leave WHERE paygrade_id =${paygrade_id} and leave_id = ${leave_id}`
-//     db.query(sql, (err, result) => {
-//       if (result) {
-//         return resolve(result)
-//       } else {
-//         return reject(err)
-//       }
-//     })
-//   })
-// }
 
 function getleaveConfig(paygrade_id) {
     return new Promise((resolve, reject) => {
@@ -553,24 +539,7 @@ function addColumn(data){
             );
         }
       })
-    } else {
-      const sql =
-        'ALTER TABLE employee ADD COLUMN (`' +
-        data.fieldName +
-        '` ' +
-        data.dataType +
-        ')'
-      console.log(sql)
-      db.query(sql, [data.fieldName, data.dataType], (err, result) => {
-        if (result) {
-          return resolve(result)
-        } else {
-          console.log(err)
-          return reject(err)
-        }
-      })
-    }
-  })
+    
 }
 
 //get data types of employee table columns
@@ -580,6 +549,22 @@ function getDataTypes() {
       "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME   = 'employee' "
     db.query(sql, (err, result) => {
       if (err) {
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
+}
+
+//returns attendace of an employee
+function getAttendace(data) {
+  return new Promise((resolve, reject) => {
+    var sql =
+      "SELECT emp_id,DATE_FORMAT(date, '%Y-%m-%d') as date,is_present from attendance WHERE emp_id = ? and date BETWEEN ? AND ? "
+    db.query(sql,[data.emp_id,data.from,data.to], (err, result) => {
+      if (err) {
+        
         return reject(err)
       } else {
         return resolve(result)
@@ -612,6 +597,7 @@ module.exports = {
     getOneEmployeesFull,
     getSupervisorId,
     getleaveConfig,
+    getAttendace,
 
     updateEmployee,
     addEmployee,
@@ -621,6 +607,6 @@ module.exports = {
     dpUpload,
     addSupervisor,
     updateSupervisor,
-     updateleaveConfig,
+    updateleaveConfig,
 }
 

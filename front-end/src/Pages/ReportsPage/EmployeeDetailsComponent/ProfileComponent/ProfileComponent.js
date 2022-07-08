@@ -1,22 +1,12 @@
 import React from 'react'
-import styles from './ProfileViewComponent.module.css'
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  Card,
-  CardBody,
-  ListGroup,
-  ListGroupItem,
-  Button,
-  Form,
-} from 'reactstrap'
-import { Link } from 'react-router-dom'
+import styles from './ProfileComponent.module.css'
+import { Card, CardBody, ListGroup, ListGroupItem } from 'reactstrap'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import Axios from 'axios'
 import { Spinner } from 'react-bootstrap'
-import defaultPic from '../../../assets/profile_picture/default.jpg'
-import authService from '../../../services/auth.service'
+import authService from '../../../../services/auth.service'
+import defaultPic from '../../../../assets/profile_picture/default.jpg'
 
 function Maritalstate(isMarried) {
   if (isMarried == 0) {
@@ -26,13 +16,12 @@ function Maritalstate(isMarried) {
   }
 }
 
-function ProfileView(props) {
+function Profile(props) {
   const [isLoading, setIsLoading] = useState(true)
   const [departments, setDepartments] = useState([])
   const [types, setTypes] = useState([])
   const [status, setStatus] = useState([])
   const [payGrades, setPayGrades] = useState([])
-  const [delVisibility, setDelVisibility] = useState(true)
   const [newAttributes, setNewAttributes] = useState()
   const [jobs, setJobs] = useState([])
 
@@ -42,7 +31,7 @@ function ProfileView(props) {
     setIsLoading(true)
 
     const findDepartments = async () => {
-      await Axios.get('http://localhost:3001/api/hrManager/getDepartments', {
+      await Axios.get('http://localhost:3001/api/hrmanager/getDepartments', {
         headers: { 'x-auth-token': authService.getUserToken() },
       }).then((res) => {
         setDepartments(res.data.result)
@@ -60,7 +49,7 @@ function ProfileView(props) {
     findJobs()
 
     const findTypes = async () => {
-      await Axios.get('http://localhost:3001/api/hrManager/getTypes', {
+      await Axios.get('http://localhost:3001/api/hrmanager/getTypes', {
         headers: { 'x-auth-token': authService.getUserToken() },
       }).then((res) => {
         setTypes(res.data.result)
@@ -69,7 +58,7 @@ function ProfileView(props) {
     findTypes()
 
     const findStatus = async () => {
-      await Axios.get('http://localhost:3001/api/hrManager/getStatus', {
+      await Axios.get('http://localhost:3001/api/hrmanager/getStatus', {
         headers: { 'x-auth-token': authService.getUserToken() },
       }).then((res) => {
         setStatus(res.data.result)
@@ -78,7 +67,7 @@ function ProfileView(props) {
     findStatus()
 
     const findPaygrades = async () => {
-      await Axios.get('http://localhost:3001/api/hrManager/getPaygrades', {
+      await Axios.get('http://localhost:3001/api/hrmanager/getPaygrades', {
         headers: { 'x-auth-token': authService.getUserToken() },
       }).then((res) => {
         setPayGrades(res.data.result)
@@ -141,36 +130,6 @@ function ProfileView(props) {
     }
   }
 
-  function handleDelete(event) {
-    event.preventDefault()
-    const formValues = {
-      emp_id: props.employee.emp_id,
-    }
-    Axios.post(
-      'http://localhost:3001/api/hrManager/deleteEmployee',
-      formValues,
-      {
-        headers: { 'x-auth-token': authService.getUserToken() },
-      },
-    ).then((res) => {
-      if (!res.data.success) {
-        alert('Error occured w!!')
-      } else {
-        window.open(`/hrmanager/employee`)
-      }
-    })
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault()
-    setDelVisibility(false)
-  }
-
-  function handleCancel(event) {
-    event.preventDefault()
-    setDelVisibility(true)
-  }
-
   function showProfilePicture() {
     if (
       props.employee.profile_picture === undefined ||
@@ -221,72 +180,7 @@ function ProfileView(props) {
         </Spinner>
       ) : (
         <>
-          <div id="myModal" className={styles['modal']} hidden={delVisibility}>
-            <div className={styles['modal-content']}>
-              <div className={styles['modal-header']}>
-                <h2>Delete Employee</h2>
-              </div>
-              <div className={styles['modal-body']}>
-                <p>
-                  Are you sure you want to delete employee{' '}
-                  {props.employee.emp_id} ?
-                </p>
-                <p>This will permanently remove this record ..</p>
-              </div>
-              <div className={styles['modal-footer']}>
-                <div className="row">
-                  <div className="col-4 col-sm-3 col-xl-2">
-                    <Form onSubmit={handleCancel}>
-                      <button
-                        type="submit"
-                        id="submit"
-                        name="submit"
-                        className="btn btn-dark"
-                      >
-                        Cancel
-                      </button>
-                    </Form>
-                  </div>
-                  <div className="col-4 col-sm-3 col-md-2">
-                    <Form onSubmit={handleDelete}>
-                      <button
-                        type="submit"
-                        id="submit"
-                        name="submit"
-                        className="btn btn-dark"
-                      >
-                        Delete
-                      </button>
-                    </Form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <div className={styles['main-body']}>
-            <div className="row">
-              <Breadcrumb>
-                <BreadcrumbItem>
-                  <Link
-                    to="/hrmanager/employee"
-                    className={styles['breadcrumb-link']}
-                  >
-                    Employee
-                  </Link>
-                </BreadcrumbItem>
-                <BreadcrumbItem active>
-                  {props.employee.first_name + ' ' + props.employee.last_name}
-                </BreadcrumbItem>
-              </Breadcrumb>
-              <div className="col-12">
-                <h3>
-                  {props.employee.first_name + ' ' + props.employee.last_name}
-                </h3>
-                <hr />
-              </div>
-            </div>
-
             <div className="row gutters-sm">
               <div className="col-md-4 mb-3">
                 {/*Profile picture and basic information*/}
@@ -309,34 +203,6 @@ function ProfileView(props) {
                           {findDepartmentById(props.employee.dept_id) +
                             ' Department'}
                         </p>
-                      </div>
-
-                      <div className="row">
-                        <div className="col-6">
-                          <Link
-                            to={
-                              '/hrmanager/employee/edit/' +
-                              props.employee.emp_id
-                            }
-                          >
-                            <Button className="fa fa-pencil">Edit</Button>
-                          </Link>
-                        </div>
-
-                        <div className="col-6">
-                          {/*<Link to="/employee">*/}
-                          <Form onSubmit={handleSubmit}>
-                            <Button
-                              type="submit"
-                              id="submit"
-                              name="submit"
-                              className="fa fa-trash"
-                            >
-                              Delete
-                            </Button>
-                          </Form>
-                          {/*</Link>*/}
-                        </div>
                       </div>
                     </div>
                   </CardBody>
@@ -479,7 +345,7 @@ function ProfileView(props) {
                         <h6 className="mb-6">Employee Supervisor</h6>
                       </div>
                       <div className="col-sm-9 text-secondary">
-                        {props.supervisor}
+                        {props.supervisor?props.supervisor:"-"}
                       </div>
                     </div>
                     <hr />
@@ -511,4 +377,4 @@ function ProfileView(props) {
   )
 }
 
-export default ProfileView
+export default Profile

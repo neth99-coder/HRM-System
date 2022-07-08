@@ -1,174 +1,172 @@
 body {
-    margin: 0;
-    padding-top: 0;
-    color: #2e323c;
-    background: #f5f6fa;
-    position: relative;
-    height: 100%;
+  margin: 0;
+  padding-top: 0;
+  color: #2e323c;
+  background: #f5f6fa;
+  position: relative;
+  height: 100%;
 }
-.admin-container{
-    margin: 100px;
-}
-
-.admin-heading h1{
-    display: flex;
-    justify-content: center;
-    font-weight: bold;
-    color:rgb(129, 121, 120);
+.admin-container {
+  margin: 100px;
 }
 
-.hrmanager-heading h1 ,.employee-heading h1{
-    font-size: 1.5em;
+.admin-heading h1 {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  color: rgb(129, 121, 120);
 }
 
-.hrmanager-heading , .employee-heading{
-    padding-bottom: 5px;
-    border-bottom:rgb(137, 153, 243) solid 1px;
+.hrmanager-heading h1,
+.employee-heading h1 {
+  font-size: 1.5em;
 }
 
-.hrmanager-profile{
-    height:200px;
-    width:150px;
-    border: 1.5px rgb(199, 195, 195) dashed ;
-    margin:40px;
-    cursor: pointer;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+.hrmanager-heading,
+.employee-heading {
+  padding-bottom: 5px;
+  border-bottom: rgb(137, 153, 243) solid 1px;
 }
 
-.hrmanager-profile h1:hover{
-    font-size: 2em;
+.hrmanager-profile {
+  height: 200px;
+  width: 150px;
+  border: 1.5px rgb(199, 195, 195) dashed;
+  margin: 40px;
+  cursor: pointer;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
-.hrmanager-profile:focus{
-    outline: none;
+.hrmanager-profile h1:hover {
+  font-size: 2em;
 }
 
-.employee-img-container{
-    margin-top:150px;
-    display: flex;
-    justify-content: center;
+.hrmanager-profile:focus {
+  outline: none;
 }
 
-.employee-profiles{
-    margin:40px;
-    padding: 15px;
-    border:1px solid rgb(199, 195, 195);
-    border-radius: 10px;
-    background-color: rgb(245, 240, 240);
+.employee-img-container {
+  margin-top: 150px;
+  display: flex;
+  justify-content: center;
 }
 
-.employee-img{
-    font-size: 4em;
-    color: rgb(128, 122, 122);
-    border: 1.5px solid rgb(128, 122, 122);
-    border-radius: 50%;
-    padding:10px;
-    margin-bottom: 20px;
-    background-color: rgb(226, 219, 219);
+.employee-profiles {
+  margin: 40px;
+  padding: 15px;
+  border: 1px solid rgb(199, 195, 195);
+  border-radius: 10px;
+  background-color: rgb(245, 240, 240);
 }
 
-.employee-message p{
-    display: flex;
-    justify-content: center;
-    font-size: 1.1em;
+.employee-img {
+  font-size: 4em;
+  color: rgb(128, 122, 122);
+  border: 1.5px solid rgb(128, 122, 122);
+  border-radius: 50%;
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: rgb(226, 219, 219);
 }
 
-.img-container{
-    width:150px;
-    height:150px;
-    border:1.5px rgb(199, 195, 195) dashed;
-    border-radius: 50%; 
+.employee-message p {
+  display: flex;
+  justify-content: center;
+  font-size: 1.1em;
 }
 
-.profile-img{
-    padding-left: 20px;
+.img-container {
+  width: 150px;
+  height: 150px;
+  border: 1.5px rgb(199, 195, 195) dashed;
+  border-radius: 50%;
 }
 
-
-
-.form-field{
-    position: relative;
-    margin:15px 0;
+.profile-img {
+  padding-left: 20px;
 }
 
-.input-text{
-    display: block;
-    width:100%;
-    height:36px;
-    border-width:0 0 1px 0;
-    color:rgb(128, 122, 122);
-    font-weight: 400;
+.form-field {
+  position: relative;
+  margin: 15px 0;
 }
 
-.input-text:focus{
-    outline: none;
-    
+.input-text {
+  display: block;
+  width: 100%;
+  height: 36px;
+  border-width: 0 0 1px 0;
+  color: rgb(128, 122, 122);
+  font-weight: 400;
 }
 
-.label{
-    position: absolute;
-    letter-spacing: 2px;
-    font-weight: bold;
-    left:0px;
-    bottom:-5px;
-    line-height:24px;
-    font-size: 0.8em;
-    color:rgb(128, 122, 122);
-    cursor: text;
-    text-transform: capitalize;
-    transition: transform 0.2s ease-in-out;
-    transform: translateY(-19px);
+.input-text:focus {
+  outline: none;
 }
 
-.input-text:focus~label,
-.input-text.not-empty~label{
-    transform: translateY(-24px);
+.label {
+  position: absolute;
+  letter-spacing: 2px;
+  font-weight: bold;
+  left: 0px;
+  bottom: -5px;
+  line-height: 24px;
+  font-size: 0.8em;
+  color: rgb(128, 122, 122);
+  cursor: text;
+  text-transform: capitalize;
+  transition: transform 0.2s ease-in-out;
+  transform: translateY(-19px);
 }
 
-.employee-info{
-    margin-top: 158px;
-    padding: 10px;
-    background-color: white;
+.input-text:focus ~ label,
+.input-text.not-empty ~ label {
+  transform: translateY(-24px);
 }
 
-.basic-info{
-    padding: 10px;
-    background-color: white;
-    margin-right: 10px;
+.employee-info {
+  margin-top: 158px;
+  padding: 10px;
+  background-color: white;
 }
 
-.profile{
-    width: 220px;
-    background-color: #eee;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.5s;
-    margin-top:40px;
-    margin-left:35px;
-    padding-bottom: 10px;
-    float: left;
-    margin-bottom: 30px;
+.basic-info {
+  padding: 10px;
+  background-color: white;
+  margin-right: 10px;
+}
+
+.profile {
+  width: 220px;
+  background-color: #eee;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.5s;
+  margin-top: 40px;
+  margin-left: 35px;
+  padding-bottom: 10px;
+  float: left;
+  margin-bottom: 30px;
 }
 
 .profile:hover {
-    transform: scale(1.1);
-  }
-
-.employee-container{
-    position: absolute;
-    top: 750px;
-    padding-right: 100px;
+  transform: scale(1.1);
 }
 
-.noemployee-container{
-    position: static;
+.employee-container {
+  position: absolute;
+  top: 750px;
+  padding-right: 100px;
+}
 
+.noemployee-container {
+  position: static;
 }
 
 .spinner {
-    position: fixed;
-    z-index: 1031;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+  position: fixed;
+  z-index: 1031;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

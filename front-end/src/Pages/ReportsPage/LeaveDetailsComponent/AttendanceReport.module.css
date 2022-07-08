@@ -1,0 +1,22 @@
+body{
+    margin-top: 20px;
+}
+.profile-dp{
+    object-fit: cover;
+
+    width: 100px;
+    height: 100px;
+}
+
+.card{
+    width: 70%;
+    margin-left: 15%;
+
+    
+}
+
+.percentage-box{
+   
+    margin-bottom: 5px;
+    
+}

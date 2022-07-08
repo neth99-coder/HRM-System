@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import styles from './ProfileViewComponent.module.css'
-import authService from '../../../../services/auth.service'
 import {
   Nav,
   Breadcrumb,
@@ -80,7 +79,7 @@ function ProfileView(props) {
 }
 
   const getEmpStatusById = (ID)=>{
-    console.log(empStatus)
+    // console.log(empStatus)
     let status = ""
     for(let emp_status_id in empStatus){
        
@@ -98,7 +97,7 @@ function ProfileView(props) {
   }
 
   const getPayGradeById = (ID)=>{
-    
+    console.log(payGrades)
     for(let paygrade_id in payGrades){
         if (payGrades[paygrade_id].paygrade_id == ID){
             return payGrades[paygrade_id].name;
@@ -120,6 +119,27 @@ function ProfileView(props) {
         alert('a fail')
       }
     })
+  }
+
+  function showExtraAttributes(col_name) {
+    if(col_name != "profile_picture" && col_name != "job_type_title"){
+      return (
+        <div>
+          <hr />
+          <div className="row">
+            <div className="col-sm-3">
+              <h6 className="mb-6">{col_name.split('_').join(" ")}</h6>
+            </div>
+            <div className="col-sm-9 text-secondary">
+              {hrmanager[col_name] === null ||
+              hrmanager[col_name] === ''
+                ? 'undefined'
+                : hrmanager[col_name]}
+            </div>
+          </div>
+        </div>
+      )
+    }
   }
 
   return (
@@ -149,7 +169,7 @@ function ProfileView(props) {
               <CardBody>
                 <div className="d-flex flex-column align-items-center text-center">
                   <img
-                    src={`http://localhost:3001/images/${hrmanager.profile_picture}`}
+                    src={`http://localhost:3001/profilePictures/${hrmanager.profile_picture?hrmanager.profile_picture:"default.jpg"}`}
                     alt={hrmanager.first_name + ' ' + hrmanager.last_name}
                     className={profileStyleClass}
                     width="150"
@@ -162,7 +182,7 @@ function ProfileView(props) {
                         ' ' +
                         hrmanager.last_name}
                     </h4>
-                    <p className="text-secondary mb-1">{hrmanager.type_name}</p>
+                    <p className="text-secondary mb-1">{hrmanager.job_type_title}</p>
                     <p className="text-muted font-size-sm">
                       {getDepartmentById(hrmanager.dept_id) + ' Department'}
                     </p>
@@ -313,6 +333,24 @@ function ProfileView(props) {
                     {getPayGradeById(hrmanager.paygrade_id)}
                   </div>
                 </div>
+                <hr />
+                <div className="row">
+                  <div className="col-sm-3">
+                    <h6 className="mb-6">Designation</h6>
+                  </div>
+                  <div className="col-sm-9 text-secondary">
+                    {hrmanager.job_type_title}
+                  </div>
+                </div>
+
+                <div>
+                  <p>
+                    {Object.keys(hrmanager)
+                      .slice(17)
+                      .map(showExtraAttributes)}
+                  </p>
+                </div>
+
               </CardBody>
             </Card>
           </div>
