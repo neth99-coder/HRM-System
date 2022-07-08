@@ -365,6 +365,20 @@ const deleteEmployee = async (req,res)=>{
 }
 
 
+const deleteColumns = async (req,res)=>{
+    await hrManagerModal
+        .deleteColumns(req.body)
+        .then((result) => {
+            res.json({ success: true, result });
+        })
+        .catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
 const addSupervisor = async (req,res)=>{
     await hrManagerModal
         .addSupervisor(req.body)
@@ -559,6 +573,7 @@ module.exports = {
     dpUpload,
     updateleaveConfig,
     addSupervisor,
-    updateSupervisor
+    updateSupervisor,
+    deleteColumns
 
 }

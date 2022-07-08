@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import styles from './ProfileViewComponent.module.css'
-import authService from '../../../../services/auth.service'
 import {
   Nav,
   Breadcrumb,

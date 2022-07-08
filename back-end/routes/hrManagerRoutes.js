@@ -31,6 +31,7 @@ router.post("/updateSupervisor",hrManagerController.updateSupervisor);
 router.post("/addEmployee",hrManagerController.addEmployee);
 router.post("/addAttendance",hrManagerController.addAttendance);
 router.post("/deleteEmployee",hrManagerController.deleteEmployee);
+router.post("/deleteColumns",hrManagerController.deleteColumns);
 router.post("/addSupervisor",hrManagerController.addSupervisor);
 router.post("/addColumn",hrManagerController.addColumn);
 router.post("/dpUpload",hrManagerController.dpUpload);

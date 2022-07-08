@@ -852,9 +852,9 @@ function EditProfile(props){
                                                         </FormGroup>
                                                     </div>
 
-                                                    <div>
+
                                                         {Object.keys(props.employeeFull).slice(17).map(showExtraAttributes)}
-                                                    </div>
+
 
                                                 </div>
 
