@@ -13,8 +13,9 @@ function LeaveConfigForm() {
   const [paygrades, setPaygrades] = useState([])
   const [leaves, setLeaves] = useState({
     Casual: 0,
-    Medical: 0,
+    Maternity: 0,
     Annual: 0,
+    No_pay:0
   })
   const navigate = useNavigate()
 
@@ -39,9 +40,10 @@ function LeaveConfigForm() {
         })
       }else{
         values = {
-          Casual:0,
-          Medical:0,
-          Annual:0
+          Casual: 0,
+          Maternity: 0,
+          Annual: 0,
+          No_pay:0
         }
       }
       setLeaves(values)
@@ -71,10 +73,12 @@ function LeaveConfigForm() {
     }
     if(success){
       setLeaves({
-        Casual:0,
-        Medical:0,
-        Annual:0
+        Casual: 0,
+        Maternity: 0,
+        Annual: 0,
+        No_pay:0
       })
+      setPaygrade("Select Paygrade")
       alert("successfully added")
     }else{
       alert("failed")
@@ -126,12 +130,12 @@ return (
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Medical Leaves</Form.Label>
+        <Form.Label>Maternity Leaves</Form.Label>
         <Form.Control
           type="number"
-          value={leaves['Medical']}
+          value={leaves['Maternity']}
           onChange={(e) => {
-            setLeaves({ ...leaves, Medical: e.target.value })
+            setLeaves({ ...leaves, Maternity: e.target.value })
           }}
           placeholder="Enter number of casual leaves"
           required
@@ -151,6 +155,18 @@ return (
         />
       </Form.Group>
 
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>No Pay Leaves</Form.Label>
+        <Form.Control
+          type="number"
+          value={leaves['No_pay']}
+          onChange={(e) => {
+            setLeaves({ ...leaves, No_pay: e.target.value })
+          }}
+          placeholder="Enter number of casual leaves"
+          required
+        />
+      </Form.Group>
       {/* Validation part before changing the Leaves */}
 
       <Button variant="primary" type="submit" onSubmit={handleSubmit}>

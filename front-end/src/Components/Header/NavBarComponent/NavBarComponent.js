@@ -52,7 +52,7 @@ class NavBar extends Component {
         if(this.state.employeeLevel === 3){
             return(
                 <NavItem>
-                    <NavLink className="nav-link" href="/hrmanager/">
+                    <NavLink className="nav-link" href="/hrmanager/reports">
                         <span className="fa fa-2x fa-book fa-lg"></span> Report
                     </NavLink>
                 </NavItem>

@@ -122,7 +122,7 @@ const existingLeaveCount = async (req, res) => {
 
 const addEmployee = async (req, res) => {
   const file = req.files.file
-  file.mv(`${__dirname}/../public/images/${file.name}`, (err) => {
+  file.mv(`${__dirname}/../public/profilePictures/${file.name}`, (err) => {
     if (err) {
       console.error(err)
     }
@@ -137,6 +137,7 @@ const addEmployee = async (req, res) => {
       })
     })
     .catch((err) => {
+      console.log(err)
       res.json({
         success: false,
         err,
@@ -165,6 +166,7 @@ const updateEmployee = async (req, res) => {
       res.json({ success: true, result })
     })
     .catch((err) => {
+      console.log(err)
       res.json({
         success: false,
         err,

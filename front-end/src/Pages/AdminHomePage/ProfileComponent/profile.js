@@ -1,6 +1,5 @@
 import React from 'react';
 import  styles from "./profle.module.css";
-import profile from "../../../Images/profile.png";
 
 function Profile(props) {
     return ( 

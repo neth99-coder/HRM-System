@@ -260,6 +260,7 @@ function updateEmployee(data){
     })
 }
 
+
 //function to update employee_supervisor record
 function updateSupervisor(data){
     return new Promise((resolve,reject)=>{
@@ -312,20 +313,6 @@ function addEmployee(data) {
     })
   })
 }
-
-//retrieves existing leave config values
-// function getLeaveConfigDetails(paygrade_id,leave_id) {
-//   return new Promise((resolve, reject) => {
-//     const sql = `SELECT * FROM paygrade_leave WHERE paygrade_id =${paygrade_id} and leave_id = ${leave_id}`
-//     db.query(sql, (err, result) => {
-//       if (result) {
-//         return resolve(result)
-//       } else {
-//         return reject(err)
-//       }
-//     })
-//   })
-// }
 
 function getleaveConfig(paygrade_id) {
     return new Promise((resolve, reject) => {
@@ -568,6 +555,7 @@ function addColumn(data){
             );
         }
     })
+
 }
 
 //get data types of employee table columns
@@ -582,6 +570,60 @@ function getDataTypes() {
             }
         });
     });
+}
+
+//returns attendace of an employee
+function getAttendace(data) {
+  return new Promise((resolve, reject) => {
+    var sql =
+      "SELECT emp_id,DATE_FORMAT(date, '%Y-%m-%d') as date,is_present from attendance WHERE emp_id = ? and date BETWEEN ? AND ? "
+    db.query(sql,[data.emp_id,data.from,data.to], (err, result) => {
+      if (err) {
+        
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
+}
+
+function getLeaves(data){
+  return new Promise((resolve, reject) => {
+    var sql =
+      "SELECT leave_request.leave_request_id,leave_type.type,DATE_FORMAT(leave_request.leave_begin, '%Y-%m-%d') as leave_begin,DATE_FORMAT(leave_request.leave_end, '%Y-%m-%d') as leave_end,leave_request.reason "+
+      "from leave_request,leave_request_state,leave_type "+
+      "where "+
+      "leave_request.leave_id = leave_type.leave_id and "+
+      "leave_request.state_id = leave_request_state.state_id and "+
+      "leave_request.state_id = 1 "+
+      "and leave_request.emp_id = ? "+
+      "and leave_request.leave_begin > ? "+
+      "and leave_request.leave_end < ?"
+    db.query(sql,[data.emp_id,data.from,data.to], (err, result) => {
+      if (err) {
+        
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
+}
+
+function getEmployeesByIDs(data){
+  return new Promise((resolve, reject) => {
+    var sql =
+      `Select emp_id,first_name,last_name,contact_num,email,job_type_title from employee natural join job_type where ${data.id} = ${data.value} `
+    db.query(sql,(err, result) => {
+      if (err) {
+        
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
 }
 
 module.exports = {
@@ -608,6 +650,9 @@ module.exports = {
     getOneEmployeesFull,
     getSupervisorId,
     getleaveConfig,
+    getAttendace,
+    getLeaves,
+    getEmployeesByIDs,
 
     updateEmployee,
     addEmployee,
@@ -619,5 +664,6 @@ module.exports = {
     updateSupervisor,
     deleteColumns,
     updateleaveConfig
+
 }
 

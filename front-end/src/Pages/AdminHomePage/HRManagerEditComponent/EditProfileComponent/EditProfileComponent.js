@@ -30,13 +30,16 @@ function EditProfile(props) {
     dept_id: props.employee.dept_id,
     profile_picture: props.employee.profile_picture,
     type_id: props.employee.type_id,
+    job_type_id:props.employee.job_type_id,
     emp_id: props.employee.emp_id,
+  
   })
 
   const [departments, setDepartments] = useState([])
   const [empStatus, setEmpStatus] = useState([])
   const [payGrades, setPayGrades] = useState([])
   const [userTypes, setUserTypes] = useState([])
+  const [jobTypes, setJobTypes] = useState([])
 
   useEffect(() => {
     Axios.get('http://localhost:3001/api/hrManager/getDepartments',{
@@ -66,6 +69,12 @@ function EditProfile(props) {
     }).then((res) => {
       setUserTypes(res.data.result)
     })
+
+    Axios.get('http://localhost:3001/api/hrManager/getJobTypes',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then((res) => {
+      setJobTypes(res.data.result)
+    })
   }, [])
 
   const getDepartmentById = (ID)=>{
@@ -78,10 +87,10 @@ function EditProfile(props) {
 
   
 
-  const getUserTypeById = (ID) => {
-    for (let type in userTypes) {
-      if (userTypes[type].type_id= ID) {
-        return userTypes[type].type_name
+  const getJobTypeById = (ID) => {
+    for (let type in jobTypes) {
+      if (jobTypes[type].job_type_id === ID) {
+        return jobTypes[type].job_type_title
       }
     }
   }
@@ -105,6 +114,47 @@ function EditProfile(props) {
       }
     })
   }
+
+  // function showExtraAttributes(col_name) {
+
+  //   <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+  //                     <FormGroup>
+  //                       <label htmlFor="emergencyNum">{col_name}</label>
+  //                       <input
+  //                         type="text"
+  //                         className={Styles['form-control']}
+                       
+  //                         required={true}
+  //                         value={employee[col_name]}
+  //                         readOnly={true}
+  //                         onChange={(e) => {
+  //                           setEmployee({ ...employee, : e.target.value })
+  //                         }}
+  //                       />
+  //                     </FormGroup>
+  //                   </div>
+
+
+  //   if(col_name != "profile_picture" && col_name != "job_type_title"){
+  //     return (
+  //       <div>
+  //         <hr />
+  //         <div className="row">
+  //           <div className="col-sm-3">
+  //             <h6 className="mb-6">{col_name.split('_').join(" ")}</h6>
+  //           </div>
+  //           <div className="col-sm-9 text-secondary">
+  //             {props.employee[col_name] === null ||
+  //             props.employee[col_name] === ''
+  //               ? 'undefined'
+  //               : props.employee[col_name]}
+  //           </div>
+  //         </div>
+  //       </div>
+  //     )
+  //   }
+
+
   return (
     <div className="container">
       <div>
@@ -129,7 +179,7 @@ function EditProfile(props) {
                       {/*{"../../../public"+this.state.employee.profile_picture}*/}
                       <img
                         className={Styles['profile-dp']}
-                        src={`http://localhost:3001/images/${employee.profile_picture}`}
+                        src={`http://localhost:3001/profilePictures/${employee.profile_picture}`}
                         alt={employee.first_name + ' ' + employee.last_name}
                       />
                     </div>
@@ -141,7 +191,7 @@ function EditProfile(props) {
                   <div className={Styles['about']}>
                     <h5>About</h5>
                     <p>
-                      {getUserTypeById(employee.type_id)} -{' '}
+                      {getJobTypeById(employee.job_type_id)} -{' '}
                       {getDepartmentById(employee.dept_id)} Department
                     </p>
                   </div>
@@ -437,6 +487,25 @@ function EditProfile(props) {
                             <option value={paygrade_id}>{name}</option>
                           ))}
                         </select>
+                      </FormGroup>
+                    </div>
+
+                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                      <FormGroup>
+                        <label htmlFor="emergencyNum">Employee ID</label>
+                        <input
+                          type="text"
+                          className={Styles['form-control']}
+                          id="empID"
+                          name="empID"
+                          required={true}
+                          value={employee.emp_id}
+                          placeholder="Enter Employee ID"
+                          readOnly={true}
+                          onChange={(e) => {
+                            setEmployee({ ...employee, emp_id: e.target.value })
+                          }}
+                        />
                       </FormGroup>
                     </div>
                   </div>

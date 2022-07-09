@@ -3,11 +3,12 @@ import styles from './index.module.css'
 import Axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import Profile from './ProfileComponent/profile.js'
-import { Modal } from 'react-bootstrap'
+import { Modal,Spinner } from 'react-bootstrap'
 import { generateKey } from 'fast-key-generator'
 import authService from '../../services/auth.service'
 
 const Index = (props) => {
+  const [isLoading, setIsLoading] = useState(false) 
   const [employees, setEmployees] = useState([])
   const [hrmanager, setHrmanager] = useState([])
 
@@ -30,7 +31,9 @@ const Index = (props) => {
     emp_status_id: '',
   })
   const [employeeIds, setEmployeeIds] = useState([])
-
+  const [empStatus, setEmpStatus] = useState([])
+  const [payGrades, setPayGrades] = useState([])
+  const [jobTypes, setJobTypes] = useState([])
   const [imgUrl, setImgUrl] = useState('')
 
   const [show, setShow] = useState(false)
@@ -42,6 +45,8 @@ const Index = (props) => {
   const handleShow = () => setShowI(true)
 
   useEffect(() => {
+    setIsLoading(true)
+
     Axios.get('http://localhost:3001/api/employee/getemployeetypes', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
@@ -59,6 +64,26 @@ const Index = (props) => {
       setEmployeeIds(res.data.result)
     })
 
+    Axios.get('http://localhost:3001/api/hrManager/getStatus',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then((res) => {
+      setEmpStatus(res.data.result)
+    })
+
+    Axios.get('http://localhost:3001/api/hrManager/getPaygrades',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then(
+      (res) => {
+        setPayGrades(res.data.result)
+      },
+    )
+
+    Axios.get('http://localhost:3001/api/hrManager/getJobTypes',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then((res) => {
+      setJobTypes(res.data.result)
+    })
+
     const GenerateEmpId = () => {
       const excludeList = []
       for (let i = 0; i < employeeIds.length; i++) {
@@ -72,10 +97,14 @@ const Index = (props) => {
     }
 
     setNewEmployee({ ...newEmployee, emp_id: GenerateEmpId() })
+
+    setIsLoading(false)
   }, [])
 
   const addRecord = (e) => {
     // e.preventDefault()
+
+    console.log(newEmployee)
     const formData = new FormData()
 
     formData.append('emp_id', newEmployee.emp_id)
@@ -94,6 +123,7 @@ const Index = (props) => {
     formData.append('emp_status_id', newEmployee.emp_status_id)
     formData.append('dept_id', 2)
     formData.append('type_id', 3)
+    formData.append('job_type_id', 1)
 
     Axios.post('http://localhost:3001/api/employee/addemployee', formData, {
       headers: {
@@ -118,6 +148,14 @@ const Index = (props) => {
   }
 
   return (
+    <div>
+      {isLoading ? (
+        <Spinner animation="border" role="status" className={styles['spinner']}>
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      ) : (
+
+
     <div className={`${styles['admin-container']}`}>
       <div className={`${styles['admin-heading']}`}>
         <h1 className="text-primary">Our Staff</h1>
@@ -274,7 +312,7 @@ const Index = (props) => {
                       }
                       required
                     >
-                      {props.paygrades.map(
+                      {payGrades.map(
                         ({ paygrade_id, name, salary }, index) => (
                           <option value={paygrade_id}>{name}</option>
                         ),
@@ -298,7 +336,7 @@ const Index = (props) => {
                       }
                       required
                     >
-                      {props.status.map(({ emp_status_id, name }, index) => (
+                      {empStatus.map(({ emp_status_id, name }, index) => (
                         <option value={emp_status_id}>{name}</option>
                       ))}
                     </select>
@@ -535,6 +573,10 @@ const Index = (props) => {
           </Modal.Footer>
         </form>
       </Modal>
+      
+      
+      </div>
+      )}
     </div>
   )
 }
