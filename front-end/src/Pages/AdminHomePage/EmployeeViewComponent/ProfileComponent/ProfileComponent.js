@@ -1,6 +1,5 @@
 import { React, useState, useEffect } from 'react'
 import styles from './ProfileComponent.module.css'
-import authService from '../../../../services/auth.service'
 import {
   Breadcrumb,
   BreadcrumbItem,

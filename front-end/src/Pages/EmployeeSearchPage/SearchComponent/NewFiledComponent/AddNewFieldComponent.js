@@ -26,10 +26,7 @@ function AddNewField(props){
                 if(!res.data.success) {
                     alert("Error occured!");
                 }else{
-                    setFieldName("");
-                    setMaxSize("");
-                    setDataType("");
-                    props.setHidden(true);
+                    window.location.reload(false)
                 }
             });
     }

@@ -927,12 +927,28 @@ function EditProfile(props) {
                             </FormGroup>
                           </div>
 
-                          <div>
-                            {Object.keys(props.employeeFull)
-                              .slice(17)
-                              .map(showExtraAttributes)}
-                          </div>
-                        </div>
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                        <FormGroup>
+                                                            <label htmlFor="paygradeID">Pay-Grade</label>
+                                                            <select
+                                                                className={Styles["form-control"]}
+                                                                id="paygradeID"
+                                                                name="paygradeID"
+                                                                placeholder="Select pay-grade"
+                                                                required={true}
+                                                                value={paygradeID}
+                                                                onChange={handleInputChange}>
+                                                                {payGrades.map(({ paygrade_id, name }, index) => <option value={paygrade_id} >{name}</option>)}
+                                                            </select>
+                                                        </FormGroup>
+                                                    </div>
+
+
+                                                        {Object.keys(props.employeeFull).slice(17).map(showExtraAttributes)}
+
+
+                                                </div>
+
 
                         <div className="row gutters">
                           <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">

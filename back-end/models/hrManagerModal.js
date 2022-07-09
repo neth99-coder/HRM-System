@@ -258,7 +258,7 @@ function updateEmployee(data){
             }
         );
     })
-  }
+}
 
 
 //function to update employee_supervisor record
@@ -345,18 +345,50 @@ function updateleaveConfig(data) {
   
 
 //function to delete employee record
-function deleteEmployee(data) {
-  return new Promise((resolve, reject) => {
-    const sql = 'DELETE FROM employee WHERE emp_id = ?'
-    db.query(sql, [data.emp_id], (err, result) => {
-      if (result) {
-        return resolve(result)
-      } else {
-        console.log(err)
-        return reject(err)
-      }
+function deleteEmployee(data){
+    return new Promise((resolve,reject)=>{
+        const sql = "DELETE FROM employee WHERE emp_id = ?";
+        db.query(
+            sql,
+            [data.emp_id],
+            (err,result) => {
+                if(result){
+                    return resolve(result);
+                }else{
+                    console.log(err);
+                    return reject(err);
+
+                }
+            }
+        );
     })
-  })
+}
+
+//function to Remove employee attribute
+function deleteColumns(data){
+    fields = data.fields;
+    return new Promise((resolve,reject)=>{
+        let sql = "ALTER TABLE employee ";
+        for(let i =0; i < fields.length; i++){
+            if(i != 0){
+                sql += ", "
+            }
+            sql += "DROP COLUMN `" + fields[i] + '`';
+        }
+        db.query(
+            sql,
+            [],
+            (err,result) => {
+                if(result){
+                    return resolve(result);
+                }else{
+                    console.log(err);
+                    return reject(err);
+
+                }
+            }
+        );
+    })
 }
 
 //function to add Superviosor
@@ -429,35 +461,19 @@ function getWorkingToday() {
 }
 
 //function to get leave types with counts; today
-function getLeaveTypesCount() {
-  return new Promise((resolve, reject) => {
-    var sql =
-      'SELECT leave_type.type, COUNT(leave_request.emp_id) AS leave_type_count FROM leave_request NATURAL JOIN leave_type WHERE (CURDATE() >= leave_request.leave_begin AND CURDATE() <= leave_request.leave_end) AND leave_request.state_id = 1 GROUP BY leave_type.type'
-    db.query(sql, (err, result) => {
-      if (err) {
-        return reject(err)
-      } else {
-        return resolve(arrayOrganizer.todayLeaveArray(result))
-      }
-    })
-  })
-}
-
-//function to get aattendance for marking
-function getAttendanceNotMarked() {
-  return new Promise((resolve, reject) => {
-    var sql =
-      'SELECT employee.emp_id,employee.first_name,employee.last_name,employee.dept_id,department.name FROM employee NATURAL JOIN department WHERE emp_id NOT IN (SELECT emp_id FROM attendance WHERE date = CURDATE())'
-    db.query(sql, [], (err, result) => {
-      if (err) {
-        return reject(err)
-      } else {
-        //console.log(result)
-        return resolve(arrayOrganizer.attendanceArray(result))
-      }
-    })
-  })
-}
+function getLeaveTypesCount(){
+    return new Promise((resolve, reject) => {
+      var sql = "SELECT leave_type.type, COUNT(leave_request.emp_id) AS leave_type_count FROM leave_request NATURAL JOIN leave_type WHERE (CURDATE() >= leave_request.leave_begin AND CURDATE() <= leave_request.leave_end) AND leave_request.state_id = 1 GROUP BY leave_type.type" ;
+      db.query(sql, (err, result) => {
+        if (err) {
+          return reject(err);
+        } else {
+                
+          return resolve(arrayOrganizer.todayLeaveArray(result));
+        }
+      });
+    });  
+  }
 
 
  //function to get aattendance for marking
@@ -538,23 +554,22 @@ function addColumn(data){
                 }
             );
         }
-      })
-    
+    })
+
 }
 
 //get data types of employee table columns
 function getDataTypes() {
-  return new Promise((resolve, reject) => {
-    var sql =
-      "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME   = 'employee' "
-    db.query(sql, (err, result) => {
-      if (err) {
-        return reject(err)
-      } else {
-        return resolve(result)
-      }
-    })
-  })
+    return new Promise((resolve, reject) => {
+        var sql = "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME   = 'employee' ";
+        db.query(sql, (err, result) => {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(result);
+            }
+        });
+    });
 }
 
 //returns attendace of an employee
@@ -647,6 +662,8 @@ module.exports = {
     dpUpload,
     addSupervisor,
     updateSupervisor,
-    updateleaveConfig,
+    deleteColumns,
+    updateleaveConfig
+
 }
 

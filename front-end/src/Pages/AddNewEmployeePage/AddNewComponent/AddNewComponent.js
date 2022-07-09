@@ -745,9 +745,9 @@ function AddNewComponent(props){
                                 </FormGroup>
                             </div>
 
-                                                    <div>
-                                                        {Object.keys(props.employeeFull).slice(17).map(showExtraAttributes)}
-                                                    </div>
+
+                            {Object.keys(props.employeeFull).slice(17).map(showExtraAttributes)}
+
 
                                                 </div>
 
