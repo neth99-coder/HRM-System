@@ -1,0 +1,29 @@
+body {
+  margin-top: 20px;
+}
+.profile-dp {
+  object-fit: cover;
+
+  width: 100px;
+  height: 100px;
+}
+
+.card {
+  width: 70%;
+  margin-left: 15%;
+
+  margin-bottom: 2%;
+}
+
+.percentage-box {
+  margin: 20px;
+  font-weight: bold;
+}
+
+.result {
+  margin-left: 150px;
+}
+
+.tags {
+  margin-bottom: 5px;
+}

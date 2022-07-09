@@ -3,11 +3,11 @@ import ReactToPrint from 'react-to-print'
 import { Form, FormGroup, Label, Input, Col } from 'reactstrap'
 import styles from './index.module.css'
 import Axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
 import Profile from './EmployeeDetailsComponent/ProfileViewPage'
-import AttendanceReport from './LeaveDetailsComponent/AttendanceReport'
+import AttendanceReport from './AttendanceDetailsComponent/AttendanceReport'
+import LeaveReport from './GrantedLeavesDetailsComponent/GrantedLeavesReport'
+import StaffReport from './StaffDetailsReportComponent/StaffDetailsReport'
 import { Modal, Spinner } from 'react-bootstrap'
-import { generateKey } from 'fast-key-generator'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import authService from '../../services/auth.service'
@@ -16,6 +16,10 @@ const Index = () => {
   const componentRef = useRef(null)
   const [reportId, setReportId] = useState(-1)
   const [employeeIds, setEmployeeIds] = useState([])
+  const [jobTypes, setJobTypes] = useState([])
+  const [departments, setDepartments] = useState([])
+  const [empStatus, setEmpStatus] = useState([])
+  const [payGrades, setPayGrades] = useState([])
 
   const [showButton, setShowButton] = useState(false)
   const [show_0, setShow_0] = useState(false)
@@ -36,14 +40,54 @@ const Index = () => {
   const [empId, setEmpID] = useState('')
   const [fromdate, setFromDate] = useState('')
   const [todate, setToDate] = useState('')
+
+  const [leavefromdate, setleaveFromDate] = useState('')
+  const [leavetodate, setleaveToDate] = useState('')
+
+  const [criteriaId , setCriteriaID] = useState('')
+  const [criteria , setCriteria] = useState('')
+
+  const [isLoadedEmployee, setisLoadedEmployee] = useState(false)
+  const [isLoadedAttendance, setisLoadedAttendance] = useState(false)
+  const [isLoadedLeaves, setisLoadedLeaves] = useState(false)
+  const [isLoadedGroupedEmployee , setisLoadedGroupedEmployee] = useState(false)
+
   const [employee, setEmployee] = useState([])
   const [attendance, setAttendance] = useState([])
+  const [result, setResult] = useState([])
 
   useEffect(() => {
     Axios.get('http://localhost:3001/api/hrManager/getEmployeeIds', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       setEmployeeIds(res.data.result)
+    })
+
+    Axios.get('http://localhost:3001/api/hrManager/getJobTypes', {
+      headers: { 'x-auth-token': authService.getUserToken() },
+    }).then((res) => {
+      setJobTypes(res.data.result)
+    })
+
+    Axios.get('http://localhost:3001/api/hrManager/getDepartments', {
+      headers: { 'x-auth-token': authService.getUserToken() },
+    }).then((res) => {
+      setDepartments(res.data.result)
+    })
+
+    Axios.get('http://localhost:3001/api/hrManager/getPaygrades',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then(
+      (res) => {
+        setPayGrades(res.data.result)
+      },
+    )
+
+    Axios.get('http://localhost:3001/api/hrManager/getStatus',{
+      headers: { "x-auth-token": authService.getUserToken() },
+    }).then((res) => {
+      console.log(res.data.result)
+      setEmpStatus(res.data.result)
     })
   }, [])
 
@@ -87,57 +131,161 @@ const Index = () => {
     }
   }
 
-  const loadEmployee = (e) => {
+  const setEmpty = () => {
     setEmployee([])
     setAttendance([])
-    e.preventDefault()
-    Axios.get(`http://localhost:3001/api/employee/getemployee/${empId}`, {
-      headers: { 'x-auth-token': authService.getUserToken() },
-    }).then((res) => {
-      setEmployee(res.data.result[0])
-    })
-    setShowButton(true)
-    handleClose_0()
+    setResult([])
+    setisLoadedEmployee(false)
+    setisLoadedAttendance(false)
+    setisLoadedLeaves(false)
+    setisLoadedGroupedEmployee(false)
+    setShowButton(false)
   }
 
-  const loadAttendance = (e)=>{
+  const loadEmployee = (e) => {
     e.preventDefault()
-    setEmployee([])
-    setAttendance([])
-
-    const data = {
-      emp_id:empId,
-      from:fromdate,
-      to:todate
+    setEmpty()
+    if (empId.length !== 0) {
+      Axios.get(`http://localhost:3001/api/employee/getemployee/${empId}`, {
+        headers: { 'x-auth-token': authService.getUserToken() },
+      }).then((res) => {
+        setEmployee(res.data.result[0])
+        setisLoadedEmployee(true)
+      })
+      setShowButton(true)
+    } else {
+      alert('Please fill all the fields')
     }
 
-    Axios.post('http://localhost:3001/api/hrManager/getAttendance', data,{
-      headers: { 'x-auth-token': authService.getUserToken() },
-    }).then((res) => {
-      setAttendance(res.data.result)
-    })
-    setShowButton(true)
-    handleClose_1()
+    handleClose_0()
+    setReportId(-1)
+    setEmpID('')
+    setleaveFromDate("")
+    setleaveToDate("")
+    setFromDate('')
+    setToDate('')
+    setCriteria('')
+    setCriteriaID('')
+
   }
 
-  //   const Reports = [
-  //     {
-  //       id: 0,
-  //       name: 'Employee Details',
-  //     },
-  //     {
-  //       id: 1,
-  //       name: 'Employee Attendace',
-  //     },
-  //     {
-  //       id: 3,
-  //       name: 'Granted Leaves',
-  //     },
-  //     {
-  //       id: 3,
-  //       name: 'Staff Details',
-  //     },
-  //   ]
+  const loadAttendance = (e) => {
+    e.preventDefault()
+    setEmpty()
+
+    const data = {
+      emp_id: empId,
+      from: fromdate,
+      to: todate,
+    }
+    if (empId.length !== 0 && fromdate.length !== 0 && todate.length !== 0) {
+      Axios.post('http://localhost:3001/api/hrManager/getAttendance', data, {
+        headers: { 'x-auth-token': authService.getUserToken() },
+      }).then((res) => {
+        setAttendance(res.data.result)
+        setisLoadedAttendance(true)
+      })
+
+      Axios.get(`http://localhost:3001/api/employee/getemployee/${empId}`, {
+        headers: { 'x-auth-token': authService.getUserToken() },
+      }).then((res) => {
+        setEmployee(res.data.result[0])
+      })
+
+      setShowButton(true)
+    } else {
+      alert('Please fill all the fields')
+    }
+
+    handleClose_1()
+    setReportId(-1)
+    setEmpID('')
+    setleaveFromDate("")
+    setleaveToDate("")
+    setCriteria('')
+    setCriteriaID('')
+  }
+
+  const loadLeaves = (e) => {
+    e.preventDefault()
+    setEmpty()
+
+    const data = {
+      emp_id: empId,
+      from: fromdate,
+      to: todate,
+    }
+    if (empId.length !== 0 && leavefromdate.length !== 0 && leavetodate.length !== 0) {
+      Axios.post('http://localhost:3001/api/hrManager/getLeaves', data, {
+        headers: { 'x-auth-token': authService.getUserToken() },
+      }).then((res) => {
+        setResult(res.data.result)
+        setisLoadedLeaves(true)
+      })
+
+      Axios.get(`http://localhost:3001/api/employee/getemployee/${empId}`, {
+        headers: { 'x-auth-token': authService.getUserToken() },
+      }).then((res) => {
+        setEmployee(res.data.result[0])
+      })
+
+      setShowButton(true)
+    } else {
+      alert('Please fill all the fields')
+    }
+
+    handleClose_2()
+    setReportId(-1)
+    setEmpID('')
+    setFromDate("")
+    setToDate("")
+    setCriteria('')
+    setCriteriaID('')
+  }
+
+  const loadGroupedEmployee = (e)=>{
+    e.preventDefault()
+    setEmpty()
+
+    const data={
+      id:criteriaId,
+      value:criteria
+    }
+
+    if(criteria.length !== 0 && criteriaId.length !== 0){
+      Axios.post('http://localhost:3001/api/hrManager/getEmployeesByIDs', data, {
+        headers: { 'x-auth-token': authService.getUserToken() },
+      }).then((res) => {
+        setResult(res.data.result)
+        setisLoadedGroupedEmployee(true)
+      })
+      setShowButton(true)
+    } else {
+      alert('Please fill all the fields')
+    }
+
+    handleClose_3()
+    setReportId(-1)
+    setEmpID('')
+    setleaveFromDate("")
+    setleaveToDate("")
+  }
+
+  const filterOption = ()=>{ 
+    switch(criteriaId){
+      case 'dept_id':
+        return 'Department : ' + departments.filter((department)=> department.dept_id == criteria)[0].name
+      
+      case 'paygrade_id':
+        return 'Pay grade : ' + payGrades.filter((paygrade)=> paygrade.paygrade_id == criteria)[0].name
+
+      case 'emp_status_id':
+        return 'Employee Status : ' + empStatus.filter((status)=>status.emp_status_id == criteria)[0].name
+
+      case 'job_type_id':
+        return'Designation : ' + jobTypes.filter((job)=>job.job_type_id == criteria)[0].job_type_title
+    }
+  }
 
   return (
     <div>
@@ -162,11 +310,13 @@ const Index = () => {
                     }}
                     style={{ marginLeft: '20px' }}
                   >
-                    <option value={''} hidden={true}>
+                    {reportId === -1 && (
+                      <option value={''} hidden={true}>
                       Select Report Type
                     </option>
+                    )}
                     <option value={0}>Employee Details</option>
-                    <option value={1}>Employee Attendace</option>
+                    <option value={1}>Employee Attendance</option>
                     <option value={2}>Granted Leaves</option>
                     <option value={3}>Staff Details</option>
                   </Input>
@@ -203,15 +353,39 @@ const Index = () => {
           </div>
         )}
 
-        {employee.length !== 0 && (
-          <Profile ref={componentRef} employee={employee} />
+        {isLoadedEmployee && <Profile ref={componentRef} employee={employee} />}
+
+        {isLoadedAttendance && (
+          <AttendanceReport
+            ref={componentRef}
+            employee={employee}
+            jobTypes={jobTypes}
+            departments={departments}
+            start_date={fromdate}
+            end_date={todate}
+            result={attendance}
+          />
         )}
 
-        {attendance.length !== 0  && (
-           <AttendanceReport ref={componentRef} start_date={fromdate} end_date={todate} result={attendance}/>
+        {isLoadedLeaves && (
+          <LeaveReport
+            ref={componentRef}
+            employee={employee}
+            jobTypes={jobTypes}
+            departments={departments}
+            start_date={leavefromdate}
+            end_date={leavetodate}
+            result={result}
+          />
+        )
+        }
+        {isLoadedGroupedEmployee && (
+          <StaffReport 
+            ref={componentRef}
+            topic = {filterOption()}
+            result = {result}
+          />
         )}
-       
-
 
         {/* modal for Employee Details */}
         <Modal show={show_0} onHide={() => handleClose(0)} centered>
@@ -224,6 +398,7 @@ const Index = () => {
                 <option value={''} hidden={true}>
                   Select Employee ID
                 </option>
+                
                 {employeeIds.map(({ emp_id }) => {
                   return <option value={emp_id}>{emp_id}</option>
                 })}
@@ -253,7 +428,10 @@ const Index = () => {
           <Modal.Header style={{ backgroundColor: '#f5f6fa' }}>
             <Modal.Title>Select employee ID and time period..</Modal.Title>
           </Modal.Header>
-          <form style={{ backgroundColor: '#f5f6fa' }} onSubmit={loadAttendance}>
+          <form
+            style={{ backgroundColor: '#f5f6fa' }}
+            onSubmit={loadAttendance}
+          >
             <Modal.Body>
               <Input type="select" onChange={(e) => setEmpID(e.target.value)}>
                 <option value={''} hidden={true}>
@@ -264,8 +442,8 @@ const Index = () => {
                 })}
               </Input>
 
-              <h6 style={{ marginTop: '20px',letterSpacing: '2.5px' }}>
-                Leave Period
+              <h6 style={{ marginTop: '20px', letterSpacing: '2.5px' }}>
+                Time Period
               </h6>
               <hr />
               <Label htmlFor="from" style={{ display: 'inline' }}>
@@ -284,6 +462,7 @@ const Index = () => {
                 type="date"
                 id="from"
                 onChange={(e) => setToDate(e.target.value)}
+                min={fromdate}
               />
             </Modal.Body>
 
@@ -294,7 +473,11 @@ const Index = () => {
               >
                 Close
               </button>
-              <button type="submit" onSubmit={loadAttendance} className="btn btn-light">
+              <button
+                type="submit"
+                onSubmit={loadAttendance}
+                className="btn btn-light"
+              >
                 Load
               </button>
             </Modal.Footer>
@@ -306,8 +489,40 @@ const Index = () => {
           <Modal.Header style={{ backgroundColor: '#f5f6fa' }}>
             <Modal.Title>Select employee ID and time period..</Modal.Title>
           </Modal.Header>
-          <form style={{ backgroundColor: '#f5f6fa' }}>
-            <Modal.Body>Leave Details</Modal.Body>
+          <form style={{ backgroundColor: '#f5f6fa' }} onSubmit={loadLeaves}>
+            <Modal.Body>
+              <Input type="select" onChange={(e) => setEmpID(e.target.value)}>
+                <option value={''} hidden={true}>
+                  Select Employee ID
+                </option>
+                {employeeIds.map(({ emp_id }) => {
+                  return <option value={emp_id}>{emp_id}</option>
+                })}
+              </Input>
+
+              <h6 style={{ marginTop: '20px', letterSpacing: '2.5px' }}>
+                Time Period
+              </h6>
+              <hr />
+              <Label htmlFor="from" style={{ display: 'inline' }}>
+                From:
+              </Label>
+              <Input
+                type="date"
+                id="from"
+                onChange={(e) => setleaveFromDate(e.target.value)}
+              />
+
+              <Label htmlFor="from" style={{ display: 'inline' }}>
+                To:
+              </Label>
+              <Input
+                type="date"
+                id="from"
+                onChange={(e) => setleaveToDate(e.target.value)}
+                min={leavefromdate}
+              />
+            </Modal.Body>
 
             <Modal.Footer>
               <button
@@ -316,7 +531,11 @@ const Index = () => {
               >
                 Close
               </button>
-              <button type="submit" className="btn btn-light">
+              <button
+                type="submit"
+                className="btn btn-light"
+                onSubmit={loadLeaves}
+              >
                 Load
               </button>
             </Modal.Footer>
@@ -326,10 +545,68 @@ const Index = () => {
         {/* modal for Employee Details */}
         <Modal show={show_3} onHide={() => handleClose(3)} centered>
           <Modal.Header style={{ backgroundColor: '#f5f6fa' }}>
-            <Modal.Title>Select the criteria..</Modal.Title>
+            <Modal.Title>Select the grouping criteria..</Modal.Title>
           </Modal.Header>
-          <form style={{ backgroundColor: '#f5f6fa' }}>
-            <Modal.Body>No of Employees</Modal.Body>
+          <form style={{ backgroundColor: '#f5f6fa' }} onSubmit={loadGroupedEmployee}>
+            <Modal.Body>
+              <Input type="select" onChange={(e) => setCriteriaID(e.target.value)} style={{marginBottom:'10px'}}>
+                <option value={''} hidden={true}>
+                  Select the grouping criteria
+                </option>
+                <option value={'dept_id'}>By Department</option>
+                <option value={'paygrade_id'}>By Pay Grade</option>
+                <option value={'emp_status_id'}>By Employee Status</option>
+                <option value={'job_type_id'}>By Designation</option>
+              </Input>
+                
+              {criteriaId == 'dept_id' && (
+                <Input type="select" onChange={(e) => setCriteria(e.target.value)}>
+                <option value={''} hidden={true}>
+                  Select the department
+                </option>
+                {departments.map(({ dept_id,name }) => {
+                  return <option value={dept_id}>{name}</option>
+                })}
+              </Input>
+              )}
+
+              {criteriaId == 'paygrade_id' && (
+                <Input type="select" onChange={(e) => setCriteria(e.target.value)}>
+                <option value={''} hidden={true}>
+                  Select the pay grade
+                </option>
+                {payGrades.map(({ paygrade_id,name,salary }) => {
+                  return <option value={paygrade_id}>{name}</option>
+                })}
+              </Input>
+              )}
+
+              {criteriaId == 'emp_status_id' && (
+                <Input type="select" onChange={(e) => setCriteria(e.target.value)}>
+                <option value={''} hidden={true}>
+                  Select the employee status
+                </option>
+                {empStatus.map(({ emp_status_id,name,is_full_time }) => {
+                  return <option value={emp_status_id}>
+                    {name}{" "}
+                    {/* {is_full_time == 0 ? 'part time' : 'full time'} */}
+                    </option>
+                })}
+              </Input>
+              )}
+
+              {criteriaId == 'job_type_id' && (
+                <Input type="select" onChange={(e) => setCriteria(e.target.value)}>
+                <option value={''} hidden={true}>
+                  Select the designation
+                </option>
+                {jobTypes.map(({ job_type_id , job_type_title }) => {
+                  return <option value={job_type_id}>{job_type_title}</option>
+                })}
+              </Input>
+              )}
+
+              </Modal.Body>
 
             <Modal.Footer>
               <button
@@ -338,20 +615,13 @@ const Index = () => {
               >
                 Close
               </button>
-              <button type="submit" className="btn btn-light">
+              <button type="submit" className="btn btn-light" onSubmit={loadGroupedEmployee}>
                 Load
               </button>
             </Modal.Footer>
           </form>
         </Modal>
 
-        {/* <ReactToPrint
-          trigger={() => (
-            <button className="btn btn-primary">Print this out!</button>
-          )}
-          content={() => componentRef.current}
-        />
-        <Profile ref={componentRef} /> */}
       </div>
     </div>
   )

@@ -573,6 +573,44 @@ function getAttendace(data) {
   })
 }
 
+function getLeaves(data){
+  return new Promise((resolve, reject) => {
+    var sql =
+      "SELECT leave_request.leave_request_id,leave_type.type,DATE_FORMAT(leave_request.leave_begin, '%Y-%m-%d') as leave_begin,DATE_FORMAT(leave_request.leave_end, '%Y-%m-%d') as leave_end,leave_request.reason "+
+      "from leave_request,leave_request_state,leave_type "+
+      "where "+
+      "leave_request.leave_id = leave_type.leave_id and "+
+      "leave_request.state_id = leave_request_state.state_id and "+
+      "leave_request.state_id = 1 "+
+      "and leave_request.emp_id = ? "+
+      "and leave_request.leave_begin > ? "+
+      "and leave_request.leave_end < ?"
+    db.query(sql,[data.emp_id,data.from,data.to], (err, result) => {
+      if (err) {
+        
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
+}
+
+function getEmployeesByIDs(data){
+  return new Promise((resolve, reject) => {
+    var sql =
+      `Select emp_id,first_name,last_name,contact_num,email,job_type_title from employee natural join job_type where ${data.id} = ${data.value} `
+    db.query(sql,(err, result) => {
+      if (err) {
+        
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
+}
+
 module.exports = {
     getDepartments,
     getTypes,
@@ -598,6 +636,8 @@ module.exports = {
     getSupervisorId,
     getleaveConfig,
     getAttendace,
+    getLeaves,
+    getEmployeesByIDs,
 
     updateEmployee,
     addEmployee,

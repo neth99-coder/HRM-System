@@ -422,6 +422,34 @@ const getAttendace = async (req,res)=>{
         });
 }
 
+const getEmployeesByIDs = async (req,res)=>{
+    await hrManagerModal
+        .getEmployeesByIDs(req.body)
+        .then((result) => {
+            res.json({ success: true, result });
+        }).catch((err) => {
+            console.log(err)
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
+const getLeaves = async (req,res)=>{
+    await hrManagerModal
+        .getLeaves(req.body)
+        .then((result) => {
+            res.json({ success: true, result });
+        }).catch((err) => {
+            console.log(err)
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
 const addColumn = async (req,res)=>{
     await hrManagerModal
         .addColumn(req.body)
@@ -565,6 +593,8 @@ module.exports = {
     getJobTypes,
     getleaveConfig,
     getAttendace,
+    getLeaves,
+    getEmployeesByIDs,
 
     updateEmployee,
     addEmployee,
