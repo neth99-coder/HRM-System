@@ -29,25 +29,25 @@ function Profile(props) {
   const [userTypes, setUserTypes] = useState([])
 
   useEffect(() => {
-    Axios.get('http://localhost:3001/api/hrManager/getDepartments', {
+    Axios.get('http://localhost:3001/api/admin/getDepartments', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       setDepartments(res.data.result)
     })
 
-    Axios.get('http://localhost:3001/api/hrManager/getStatus', {
+    Axios.get('http://localhost:3001/api/admin/getStatus', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       setEmpStatus(res.data.result)
     })
 
-    Axios.get('http://localhost:3001/api/hrManager/getPaygrades', {
+    Axios.get('http://localhost:3001/api/admin/getPaygrades', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       setPayGrades(res.data.result)
     })
 
-    Axios.get('http://localhost:3001/api/hrManager/getTypes', {
+    Axios.get('http://localhost:3001/api/admin/getTypes', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       setUserTypes(res.data.result)
