@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Modal,Spinner } from 'react-bootstrap'
 import styles from './ProfileViewComponent.module.css'
 import {
   Nav,
@@ -35,6 +36,13 @@ function ProfileView(props) {
   const [empStatus, setEmpStatus] = useState([])
   const [payGrades, setPayGrades] = useState([])
   const [userTypes, setUserTypes] = useState([])
+
+  const [show, setShow] = useState(false)
+  const handleClose = (e) => {
+    e.preventDefault()
+    setShow(false)
+  }
+  const handleShow = () => setShow(true)
 
   useEffect(() => {
     Axios.get('http://localhost:3001/api/hrManager/getDepartments',{
@@ -103,7 +111,8 @@ function ProfileView(props) {
     }
   }
 
-  const deleteHRM = () => {
+  const deleteHRM = (e) => {
+    e.preventDefault()
     const data = {
       emp_id: hrmanager.emp_id,
       profile_picture: hrmanager.profile_picture,
@@ -194,7 +203,7 @@ function ProfileView(props) {
                     </div>
 
                     <div className="col-6">
-                      <Button className="fa fa-trash" onClick={deleteHRM}>
+                      <Button className="fa fa-trash" onClick={handleShow}>
                         Delete
                       </Button>
                     </div>
@@ -354,6 +363,34 @@ function ProfileView(props) {
           </div>
         </div>
       </div>
+
+      {/* modal for adding img */}
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header style={{ backgroundColor: '#f5f6fa' }}>
+          <Modal.Title>Delete HR Manager</Modal.Title>
+        </Modal.Header>
+        <form
+          style={{ backgroundColor: '#f5f6fa' }}
+        >
+          <Modal.Body>
+          <div className="row">
+                                <div className="col-11">
+                                    <h5>Are you sure you want to delete this record?</h5>
+                                </div>
+                            </div>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <button onClick={handleClose} className="btn btn-secondary">
+              Close
+            </button>
+            <button type="submit" className="btn btn-light" onClick={deleteHRM}>
+              Delete
+            </button>
+          </Modal.Footer>
+        </form>
+      </Modal>
+
     </div>
   )
 }
