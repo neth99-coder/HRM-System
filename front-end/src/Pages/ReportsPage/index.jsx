@@ -14,6 +14,7 @@ import authService from '../../services/auth.service'
 
 const Index = () => {
   const componentRef = useRef(null)
+  const [isLoading, setIsLoading] = useState(false)
   const [reportId, setReportId] = useState(-1)
   const [employeeIds, setEmployeeIds] = useState([])
   const [jobTypes, setJobTypes] = useState([])
@@ -308,6 +309,11 @@ const Index = () => {
 
   return (
     <div>
+      {isLoading ? (
+        <Spinner animation="border" role="status" className={styles['spinner']}>
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      ) : (
       <div className="col-12">
         <div
           className={`${styles['reportsHeading']} col-12`}
@@ -662,6 +668,7 @@ const Index = () => {
           </form>
         </Modal>
       </div>
+      )}
     </div>
   )
 }
