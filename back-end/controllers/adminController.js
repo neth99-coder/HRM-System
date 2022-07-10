@@ -1,7 +1,7 @@
-const hrManagerModal = require('../models/adminModal')
+const adminModal = require('../models/adminModal')
 
 const getDepartments = async (req, res) => {
-  await hrManagerModal
+  await adminModal
     .getDepartments()
     .then((result) => {
       res.json({
@@ -18,7 +18,7 @@ const getDepartments = async (req, res) => {
 }
 
 const getJobTypes = async (req, res) => {
-  await hrManagerModal
+  await adminModal
     .getJobTypes()
     .then((result) => {
       res.json({
@@ -35,7 +35,7 @@ const getJobTypes = async (req, res) => {
 }
 
 const getTypes = async (req, res) => {
-  await hrManagerModal
+  await adminModal
     .getTypes()
     .then((result) => {
       res.json({
@@ -52,7 +52,7 @@ const getTypes = async (req, res) => {
 }
 
 const getStatus = async (req, res) => {
-  await hrManagerModal
+  await adminModal
     .getStatus()
     .then((result) => {
       res.json({
@@ -69,7 +69,7 @@ const getStatus = async (req, res) => {
 }
 
 const getPaygrades = async (req, res) => {
-  await hrManagerModal
+  await adminModal
     .getPaygrades()
     .then((result) => {
       res.json({
@@ -86,7 +86,7 @@ const getPaygrades = async (req, res) => {
 }
 
 const getEmployee = async (req, res) => {
-  await hrManagerModal
+  await adminModal
     .getEmployee(req.params.empId)
     .then((result) => {
       res.json({
@@ -103,7 +103,7 @@ const getEmployee = async (req, res) => {
 }
 
 const getEmployeeFull = async (req, res) => {
-  await hrManagerModal
+  await adminModal
     .getEmployeeFull(req.params.empId)
     .then((result) => {
       res.json({
@@ -120,7 +120,7 @@ const getEmployeeFull = async (req, res) => {
 }
 
 const updateEmployee = async (req, res) => {
-  await hrManagerModal
+  await adminModal
     .updateEmployee(req.body)
     .then((result) => {
       res.json({ success: true, result })
@@ -134,7 +134,7 @@ const updateEmployee = async (req, res) => {
 }
 
 const addEmployee = async (req, res) => {
-  await hrManagerModal
+  await adminModal
     .addEmployee(req.body)
     .then((result) => {
       res.json({ success: true, result })
@@ -149,7 +149,7 @@ const addEmployee = async (req, res) => {
 
 const dpUpload = async (req, res) => {
   try {
-    await hrManagerModal.dpUpload(req.files.file, req.body.fileName)
+    await adminModal.dpUpload(req.files.file, req.body.fileName)
     res.json({ success: true })
   } catch (err) {
     res.json({
@@ -157,6 +157,20 @@ const dpUpload = async (req, res) => {
       err,
     })
   }
+}
+
+const deleteEmployee = async (req, res) => {
+  await adminModal
+    .deleteEmployee(req.body)
+    .then((result) => {
+      res.json({ success: true, result })
+    })
+    .catch((err) => {
+      res.json({
+        success: false,
+        err,
+      })
+    })
 }
 
 module.exports = {
@@ -170,4 +184,5 @@ module.exports = {
   updateEmployee,
   dpUpload,
   addEmployee,
+  deleteEmployee
 }

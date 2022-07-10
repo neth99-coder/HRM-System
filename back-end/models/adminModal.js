@@ -166,6 +166,22 @@ function addEmployee(data) {
   })
 }
 
+//deletes an employee
+function deleteEmployee(data) {
+  fs.unlinkSync(`${__dirname}/../public/profilePictures/${data.profile_picture}`);
+  return new Promise((resolve, reject) => {
+    var sql = "DELETE FROM EMPLOYEE WHERE emp_id = ?";
+    db.query(sql, [data.emp_id], (err, result) => {
+      if (err) {
+        return reject(err);
+      } else {
+        return resolve(result);
+      }
+    });
+  });
+}
+
+
 module.exports = {
   getEmployee,
   getEmployeeFull,
@@ -177,4 +193,5 @@ module.exports = {
   updateEmployee,
   dpUpload,
   addEmployee,
+  deleteEmployee
 }

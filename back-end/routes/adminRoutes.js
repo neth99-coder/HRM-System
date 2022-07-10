@@ -14,5 +14,6 @@ router.get("/getemployeeFull/:empId",adminController.getEmployeeFull);
 router.post("/updateEmployee",adminController.updateEmployee);
 router.post("/addEmployee",adminController.addEmployee);
 router.post("/dpUpload",adminController.dpUpload);
+router.post('/hr-manager-delete', adminController.deleteEmployee)
 
 module.exports = router
