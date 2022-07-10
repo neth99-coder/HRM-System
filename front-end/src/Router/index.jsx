@@ -122,7 +122,7 @@ export default function AppRouter() {
                 <Route path="emp-profile" element={<EmployeeProfileView />} />
                 <Route path="hr-profile" element={<HRManagerView />} />
                 <Route path="hr-profile/edit/:emp_id" element={<HRManagerEdit />} />
-                <Route path="companyDetails" element={<CompanyDetailsPage />} />
+                <Route path="companyDetails" element={<CompanyDetailsPage companyDetails={companyDetails}/>} />
                 <Route path="*" element={<NotFound/>} />
               </Route>
               <Route path="*" element={<Unauth/>} />
