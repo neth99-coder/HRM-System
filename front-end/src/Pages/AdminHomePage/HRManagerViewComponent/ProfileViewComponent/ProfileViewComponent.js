@@ -79,7 +79,6 @@ function ProfileView(props) {
 }
 
   const getEmpStatusById = (ID)=>{
-    // console.log(empStatus)
     let status = ""
     for(let emp_status_id in empStatus){
        
@@ -97,7 +96,6 @@ function ProfileView(props) {
   }
 
   const getPayGradeById = (ID)=>{
-    console.log(payGrades)
     for(let paygrade_id in payGrades){
         if (payGrades[paygrade_id].paygrade_id == ID){
             return payGrades[paygrade_id].name;
@@ -190,7 +188,7 @@ function ProfileView(props) {
 
                   <div className="row">
                     <div className="col-6">
-                      <Link to={`/admin/hr-profile/edit`} state={hrmanager}>
+                      <Link to={`/admin/hr-profile/edit/${hrmanager.emp_id}`}>
                         <Button className="fa fa-pencil">Edit</Button>
                       </Link>
                     </div>

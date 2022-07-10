@@ -104,7 +104,6 @@ const Index = (props) => {
   const addRecord = (e) => {
     // e.preventDefault()
 
-    console.log(newEmployee)
     const formData = new FormData()
 
     formData.append('emp_id', newEmployee.emp_id)
