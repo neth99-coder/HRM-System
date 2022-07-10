@@ -47,7 +47,7 @@ const Index = (props) => {
   useEffect(() => {
     setIsLoading(true)
 
-    Axios.get('http://localhost:3001/api/employee/getemployeetypes', {
+    Axios.get('http://localhost:3001/api/admin/getemployeetypes', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       res.data.result.map((employee) => {
@@ -58,25 +58,25 @@ const Index = (props) => {
       setEmployees(res.data.result)
     })
 
-    Axios.get('http://localhost:3001/api/hrManager/getEmployeeIds', {
+    Axios.get('http://localhost:3001/api/admin/getEmployeeIds', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       setEmployeeIds(res.data.result)
     })
 
-    Axios.get('http://localhost:3001/api/hrManager/getStatus', {
+    Axios.get('http://localhost:3001/api/admin/getStatus', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       setEmpStatus(res.data.result)
     })
 
-    Axios.get('http://localhost:3001/api/hrManager/getPaygrades', {
+    Axios.get('http://localhost:3001/api/admin/getPaygrades', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       setPayGrades(res.data.result)
     })
 
-    Axios.get('http://localhost:3001/api/hrManager/getDataTypes', {
+    Axios.get('http://localhost:3001/api/admin/getDataTypes', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       setDataTypes(res.data.result)

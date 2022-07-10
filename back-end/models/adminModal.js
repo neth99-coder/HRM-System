@@ -210,6 +210,22 @@ function getEmployeewithUserType() {
   });
 }
 
+//function to get all employee ID
+function getEmployeeIds() {
+  return new Promise((resolve, reject) => {
+    var sql = 'SELECT emp_id FROM employee'
+    db.query(sql, [], (err, result) => {
+      if (err) {
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
+}
+
+
+
 module.exports = {
   getEmployee,
   getEmployeeFull,
@@ -223,5 +239,6 @@ module.exports = {
   addEmployee,
   deleteEmployee,
   getDataTypes,
-  getEmployeewithUserType
+  getEmployeewithUserType,
+  getEmployeeIds
 }

@@ -199,6 +199,37 @@ const getDataTypes = async (req,res) =>{
       });
 };
 
+const getEmployeewithUserType = async (req, res) => {
+  await adminModal
+    .getEmployeewithUserType()
+    .then((result) => {
+      res.json({ success: true, result })
+    })
+    .catch((err) => {
+      res.json({
+        success: false,
+        err,
+      })
+    })
+}
+
+const getEmployeeIds = async (req,res) =>{
+  await adminModal.
+  getEmployeeIds()
+      .then((result)=>{
+          res.json({
+              success: true,
+              result,
+          });
+      })
+      .catch((err)=>{
+          res.json({
+              success: false,
+              err,
+          });
+      });
+}
+
 
 module.exports = {
   getEmployee,
@@ -212,5 +243,7 @@ module.exports = {
   dpUpload,
   addEmployee,
   deleteEmployee,
-  getDataTypes
+  getDataTypes,
+  getEmployeewithUserType,
+  getEmployeeIds
 }
