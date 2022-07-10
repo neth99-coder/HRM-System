@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from 'react'
 import styles from './ProfileComponent.module.css'
+import authService from '../../../../services/auth.service'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -130,7 +131,7 @@ function Profile(props) {
               <CardBody>
                 <div className="d-flex flex-column align-items-center text-center">
                   <img
-                    src={`http://localhost:3001/profilePictures/${props.employee.profile_picture}`}
+                    src={`http://localhost:3001/profilePictures/${employee.profile_picture ? employee.profile_picture : 'default.jpg'}`}
                     alt={
                       props.employee.first_name + ' ' + props.employee.last_name
                     }

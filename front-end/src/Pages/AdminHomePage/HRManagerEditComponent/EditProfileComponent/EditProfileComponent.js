@@ -176,10 +176,9 @@ function EditProfile(props) {
                 <div className={Styles['account-settings']}>
                   <div className={Styles['user-profile']}>
                     <div className={Styles['user-avatar']}>
-                      {/*{"../../../public"+this.state.employee.profile_picture}*/}
                       <img
                         className={Styles['profile-dp']}
-                        src={`http://localhost:3001/profilePictures/${employee.profile_picture}`}
+                        src={`http://localhost:3001/profilePictures/${employee.profile_picture ? employee.profile_picture : 'default.jpg'}`}
                         alt={employee.first_name + ' ' + employee.last_name}
                       />
                     </div>
@@ -457,8 +456,8 @@ function EditProfile(props) {
                             })
                           }}
                         >
-                          {empStatus.map(({ emp_status_id, name }, index) => (
-                            <option value={emp_status_id}>{name}</option>
+                          {empStatus.map(({ emp_status_id, name , is_full_time}, index) => (
+                            <option value={emp_status_id}>{name}{ is_full_time == 1 ? ' - full time' :' - part time'}</option>
                           ))}
 
                         
