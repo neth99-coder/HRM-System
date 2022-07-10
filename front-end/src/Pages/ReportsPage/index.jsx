@@ -410,7 +410,7 @@ const Index = () => {
           <Modal.Header style={{ backgroundColor: '#f5f6fa' }}>
             <Modal.Title>Select employee ID..</Modal.Title>
           </Modal.Header>
-          <form style={{ backgroundColor: '#f5f6fa' }} onSubmit={loadEmployee}>
+          <form style={{ backgroundColor: '#f5f6fa' }}>
             <Modal.Body>
               <Input type="select" onChange={(e) => setEmpID(e.target.value)}>
                 <option value={''} hidden={true}>
@@ -433,7 +433,7 @@ const Index = () => {
               <button
                 type="submit"
                 className="btn btn-primary"
-                onSubmit={loadEmployee}
+                onClick={loadEmployee}
               >
                 Load
               </button>
@@ -448,7 +448,6 @@ const Index = () => {
           </Modal.Header>
           <form
             style={{ backgroundColor: '#f5f6fa' }}
-            onSubmit={loadAttendance}
           >
             <Modal.Body>
               <Input type="select" onChange={(e) => setEmpID(e.target.value)}>
@@ -493,7 +492,7 @@ const Index = () => {
               </button>
               <button
                 type="submit"
-                onSubmit={loadAttendance}
+                onClick={loadAttendance}
                 className="btn btn-primary"
               >
                 Load
@@ -507,7 +506,7 @@ const Index = () => {
           <Modal.Header style={{ backgroundColor: '#f5f6fa' }}>
             <Modal.Title>Select employee ID and time period..</Modal.Title>
           </Modal.Header>
-          <form style={{ backgroundColor: '#f5f6fa' }} onSubmit={loadLeaves}>
+          <form style={{ backgroundColor: '#f5f6fa' }}>
             <Modal.Body>
               <Input type="select" onChange={(e) => setEmpID(e.target.value)}>
                 <option value={''} hidden={true}>
@@ -552,7 +551,7 @@ const Index = () => {
               <button
                 type="submit"
                 className="btn btn-primary"
-                onSubmit={loadLeaves}
+                onClick={loadLeaves}
               >
                 Load
               </button>
@@ -567,7 +566,6 @@ const Index = () => {
           </Modal.Header>
           <form
             style={{ backgroundColor: '#f5f6fa' }}
-            onSubmit={loadGroupedEmployee}
           >
             <Modal.Body>
               <Input
@@ -656,7 +654,7 @@ const Index = () => {
               <button
                 type="submit"
                 className="btn btn-primary"
-                onSubmit={loadGroupedEmployee}
+                onClick={loadGroupedEmployee}
               >
                 Load
               </button>
