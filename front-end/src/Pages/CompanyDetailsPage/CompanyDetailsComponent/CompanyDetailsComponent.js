@@ -1,15 +1,20 @@
-import {React, useState} from "react";
+import {React, useEffect, useState} from "react";
 import {Form, FormGroup} from "reactstrap";
-import Styles from "./CompanyDetailsComponent.module.css";
+import styles from "./CompanyDetailsComponent.module.css";
 import {Link} from "react-router-dom";
 
 function CompanyDetailsComponent(props){
 
-    const [name,setName] = useState();
-    const [address,setAddress] = useState();
+    const [name,setName] = useState(props.companyDetails.name)
+    const [address,setAddress] = useState(props.companyDetails.addressLine1)
+
+    useEffect(()=>{
+        console.log(props)
+    },[])
 
     function handleSubmit(event){
         event.preventDefault();
+        
     }
 
     function handleChange(event){
@@ -17,51 +22,58 @@ function CompanyDetailsComponent(props){
         const value = event.target.value;
 
         if(name === "name"){
-            setName(value);
+            setName(value)
         }else if(name === "address"){
-            setAddress(value);
+            setAddress(value)
         }
     }
 
     return(
-        <div>
-            <div className="container col-12 col-sm-6 col-md-4 col-lg-3">
+        <div className={styles['main']}>
+            <div    >
                 <h1>Company Details</h1>
 
                 <Form onSubmit={handleSubmit}>
-                    <div className="col-12">
+                    <div className={`${styles['form-field']}`}>
                         <FormGroup>
-                            <label htmlFor="name">Company Name</label>
+                            <label className={`${styles['label']}`} htmlFor="name">Company Name</label>
                             <input type="text"
-                                   className={Styles["form-control"]}
+                                   className={`${styles['input-text']}`}
                                    id="name"
                                    name="name"
                                    required={true}
                                    value={name}
-                                   placeholder={"Enter Company Name"}
                                    onChange={handleChange}/>
                         </FormGroup>
                     </div>
 
-                    <div className="col-12">
+                    <div className={`${styles['form-field']}`} style={{display:'flex'}}>
                         <FormGroup>
-                            <label htmlFor="address">Company Address</label>
+                            <label className={`${styles['label']}`} htmlFor="address">Company Address</label>
                             <input type="text"
-                                   className={Styles["form-control"]}
+                                   className={`${styles['input-text']}`}
+                                   id="address"
+                                   name="address"
+                                   required={true}
+                                   value="615"
+                                   onChange={handleChange}/>
+                        </FormGroup>
+                        <FormGroup> 
+                        <input type="text"
+                                   className={`${styles['input-text']}4`}
                                    id="address"
                                    name="address"
                                    required={true}
                                    value={address}
-                                   placeholder={"Enter Company Address"}
                                    onChange={handleChange}/>
                         </FormGroup>
                     </div>
 
-                    <div className="row gutters">
+                    <div className=" row gutters">
                         <div className="col-12">
                             <div className="text-right">
                                 <Link to={"/admin"}>
-                                    <button type="button" id="cancel" name="cancel" className="btn btn-secondary">
+                                    <button type="button" id="cancel" name="cancel" style={{marginRight:'10px'}} className="btn btn-secondary">
                                         Cancel
                                     </button>
                                 </Link>

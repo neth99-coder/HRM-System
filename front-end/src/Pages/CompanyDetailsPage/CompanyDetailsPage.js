@@ -5,7 +5,7 @@ function CompanyDetailsPage(props){
 
     return(
         <div>
-            <CompanyDetailsComponent />
+            <CompanyDetailsComponent companyDetails={props.companyDetails}  setCompanyDetails={props.setCompanyDetails}/>
         </div>
     )
 }
