@@ -118,10 +118,10 @@ export default function AppRouter() {
           ):type === 4 ?(
              <Route>
               <Route exact path="admin" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={4}/> } >
-                <Route path="" element={<AdminHomePage departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE}/>} />
+                <Route path="" element={<AdminHomePage companyDetails={companyDetails} profileDetails={profileDetails}/>} />
                 <Route path="emp-profile" element={<EmployeeProfileView />} />
                 <Route path="hr-profile" element={<HRManagerView />} />
-                <Route path="hr-profile/edit" element={<HRManagerEdit departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE}/>} />
+                <Route path="hr-profile/edit/:emp_id" element={<HRManagerEdit />} />
                 <Route path="companyDetails" element={<CompanyDetailsPage />} />
                 <Route path="*" element={<NotFound/>} />
               </Route>

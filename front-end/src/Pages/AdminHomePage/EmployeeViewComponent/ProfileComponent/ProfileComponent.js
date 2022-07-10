@@ -98,7 +98,7 @@ function Profile(props) {
             <div className="col-sm-9 text-secondary">
               {props.employee[col_name] === null ||
               props.employee[col_name] === ''
-                ? 'undefined'
+                ? '-'
                 : props.employee[col_name]}
             </div>
           </div>
@@ -131,7 +131,7 @@ function Profile(props) {
               <CardBody>
                 <div className="d-flex flex-column align-items-center text-center">
                   <img
-                    src={`http://localhost:3001/profilePictures/${employee.profile_picture ? employee.profile_picture : 'default.jpg'}`}
+                    src={`http://localhost:3001/profilePictures/${props.employee.profile_picture ? props.employee.profile_picture : 'default.jpg'}`}
                     alt={
                       props.employee.first_name + ' ' + props.employee.last_name
                     }
