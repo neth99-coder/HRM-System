@@ -134,8 +134,17 @@ const updateEmployee = async (req, res) => {
 }
 
 const addEmployee = async (req, res) => {
+
+  const file = req.files.file
+  file.mv(`${__dirname}/../public/profilePictures/${file.name}`, (err) => {
+    if (err) {
+      console.error(err)
+    }
+  })
+
+
   await adminModal
-    .addEmployee(req.body)
+    .addEmployee({ ...req.body, profile_picture: req.files.file.name })
     .then((result) => {
       res.json({ success: true, result })
     })
@@ -173,6 +182,24 @@ const deleteEmployee = async (req, res) => {
     })
 }
 
+const getDataTypes = async (req,res) =>{
+  await adminModal
+      .getDataTypes()
+      .then((result)=>{
+          res.json({
+              success: true,
+              result,
+          });
+      })
+      .catch((err)=>{
+          res.json({
+              success: false,
+              err,
+          });
+      });
+};
+
+
 module.exports = {
   getEmployee,
   getEmployeeFull,
@@ -184,5 +211,6 @@ module.exports = {
   updateEmployee,
   dpUpload,
   addEmployee,
-  deleteEmployee
+  deleteEmployee,
+  getDataTypes
 }

@@ -139,27 +139,28 @@ function dpUpload(file, fileName) {
 //function to add employee record
 function addEmployee(data) {
   return new Promise((resolve, reject) => {
-    const keys = data.keys
-    const values = data.values
     let sql = 'INSERT INTO employee ('
-    for (let i = 0; i < keys.length; i++) {
+    for (let i = 0; i < Object.keys(data).length; i++) {
       if (i !== 0) {
         sql += ','
       }
-      sql += ' `' + keys[i] + '` '
+      sql += ' `' + Object.keys(data)[i] + '` '
     }
+    console.log(sql)
     sql += ') VALUES ('
-    for (let i = 0; i < keys.length; i++) {
+    for (let i = 0; i < Object.keys(data).length; i++) {
       if (i !== 0) {
         sql += ','
       }
       sql += '?'
     }
     sql += ')'
-    db.query(sql, values, (err, result) => {
+    console.log(sql)
+    db.query(sql, [...Object.values(data)], (err, result) => {
       if (result) {
         return resolve(result)
       } else {
+        console.log(err)
         return reject(err)
       }
     })
@@ -181,6 +182,33 @@ function deleteEmployee(data) {
   });
 }
 
+//get data types of employee table columns
+function getDataTypes() {
+  return new Promise((resolve, reject) => {
+      var sql = "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME   = 'employee' ";
+      db.query(sql, (err, result) => {
+          if (err) {
+              return reject(err);
+          } else {
+              return resolve(result);
+          }
+      });
+  });
+}
+
+//returns all the details of the employees along with the job title
+function getEmployeewithUserType() {
+  return new Promise((resolve, reject) => {
+    var sql = "SELECT * FROM employee natural join job_type";
+    db.query(sql, (err, result) => {
+      if (err) {
+        return reject(err);
+      } else {
+        return resolve(result);
+      }
+    });
+  });
+}
 
 module.exports = {
   getEmployee,
@@ -193,5 +221,7 @@ module.exports = {
   updateEmployee,
   dpUpload,
   addEmployee,
-  deleteEmployee
+  deleteEmployee,
+  getDataTypes,
+  getEmployeewithUserType
 }
