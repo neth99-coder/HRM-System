@@ -3,12 +3,14 @@ import {Button,Form,FormGroup,Label,Input,Col,FormFeedback} from "reactstrap";
 import Option from "../../../Components/UI/Dropdown/Option";
 import {Link} from "react-router-dom";
 import AddNewField from "./NewFiledComponent/AddNewFieldComponent";
+import RemoveField from "./RemoveFieldComponent/RemoveFieldComponent";
 
 function Search(props){
 
 
     const [employeeId,setEmployeeId] = useState(false);
     const [hiddenAttribute,setHiddenAttribute] = useState(true);
+    const [hiddenRemove,setHiddenRemove] = useState(true);
 
 
     function handleInputChange(event){
@@ -24,6 +26,11 @@ function Search(props){
     function handleNewField(event){
         event.preventDefault();
         setHiddenAttribute(false);
+    }
+
+    function handleRemoveField(event){
+        event.preventDefault();
+        setHiddenRemove(false);
     }
 
     const departmentList = props.departments.map((department) =>{
@@ -77,23 +84,31 @@ function Search(props){
                     </div>
                 <hr/>
                     <div className="row">
-                        <div className="col-6 col-sm-3 col-md-4 col-lg-3">
+                        <div className="col-3 col-lg-2 m-1">
                             <Link to={"/hrmanager/employee/add-new"} >
                                 <button type="button" id="addNew" name="addNew"
                                         className="btn btn-primary">Add New Employee
                                 </button>
                             </Link>
                         </div>
-                        <div className="col-6 col-sm-3 col-md-4 col-lg-3">
+                        <div className="col-3 col-lg-2 m-1">
                             <Form onSubmit={handleNewField} >
                                 <button type="submit" id="addNew" name="addNew"
                                         className="btn btn-primary">Add New Attribute
                                 </button>
                             </Form>
                         </div>
+                        <div className="col-3 col-lg-2 m-1">
+                            <Form onSubmit={handleRemoveField} >
+                                <button type="submit" id="addNew" name="addNew"
+                                        className="btn btn-primary">Remove Attributes
+                                </button>
+                            </Form>
+                        </div>
                     </div>
 
                     <AddNewField hidden={hiddenAttribute} setHidden={setHiddenAttribute}/>
+                    <RemoveField hidden={hiddenRemove} setHidden={setHiddenRemove} />
                 </div>
             </div>
 

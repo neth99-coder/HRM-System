@@ -34,6 +34,8 @@ const getEmployees = async (req, res) => {
       })
     })
 }
+
+
 const getLeaveTypes = async (req, res) => {
   await employeeModal
     .getLeaveTypes()
@@ -120,7 +122,7 @@ const existingLeaveCount = async (req, res) => {
 
 const addEmployee = async (req, res) => {
   const file = req.files.file
-  file.mv(`${__dirname}/../public/images/${file.name}`, (err) => {
+  file.mv(`${__dirname}/../public/profilePictures/${file.name}`, (err) => {
     if (err) {
       console.error(err)
     }
@@ -150,7 +152,6 @@ const deleteEmployee = async (req, res) => {
       res.json({ success: true, result })
     })
     .catch((err) => {
-      console.log(err)
       res.json({
         success: false,
         err,

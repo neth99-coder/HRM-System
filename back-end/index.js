@@ -4,6 +4,7 @@ require('dotenv').config();
 const app = express();
 const cors = require("cors");
 const fileUpload = require("express-fileupload")
+const adminRoutes = require("./routes/adminRoutes");
 const employeeRoutes = require("./routes/employeeRoutes");
 const supervisorRoutes = require("./routes/supervisorRoutes");
 const hrmanagerRoutes = require("./routes/hrManagerRoutes");
@@ -17,6 +18,7 @@ require('dotenv').config();
 app.use(express.static('public'));
 app.use(fileUpload());
 
+app.use("/api/admin", authToken,adminRoutes);
 app.use("/api/employee", authToken,employeeRoutes);
 app.use("/api/supervisor", authToken,supervisorRoutes);
 app.use("/api/hrManager", authToken, hrmanagerRoutes);

@@ -6,7 +6,7 @@ const arrayOrganizer = require("../helpers/arrayOrganizer");
 function getRequests(empId) {
   return new Promise((resolve, reject) => {
     var sql =
-      "SELECT leave_id,leave_request_id,emp_id,first_name,last_name,supervisor_id,state_id,reason,attachment,type, DATE_FORMAT(leave_begin, '%d-%m-%Y') AS leave_begin, DATE_FORMAT(leave_end, '%d-%m-%Y') AS leave_end FROM leave_request NATURAL JOIN leave_type NATURAL JOIN supervisor NATURAL JOIN employee WHERE state_id = 3 AND supervisor_id = ? ";
+      "SELECT leave_id,leave_request_id,emp_id,first_name,last_name,supervisor_id,state_id,reason,attachment,type, profile_picture, DATE_FORMAT(leave_begin, '%d-%m-%Y') AS leave_begin, DATE_FORMAT(leave_end, '%d-%m-%Y') AS leave_end FROM leave_request NATURAL JOIN leave_type NATURAL JOIN supervisor NATURAL JOIN employee WHERE state_id = 3 AND supervisor_id = ? ";
     db.query(sql, [empId], (err, result) => {
       if (err) {
         return reject(err);

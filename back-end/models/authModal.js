@@ -29,8 +29,10 @@ function signupUser(obj) {
                 [emp_id, hash],
                 function (err, result) {
                   if (result) {
+                    console.log("success")
                     return resolve(result);
                   } else {
+                    console.log(err)
                     return reject(err);
                   }
                 }
