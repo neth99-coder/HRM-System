@@ -31,6 +31,8 @@ import HrManagerHomePage from "../Pages/HrManagerHomePage"
 import Unauth from "../Pages/ErrorPages/Unauth";
 import NotFound from "../Pages/ErrorPages/NotFound";
 import AdminHomePage from "../Pages/AdminHomePage/index";
+import CompanyDetailsPage from "../Pages/CompanyDetailsPage/CompanyDetailsPage";
+import Reports from "../Pages/ReportsPage";
 
 
 import authService from "../services/auth.service"
@@ -84,7 +86,7 @@ export default function AppRouter() {
               </Route>
           ) : type === 2 ? (
             <Route>
-              <Route exact path="supervisor" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={2}/> } >
+              <Route exact path="supervisor" element={<HeaderPage  companyDetails={companyDetails} profileDetails={profileDetails} type={2}/> } >
                 <Route path="" element={<EmployeeHomePage/>} />
                 <Route path="requests" element={<RequestPage/>} />
                 <Route path="my-profile" element={<ProfileView />} />
@@ -96,16 +98,19 @@ export default function AppRouter() {
 
           ): type === 3 ? (
             <Route >
-              <Route exact path="hrmanager" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={3}/> } >
+              <Route exact path="hrmanager" element={<HeaderPage  companyDetails={companyDetails} profileDetails={profileDetails} type={3}/> } >
                 <Route path="" element={<HrManagerHomePage/>} />
                 <Route path="requests" element={<RequestPage/>} />
                 <Route exact path="employee" element={<EmployeeSearch companyDetails={companyDetails} profileDetails={profileDetails}/>}/>
+                <Route exact path="reports" element={<Reports companyDetails={companyDetails} profileDetails={profileDetails}/>}/>
                 <Route path="employee/view/:emp_id" element={<EmployeeView companyDetails={companyDetails} profileDetails={profileDetails} />} />
                 <Route path="employee/edit/:emp_id" element={<EmployeeEdit companyDetails={companyDetails} profileDetails={profileDetails} />} />
                 <Route path="employee/add-new" element={<AddNewEmployeePage />} />
                 <Route path="my-profile" element={<ProfileView />} />
                 <Route path="attendance" element={<AttendancePage />} />
                 <Route path="leave-config" element={<LeaveConfigPage />} />
+                <Route path="handle-leaves" element={<HandleLeavePage/>}/>
+
                 <Route path="*" element={<NotFound/>} />
               </Route>
               <Route path="*" element={<Unauth/>} />
@@ -113,10 +118,11 @@ export default function AppRouter() {
           ):type === 4 ?(
              <Route>
               <Route exact path="admin" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={4}/> } >
-                <Route path="" element={<AdminHomePage departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE}/>} />
+                <Route path="" element={<AdminHomePage companyDetails={companyDetails} profileDetails={profileDetails}/>} />
                 <Route path="emp-profile" element={<EmployeeProfileView />} />
                 <Route path="hr-profile" element={<HRManagerView />} />
-                <Route path="hr-profile/edit" element={<HRManagerEdit departments={DEPARTMENT} type={TYPE} status={EMPLOYEESTATUS} paygrades={PAYGRADE}/>} />
+                <Route path="hr-profile/edit/:emp_id" element={<HRManagerEdit />} />
+                <Route path="companyDetails" element={<CompanyDetailsPage companyDetails={companyDetails}/>} />
                 <Route path="*" element={<NotFound/>} />
               </Route>
               <Route path="*" element={<Unauth/>} />

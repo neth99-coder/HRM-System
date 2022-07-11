@@ -19,11 +19,9 @@ function ProfileCard(props) {
           headers: { "x-auth-token": authService.getUserToken() },
         }
       ).then((res) => {
-        
-       console.log(res.data.result[0]['prfile_picture']);
        setUserName(res.data.result[0]['first_name'] + " " + res.data.result[0]['last_name']);
        setUserPost(res.data.result[0]['job_type_title']);
-       setDp(res.data.result[0]['profile_picture']);
+       setDp(res.data.result[0]['profile_picture']?res.data.result[0]['profile_picture']:"default.jpg");
         
       });
     };
