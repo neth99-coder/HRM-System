@@ -9,7 +9,7 @@ function CompanyCard(props) {
 
   useEffect(() => {
     const load =  ()=>{
-       Axios.get('http://localhost:3001/api/admin/getCompanyDetails', {
+       Axios.get('http://localhost:3001/api/employee/getCompanyDetails', {
             headers: { 'x-auth-token': authService.getUserToken() },
           }).then((res) => {
             setCompanyDetails(res.data.result)
