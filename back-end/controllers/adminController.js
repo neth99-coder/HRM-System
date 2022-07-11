@@ -1,4 +1,5 @@
 const adminModal = require('../models/adminModal')
+const fs = require('fs')
 
 const getDepartments = async (req, res) => {
   await adminModal
@@ -134,14 +135,12 @@ const updateEmployee = async (req, res) => {
 }
 
 const addEmployee = async (req, res) => {
-
   const file = req.files.file
   file.mv(`${__dirname}/../public/profilePictures/${file.name}`, (err) => {
     if (err) {
       console.error(err)
     }
   })
-
 
   await adminModal
     .addEmployee({ ...req.body, profile_picture: req.files.file.name })
@@ -182,22 +181,22 @@ const deleteEmployee = async (req, res) => {
     })
 }
 
-const getDataTypes = async (req,res) =>{
+const getDataTypes = async (req, res) => {
   await adminModal
-      .getDataTypes()
-      .then((result)=>{
-          res.json({
-              success: true,
-              result,
-          });
+    .getDataTypes()
+    .then((result) => {
+      res.json({
+        success: true,
+        result,
       })
-      .catch((err)=>{
-          res.json({
-              success: false,
-              err,
-          });
-      });
-};
+    })
+    .catch((err) => {
+      res.json({
+        success: false,
+        err,
+      })
+    })
+}
 
 const getEmployeewithUserType = async (req, res) => {
   await adminModal
@@ -213,23 +212,60 @@ const getEmployeewithUserType = async (req, res) => {
     })
 }
 
-const getEmployeeIds = async (req,res) =>{
-  await adminModal.
-  getEmployeeIds()
-      .then((result)=>{
-          res.json({
-              success: true,
-              result,
-          });
+const getEmployeeIds = async (req, res) => {
+  await adminModal
+    .getEmployeeIds()
+    .then((result) => {
+      res.json({
+        success: true,
+        result,
       })
-      .catch((err)=>{
-          res.json({
-              success: false,
-              err,
-          });
-      });
+    })
+    .catch((err) => {
+      res.json({
+        success: false,
+        err,
+      })
+    })
 }
 
+const getCompanydetails = (req, res) => {
+
+  try {
+    const data =  fs.readFileSync(`${__dirname}/../company.json`, 'utf8')
+
+    // parse JSON string to JSON object
+    const result = JSON.parse(data)
+    res.json({
+      success: true,
+      result,
+    })
+  } catch (err) {
+    res.json({
+      success: false,
+      err,
+    })
+  }
+}
+
+const updateCompanyDetails = (req, res) => {
+  try {
+    // convert JSON object to a string
+    const data = JSON.stringify(req.body, null, 4)
+
+    // write file to disk
+    fs.writeFileSync('../company.json', data, 'utf8')
+
+    res.json({
+      success: true,
+    })
+  } catch (err) {
+    res.json({
+      success: false,
+      err,
+    })
+  }
+}
 
 module.exports = {
   getEmployee,
@@ -245,5 +281,7 @@ module.exports = {
   deleteEmployee,
   getDataTypes,
   getEmployeewithUserType,
-  getEmployeeIds
+  getEmployeeIds,
+  getCompanydetails,
+  updateCompanyDetails
 }

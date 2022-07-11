@@ -13,10 +13,12 @@ router.get("/getemployeeFull/:empId",adminController.getEmployeeFull);
 router.get("/getDataTypes",adminController.getDataTypes);
 router.get('/getemployeetypes', adminController.getEmployeewithUserType)
 router.get("/getEmployeeIds",adminController.getEmployeeIds);
+router.get("/getCompanyDetails",adminController.getCompanydetails);
 
 router.post("/updateEmployee",adminController.updateEmployee);
 router.post("/addEmployee",adminController.addEmployee);
 router.post("/dpUpload",adminController.dpUpload);
 router.post('/hr-manager-delete', adminController.deleteEmployee)
+router.post("/updateCompanyDetails",adminController.updateCompanyDetails);
 
 module.exports = router

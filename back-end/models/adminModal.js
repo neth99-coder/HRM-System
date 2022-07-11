@@ -169,45 +169,48 @@ function addEmployee(data) {
 
 //deletes an employee
 function deleteEmployee(data) {
-  fs.unlinkSync(`${__dirname}/../public/profilePictures/${data.profile_picture}`);
+  fs.unlinkSync(
+    `${__dirname}/../public/profilePictures/${data.profile_picture}`,
+  )
   return new Promise((resolve, reject) => {
-    var sql = "DELETE FROM EMPLOYEE WHERE emp_id = ?";
+    var sql = 'DELETE FROM EMPLOYEE WHERE emp_id = ?'
     db.query(sql, [data.emp_id], (err, result) => {
       if (err) {
-        return reject(err);
+        return reject(err)
       } else {
-        return resolve(result);
+        return resolve(result)
       }
-    });
-  });
+    })
+  })
 }
 
 //get data types of employee table columns
 function getDataTypes() {
   return new Promise((resolve, reject) => {
-      var sql = "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME   = 'employee' ";
-      db.query(sql, (err, result) => {
-          if (err) {
-              return reject(err);
-          } else {
-              return resolve(result);
-          }
-      });
-  });
+    var sql =
+      "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME   = 'employee' "
+    db.query(sql, (err, result) => {
+      if (err) {
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
 }
 
 //returns all the details of the employees along with the job title
 function getEmployeewithUserType() {
   return new Promise((resolve, reject) => {
-    var sql = "SELECT * FROM employee natural join job_type";
+    var sql = 'SELECT * FROM employee natural join job_type'
     db.query(sql, (err, result) => {
       if (err) {
-        return reject(err);
+        return reject(err)
       } else {
-        return resolve(result);
+        return resolve(result)
       }
-    });
-  });
+    })
+  })
 }
 
 //function to get all employee ID
@@ -224,8 +227,6 @@ function getEmployeeIds() {
   })
 }
 
-
-
 module.exports = {
   getEmployee,
   getEmployeeFull,
@@ -240,5 +241,5 @@ module.exports = {
   deleteEmployee,
   getDataTypes,
   getEmployeewithUserType,
-  getEmployeeIds
+  getEmployeeIds,
 }

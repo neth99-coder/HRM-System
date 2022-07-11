@@ -86,7 +86,7 @@ export default function AppRouter() {
               </Route>
           ) : type === 2 ? (
             <Route>
-              <Route exact path="supervisor" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={2}/> } >
+              <Route exact path="supervisor" element={<HeaderPage  companyDetails={companyDetails} profileDetails={profileDetails} type={2}/> } >
                 <Route path="" element={<EmployeeHomePage/>} />
                 <Route path="requests" element={<RequestPage/>} />
                 <Route path="my-profile" element={<ProfileView />} />
@@ -98,7 +98,7 @@ export default function AppRouter() {
 
           ): type === 3 ? (
             <Route >
-              <Route exact path="hrmanager" element={<HeaderPage companyDetails={companyDetails} profileDetails={profileDetails} type={3}/> } >
+              <Route exact path="hrmanager" element={<HeaderPage  companyDetails={companyDetails} profileDetails={profileDetails} type={3}/> } >
                 <Route path="" element={<HrManagerHomePage/>} />
                 <Route path="requests" element={<RequestPage/>} />
                 <Route exact path="employee" element={<EmployeeSearch companyDetails={companyDetails} profileDetails={profileDetails}/>}/>

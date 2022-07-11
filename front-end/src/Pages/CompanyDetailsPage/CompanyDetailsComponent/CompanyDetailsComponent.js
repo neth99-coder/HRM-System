@@ -2,18 +2,48 @@ import { React, useEffect, useState } from 'react'
 import { Form, FormGroup } from 'reactstrap'
 import styles from './CompanyDetailsComponent.module.css'
 import { Link } from 'react-router-dom'
+import authService from '../../../services/auth.service'
+import Axios from 'axios'
+
 
 function CompanyDetailsComponent(props) {
-  const [name, setName] = useState(props.companyDetails.name)
-  const [address_1, setAddress_1] = useState(props.companyDetails.addressLine1)
-  const [address_2, setAddress_2] = useState(props.companyDetails.addressLine2)
+  const [companyDetails, setCompanyDetails] = useState([])
+  const [name, setName] = useState('')
+  const [address_1, setAddress_1] = useState('')
+  const [address_2, setAddress_2] = useState('')
 
   useEffect(() => {
-    console.log(props)
+      const load =  ()=>{
+         Axios.get('http://localhost:3001/api/admin/getCompanyDetails', {
+              headers: { 'x-auth-token': authService.getUserToken() },
+            }).then((res) => {
+              setCompanyDetails(res.data.result)
+              setName(companyDetails.name)
+              setAddress_1(companyDetails.addressLine1)
+              setAddress_2(companyDetails.addressLine2)
+            })
+      }
+  
+      load()
   }, [])
+
+  const updateCompanyDetails = (data)=>{
+    Axios.post('http://localhost:3001/api/admin/updateCompanyDetails',data, {
+      headers: {
+        'x-auth-token': authService.getUserToken(),
+      },
+    }).then((res) => {
+      if (res.data.success) {
+        alert('successfully updated')
+      } else {
+        alert('a fail')
+      }
+    })
+  }
 
   function handleSubmit(event) {
     event.preventDefault()
+    updateCompanyDetails({...companyDetails,'name':name,'addressLine1':address_1,'addressLine2':address_2})
   }
 
   return (
