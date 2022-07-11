@@ -18,7 +18,7 @@ function EmployeeEdit(props){
         setIsLoading(true);
 
         const findEmployee = async () => {
-            await Axios.get("http://localhost:3001/api/hrmanager/getemployee/"+ emp_id, {
+            await Axios.get("http://localhost:3001/api/admin/getemployee/"+ emp_id, {
                 headers: { "x-auth-token": authService.getUserToken() },
             }).then(
                 (res) => {
@@ -29,7 +29,7 @@ function EmployeeEdit(props){
         findEmployee();
 
         const findEmployeeFull = async () => {
-            await Axios.get("http://localhost:3001/api/hrManager/getemployeeFull/" + emp_id, {
+            await Axios.get("http://localhost:3001/api/admin/getemployeeFull/" + emp_id, {
                 headers: { "x-auth-token": authService.getUserToken() },
             }).then(
                 (res) => {
@@ -40,7 +40,7 @@ function EmployeeEdit(props){
         findEmployeeFull();
 
         const findDataTypes = async () => {
-            await Axios.get("http://localhost:3001/api/hrManager/getDataTypes",{
+            await Axios.get("http://localhost:3001/api/admin/getDataTypes",{
                 headers: { "x-auth-token": authService.getUserToken() },
             }).then(
                 (res) => {

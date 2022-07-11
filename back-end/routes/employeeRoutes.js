@@ -12,6 +12,8 @@ router.get("/leaveChart/:empId",employeeController.loadLeaveChart);
 router.get("/getEmployeeByDeptId/:deptId",employeeController.getEmployeeByDeptId);
 router.get("/getEmployeeByEmpIdDeptId/:empId:deptId",employeeController.getEmployeeByEmpIdDeptId);
 router.get('/getemployeetypes', employeeController.getEmployeewithUserType)
+router.get("/getCompanyDetails",employeeController.getCompanydetails);
+
 router.post('/addemployee', employeeController.addEmployee)
 router.post('/updateemployee', employeeController.updateEmployee)
 router.post('/hr-manager-delete', employeeController.deleteEmployee)
