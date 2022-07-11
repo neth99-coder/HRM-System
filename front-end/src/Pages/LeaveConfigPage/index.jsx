@@ -91,7 +91,7 @@ return (
       className={`${styled['main-form']} ${styled['admin-form']}`}
       onSubmit={handleSubmit}
     >
-      <h3 className={styled['form-title']}>Leave Configeration</h3>
+      <h3 className={styled['form-title']}>Leave Configuration</h3>
 
       <Dropdown className={styled['paygrade-select-container']}>
         <Dropdown.Toggle
