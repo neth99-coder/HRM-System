@@ -254,7 +254,7 @@ const updateCompanyDetails = (req, res) => {
     const data = JSON.stringify(req.body, null, 4)
 
     // write file to disk
-    fs.writeFileSync('../company.json', data, 'utf8')
+    fs.writeFileSync(`${__dirname}/../company.json`, data, 'utf8')
 
     res.json({
       success: true,
@@ -263,7 +263,7 @@ const updateCompanyDetails = (req, res) => {
     res.json({
       success: false,
       err,
-    })
+    })   
   }
 }
 

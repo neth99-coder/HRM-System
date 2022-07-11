@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect} from 'react'
 import Header from '../../Components/Header/Header'
 import NavBar from '../../Components/Header/NavBarComponent/NavBarComponent'
 
 
 function HeaderPage(props) {
-  const [companyDetails, setCompanyDetails] = useState([])
+
   useEffect(() => {
     
   }, [])

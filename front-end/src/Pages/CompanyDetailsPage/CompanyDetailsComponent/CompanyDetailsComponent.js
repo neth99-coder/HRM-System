@@ -18,9 +18,10 @@ function CompanyDetailsComponent(props) {
               headers: { 'x-auth-token': authService.getUserToken() },
             }).then((res) => {
               setCompanyDetails(res.data.result)
-              setName(companyDetails.name)
-              setAddress_1(companyDetails.addressLine1)
-              setAddress_2(companyDetails.addressLine2)
+              //console.log(res.data.result)
+              setName(res.data.result.name)
+              setAddress_1(res.data.result.addressLine1)
+              setAddress_2(res.data.result.addressLine2)
             })
       }
   
@@ -44,6 +45,7 @@ function CompanyDetailsComponent(props) {
   function handleSubmit(event) {
     event.preventDefault()
     updateCompanyDetails({...companyDetails,'name':name,'addressLine1':address_1,'addressLine2':address_2})
+    window.location.reload(false);
   }
 
   return (

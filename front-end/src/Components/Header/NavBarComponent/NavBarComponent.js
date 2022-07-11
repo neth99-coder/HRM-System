@@ -1,7 +1,6 @@
 import React,{Component} from "react";
 import {Navbar,Nav,NavbarToggler,Collapse,NavItem,NavLink} from "reactstrap";
 import style from "./NavBar.Module.css";
-import getEmployeeLevel from "../../../shared/getEmployeeLevel";
 import {Outlet} from "react-router-dom";
 
 
