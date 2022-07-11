@@ -229,24 +229,6 @@ const getEmployeeIds = async (req, res) => {
     })
 }
 
-const getCompanydetails = (req, res) => {
-
-  try {
-    const data =  fs.readFileSync(`${__dirname}/../company.json`, 'utf8')
-
-    // parse JSON string to JSON object
-    const result = JSON.parse(data)
-    res.json({
-      success: true,
-      result,
-    })
-  } catch (err) {
-    res.json({
-      success: false,
-      err,
-    })
-  }
-}
 
 const updateCompanyDetails = (req, res) => {
   try {
@@ -254,7 +236,7 @@ const updateCompanyDetails = (req, res) => {
     const data = JSON.stringify(req.body, null, 4)
 
     // write file to disk
-    fs.writeFileSync('../company.json', data, 'utf8')
+    fs.writeFileSync(`${__dirname}/../company.json`, data, 'utf8')
 
     res.json({
       success: true,
@@ -263,7 +245,7 @@ const updateCompanyDetails = (req, res) => {
     res.json({
       success: false,
       err,
-    })
+    })   
   }
 }
 
@@ -282,6 +264,5 @@ module.exports = {
   getDataTypes,
   getEmployeewithUserType,
   getEmployeeIds,
-  getCompanydetails,
   updateCompanyDetails
 }

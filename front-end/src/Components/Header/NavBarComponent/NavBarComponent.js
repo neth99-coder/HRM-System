@@ -1,7 +1,6 @@
 import React,{Component} from "react";
 import {Navbar,Nav,NavbarToggler,Collapse,NavItem,NavLink} from "reactstrap";
 import style from "./NavBar.Module.css";
-import getEmployeeLevel from "../../../shared/getEmployeeLevel";
 import {Outlet} from "react-router-dom";
 
 
@@ -141,14 +140,6 @@ class NavBar extends Component {
             return(
                 <NavItem>
                     <NavLink className="nav-link" href="/supervisor/handle-leaves">
-                        <span className={"fa fa-2x fa-envelope-open fa-lg "}></span> Leave Requests
-                    </NavLink>
-                </NavItem>
-            );
-        }else if(this.state.employeeLevel === 3){
-            return(
-                <NavItem>
-                    <NavLink className="nav-link" href="/hrmanager/handle-leaves">
                         <span className={"fa fa-2x fa-envelope-open fa-lg "}></span> Leave Requests
                     </NavLink>
                 </NavItem>
