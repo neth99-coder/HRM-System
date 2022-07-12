@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from 'react'
 import styles from './ProfileComponent.module.css'
+import authService from '../../../../services/auth.service'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -28,25 +29,25 @@ function Profile(props) {
   const [userTypes, setUserTypes] = useState([])
 
   useEffect(() => {
-    Axios.get('http://localhost:3001/api/hrManager/getDepartments', {
+    Axios.get('http://localhost:3001/api/admin/getDepartments', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       setDepartments(res.data.result)
     })
 
-    Axios.get('http://localhost:3001/api/hrManager/getStatus', {
+    Axios.get('http://localhost:3001/api/admin/getStatus', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       setEmpStatus(res.data.result)
     })
 
-    Axios.get('http://localhost:3001/api/hrManager/getPaygrades', {
+    Axios.get('http://localhost:3001/api/admin/getPaygrades', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       setPayGrades(res.data.result)
     })
 
-    Axios.get('http://localhost:3001/api/hrManager/getTypes', {
+    Axios.get('http://localhost:3001/api/admin/getTypes', {
       headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
       setUserTypes(res.data.result)
@@ -97,7 +98,7 @@ function Profile(props) {
             <div className="col-sm-9 text-secondary">
               {props.employee[col_name] === null ||
               props.employee[col_name] === ''
-                ? 'undefined'
+                ? '-'
                 : props.employee[col_name]}
             </div>
           </div>
@@ -130,7 +131,7 @@ function Profile(props) {
               <CardBody>
                 <div className="d-flex flex-column align-items-center text-center">
                   <img
-                    src={`http://localhost:3001/profilePictures/${props.employee.profile_picture}`}
+                    src={`http://localhost:3001/profilePictures/${props.employee.profile_picture ? props.employee.profile_picture : 'default.jpg'}`}
                     alt={
                       props.employee.first_name + ' ' + props.employee.last_name
                     }

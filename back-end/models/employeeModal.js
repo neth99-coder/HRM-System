@@ -66,6 +66,7 @@ function getLeaveTypes() {
 
 //inserts a new employee
 function addEmployee(data) {
+  console.log(Object.values(data).slice(1))
   return new Promise((resolve, reject) => {
     var sql =
       `INSERT INTO employee (emp_id , first_name ,middle_name, last_name,address,nic,bday,is_married,` +

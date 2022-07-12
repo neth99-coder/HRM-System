@@ -27,7 +27,6 @@ function EmployeeHomePage() {
           headers: { "x-auth-token": authService.getUserToken() },
         }
       ).then((res) => {
-        console.log(res.data.result);
         setLeaveData([...res.data.result]);
         setIsLoading(false);
       });

@@ -9,20 +9,20 @@ function ToggleSwitch(props){
    useEffect(()=>{
     document.getElementById(props.id).checked = props.label
 
-    //console.log(props.id,props.label)
+    // console.log(props.id,props.label)
     },[props.id, props.label])
       
     
 
     return (
-      <div className={`${styled["container"]} ${props.className}`}>
-        <div className={styled["toggle-switch"]}>
+      <div >
+        <div >
           {/* This is the switch values */}
-          <input type="checkbox" className={styled["checkbox"]}
+          <input type="checkbox" 
                  name={props.label} id={props.id}  onClick= {()=>{props.handleToggle(props.id)}} />
-          <label className={styled["label"]} htmlFor={props.id}>
-            <span className={styled["inner"]} />
-            <span className={styled["switch"]} />
+          <label  htmlFor={props.id}>
+            <span  />
+            <span  />
           </label>
         </div>
       </div>

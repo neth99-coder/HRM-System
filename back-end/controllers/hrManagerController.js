@@ -335,12 +335,10 @@ const addEmployee = async (req,res)=>{
 
 const dpUpload = async (req,res)=>{
     try{
-        console.log(req.body.fileName);
         await hrManagerModal
             .dpUpload(req.files.file,req.body.fileName);
         res.json({ success: true });
     }catch (err){
-        console.log(err);
         res.json({
             success: false,
             err,
@@ -386,7 +384,6 @@ const addSupervisor = async (req,res)=>{
             res.json({ success: true, result });
         })
         .catch((err) => {
-            console.log(err)
             res.json({
                 success: false,
                 err,
@@ -401,7 +398,6 @@ const updateleaveConfig = async (req,res)=>{
             res.json({ success: true, result });
         })
         .catch((err) => {
-            console.log(err)
             res.json({
                 success: false,
                 err,
@@ -428,7 +424,6 @@ const getAttendace = async (req,res)=>{
         .then((result) => {
             res.json({ success: true, result });
         }).catch((err) => {
-            console.log(err)
             res.json({
                 success: false,
                 err,
@@ -442,7 +437,6 @@ const getEmployeesByIDs = async (req,res)=>{
         .then((result) => {
             res.json({ success: true, result });
         }).catch((err) => {
-            console.log(err)
             res.json({
                 success: false,
                 err,
@@ -456,7 +450,6 @@ const getLeaves = async (req,res)=>{
         .then((result) => {
             res.json({ success: true, result });
         }).catch((err) => {
-            console.log(err)
             res.json({
                 success: false,
                 err,

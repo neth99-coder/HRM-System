@@ -248,10 +248,8 @@ function updateEmployee(data){
             values,
             (err,result) => {
                 if(result){
-                    //console.log(result+ "SUCCESS")
                     return resolve(result);
                 }else{
-                    console.log(err)
                     return reject(err);
 
                 }
@@ -272,7 +270,6 @@ function updateSupervisor(data){
                 if(result){
                     return resolve(result);
                 }else{
-                    console.log(err)
                     return reject(err);
 
                 }
@@ -307,7 +304,6 @@ function addEmployee(data) {
       if (result) {
         return resolve(result)
       } else {
-        console.log(err)
         return reject(err)
       }
     })
@@ -332,7 +328,6 @@ function updateleaveConfig(data) {
     return new Promise((resolve, reject) => {
   
     const sql = `UPDATE paygrade_leave SET num_of_leaves = ${data.leaves} WHERE paygrade_id =${data.paygrade_id} and leave_id = ${data.leave_id}`
-        console.log(sql)
       db.query(sql, (err, result) => {
         if (result) {
           return resolve(result)
@@ -355,7 +350,6 @@ function deleteEmployee(data){
                 if(result){
                     return resolve(result);
                 }else{
-                    console.log(err);
                     return reject(err);
 
                 }
@@ -382,7 +376,6 @@ function deleteColumns(data){
                 if(result){
                     return resolve(result);
                 }else{
-                    console.log(err);
                     return reject(err);
 
                 }
@@ -402,7 +395,6 @@ function addSupervisor(data){
                 if(result){
                     return resolve(result);
                 }else{
-                    console.log(err);
                     return reject(err);
 
                 }

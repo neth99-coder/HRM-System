@@ -14,6 +14,7 @@ import authService from '../../services/auth.service'
 
 const Index = () => {
   const componentRef = useRef(null)
+  const [isLoading, setIsLoading] = useState(false)
   const [reportId, setReportId] = useState(-1)
   const [employeeIds, setEmployeeIds] = useState([])
   const [jobTypes, setJobTypes] = useState([])
@@ -44,13 +45,13 @@ const Index = () => {
   const [leavefromdate, setleaveFromDate] = useState('')
   const [leavetodate, setleaveToDate] = useState('')
 
-  const [criteriaId , setCriteriaID] = useState('')
-  const [criteria , setCriteria] = useState('')
+  const [criteriaId, setCriteriaID] = useState('')
+  const [criteria, setCriteria] = useState('')
 
   const [isLoadedEmployee, setisLoadedEmployee] = useState(false)
   const [isLoadedAttendance, setisLoadedAttendance] = useState(false)
   const [isLoadedLeaves, setisLoadedLeaves] = useState(false)
-  const [isLoadedGroupedEmployee , setisLoadedGroupedEmployee] = useState(false)
+  const [isLoadedGroupedEmployee, setisLoadedGroupedEmployee] = useState(false)
 
   const [employee, setEmployee] = useState([])
   const [attendance, setAttendance] = useState([])
@@ -75,18 +76,15 @@ const Index = () => {
       setDepartments(res.data.result)
     })
 
-    Axios.get('http://localhost:3001/api/hrManager/getPaygrades',{
-      headers: { "x-auth-token": authService.getUserToken() },
-    }).then(
-      (res) => {
-        setPayGrades(res.data.result)
-      },
-    )
-
-    Axios.get('http://localhost:3001/api/hrManager/getStatus',{
-      headers: { "x-auth-token": authService.getUserToken() },
+    Axios.get('http://localhost:3001/api/hrManager/getPaygrades', {
+      headers: { 'x-auth-token': authService.getUserToken() },
     }).then((res) => {
-      console.log(res.data.result)
+      setPayGrades(res.data.result)
+    })
+
+    Axios.get('http://localhost:3001/api/hrManager/getStatus', {
+      headers: { 'x-auth-token': authService.getUserToken() },
+    }).then((res) => {
       setEmpStatus(res.data.result)
     })
   }, [])
@@ -160,13 +158,12 @@ const Index = () => {
     handleClose_0()
     setReportId(-1)
     setEmpID('')
-    setleaveFromDate("")
-    setleaveToDate("")
+    setleaveFromDate('')
+    setleaveToDate('')
     setFromDate('')
     setToDate('')
     setCriteria('')
     setCriteriaID('')
-
   }
 
   const loadAttendance = (e) => {
@@ -200,8 +197,8 @@ const Index = () => {
     handleClose_1()
     setReportId(-1)
     setEmpID('')
-    setleaveFromDate("")
-    setleaveToDate("")
+    setleaveFromDate('')
+    setleaveToDate('')
     setCriteria('')
     setCriteriaID('')
   }
@@ -215,7 +212,11 @@ const Index = () => {
       from: fromdate,
       to: todate,
     }
-    if (empId.length !== 0 && leavefromdate.length !== 0 && leavetodate.length !== 0) {
+    if (
+      empId.length !== 0 &&
+      leavefromdate.length !== 0 &&
+      leavetodate.length !== 0
+    ) {
       Axios.post('http://localhost:3001/api/hrManager/getLeaves', data, {
         headers: { 'x-auth-token': authService.getUserToken() },
       }).then((res) => {
@@ -237,25 +238,29 @@ const Index = () => {
     handleClose_2()
     setReportId(-1)
     setEmpID('')
-    setFromDate("")
-    setToDate("")
+    setFromDate('')
+    setToDate('')
     setCriteria('')
     setCriteriaID('')
   }
 
-  const loadGroupedEmployee = (e)=>{
+  const loadGroupedEmployee = (e) => {
     e.preventDefault()
     setEmpty()
 
-    const data={
-      id:criteriaId,
-      value:criteria
+    const data = {
+      id: criteriaId,
+      value: criteria,
     }
 
-    if(criteria.length !== 0 && criteriaId.length !== 0){
-      Axios.post('http://localhost:3001/api/hrManager/getEmployeesByIDs', data, {
-        headers: { 'x-auth-token': authService.getUserToken() },
-      }).then((res) => {
+    if (criteria.length !== 0 && criteriaId.length !== 0) {
+      Axios.post(
+        'http://localhost:3001/api/hrManager/getEmployeesByIDs',
+        data,
+        {
+          headers: { 'x-auth-token': authService.getUserToken() },
+        },
+      ).then((res) => {
         setResult(res.data.result)
         setisLoadedGroupedEmployee(true)
       })
@@ -267,28 +272,48 @@ const Index = () => {
     handleClose_3()
     setReportId(-1)
     setEmpID('')
-    setleaveFromDate("")
-    setleaveToDate("")
+    setleaveFromDate('')
+    setleaveToDate('')
   }
 
-  const filterOption = ()=>{ 
-    switch(criteriaId){
+  const filterOption = () => {
+    switch (criteriaId) {
       case 'dept_id':
-        return 'Department : ' + departments.filter((department)=> department.dept_id == criteria)[0].name
-      
+        return (
+          'Department : ' +
+          departments.filter((department) => department.dept_id == criteria)[0]
+            .name
+        )
+
       case 'paygrade_id':
-        return 'Pay grade : ' + payGrades.filter((paygrade)=> paygrade.paygrade_id == criteria)[0].name
+        return (
+          'Pay grade : ' +
+          payGrades.filter((paygrade) => paygrade.paygrade_id == criteria)[0]
+            .name
+        )
 
       case 'emp_status_id':
-        return 'Employee Status : ' + empStatus.filter((status)=>status.emp_status_id == criteria)[0].name
+        return (
+          'Employee Status : ' +
+          empStatus.filter((status) => status.emp_status_id == criteria)[0].name
+        )
 
       case 'job_type_id':
-        return'Designation : ' + jobTypes.filter((job)=>job.job_type_id == criteria)[0].job_type_title
+        return (
+          'Designation : ' +
+          jobTypes.filter((job) => job.job_type_id == criteria)[0]
+            .job_type_title
+        )
     }
   }
 
   return (
     <div>
+      {isLoading ? (
+        <Spinner animation="border" role="status" className={styles['spinner']}>
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      ) : (
       <div className="col-12">
         <div
           className={`${styles['reportsHeading']} col-12`}
@@ -312,8 +337,8 @@ const Index = () => {
                   >
                     {reportId === -1 && (
                       <option value={''} hidden={true}>
-                      Select Report Type
-                    </option>
+                        Select Report Type
+                      </option>
                     )}
                     <option value={0}>Employee Details</option>
                     <option value={1}>Employee Attendance</option>
@@ -377,13 +402,12 @@ const Index = () => {
             end_date={leavetodate}
             result={result}
           />
-        )
-        }
+        )}
         {isLoadedGroupedEmployee && (
-          <StaffReport 
+          <StaffReport
             ref={componentRef}
-            topic = {filterOption()}
-            result = {result}
+            topic={filterOption()}
+            result={result}
           />
         )}
 
@@ -392,13 +416,13 @@ const Index = () => {
           <Modal.Header style={{ backgroundColor: '#f5f6fa' }}>
             <Modal.Title>Select employee ID..</Modal.Title>
           </Modal.Header>
-          <form style={{ backgroundColor: '#f5f6fa' }} onSubmit={loadEmployee}>
+          <form style={{ backgroundColor: '#f5f6fa' }}>
             <Modal.Body>
               <Input type="select" onChange={(e) => setEmpID(e.target.value)}>
                 <option value={''} hidden={true}>
                   Select Employee ID
                 </option>
-                
+
                 {employeeIds.map(({ emp_id }) => {
                   return <option value={emp_id}>{emp_id}</option>
                 })}
@@ -414,8 +438,8 @@ const Index = () => {
               </button>
               <button
                 type="submit"
-                className="btn btn-light"
-                onSubmit={loadEmployee}
+                className="btn btn-primary"
+                onClick={loadEmployee}
               >
                 Load
               </button>
@@ -430,7 +454,6 @@ const Index = () => {
           </Modal.Header>
           <form
             style={{ backgroundColor: '#f5f6fa' }}
-            onSubmit={loadAttendance}
           >
             <Modal.Body>
               <Input type="select" onChange={(e) => setEmpID(e.target.value)}>
@@ -475,8 +498,8 @@ const Index = () => {
               </button>
               <button
                 type="submit"
-                onSubmit={loadAttendance}
-                className="btn btn-light"
+                onClick={loadAttendance}
+                className="btn btn-primary"
               >
                 Load
               </button>
@@ -489,7 +512,7 @@ const Index = () => {
           <Modal.Header style={{ backgroundColor: '#f5f6fa' }}>
             <Modal.Title>Select employee ID and time period..</Modal.Title>
           </Modal.Header>
-          <form style={{ backgroundColor: '#f5f6fa' }} onSubmit={loadLeaves}>
+          <form style={{ backgroundColor: '#f5f6fa' }}>
             <Modal.Body>
               <Input type="select" onChange={(e) => setEmpID(e.target.value)}>
                 <option value={''} hidden={true}>
@@ -533,8 +556,8 @@ const Index = () => {
               </button>
               <button
                 type="submit"
-                className="btn btn-light"
-                onSubmit={loadLeaves}
+                className="btn btn-primary"
+                onClick={loadLeaves}
               >
                 Load
               </button>
@@ -547,9 +570,15 @@ const Index = () => {
           <Modal.Header style={{ backgroundColor: '#f5f6fa' }}>
             <Modal.Title>Select the grouping criteria..</Modal.Title>
           </Modal.Header>
-          <form style={{ backgroundColor: '#f5f6fa' }} onSubmit={loadGroupedEmployee}>
+          <form
+            style={{ backgroundColor: '#f5f6fa' }}
+          >
             <Modal.Body>
-              <Input type="select" onChange={(e) => setCriteriaID(e.target.value)} style={{marginBottom:'10px'}}>
+              <Input
+                type="select"
+                onChange={(e) => setCriteriaID(e.target.value)}
+                style={{ marginBottom: '10px' }}
+              >
                 <option value={''} hidden={true}>
                   Select the grouping criteria
                 </option>
@@ -558,55 +587,68 @@ const Index = () => {
                 <option value={'emp_status_id'}>By Employee Status</option>
                 <option value={'job_type_id'}>By Designation</option>
               </Input>
-                
+
               {criteriaId == 'dept_id' && (
-                <Input type="select" onChange={(e) => setCriteria(e.target.value)}>
-                <option value={''} hidden={true}>
-                  Select the department
-                </option>
-                {departments.map(({ dept_id,name }) => {
-                  return <option value={dept_id}>{name}</option>
-                })}
-              </Input>
+                <Input
+                  type="select"
+                  onChange={(e) => setCriteria(e.target.value)}
+                >
+                  <option value={''} hidden={true}>
+                    Select the department
+                  </option>
+                  {departments.map(({ dept_id, name }) => {
+                    return <option value={dept_id}>{name}</option>
+                  })}
+                </Input>
               )}
 
               {criteriaId == 'paygrade_id' && (
-                <Input type="select" onChange={(e) => setCriteria(e.target.value)}>
-                <option value={''} hidden={true}>
-                  Select the pay grade
-                </option>
-                {payGrades.map(({ paygrade_id,name,salary }) => {
-                  return <option value={paygrade_id}>{name}</option>
-                })}
-              </Input>
+                <Input
+                  type="select"
+                  onChange={(e) => setCriteria(e.target.value)}
+                >
+                  <option value={''} hidden={true}>
+                    Select the pay grade
+                  </option>
+                  {payGrades.map(({ paygrade_id, name, salary }) => {
+                    return <option value={paygrade_id}>{name}</option>
+                  })}
+                </Input>
               )}
 
               {criteriaId == 'emp_status_id' && (
-                <Input type="select" onChange={(e) => setCriteria(e.target.value)}>
-                <option value={''} hidden={true}>
-                  Select the employee status
-                </option>
-                {empStatus.map(({ emp_status_id,name,is_full_time }) => {
-                  return <option value={emp_status_id}>
-                    {name}{" "}
-                    {/* {is_full_time == 0 ? 'part time' : 'full time'} */}
-                    </option>
-                })}
-              </Input>
+                <Input
+                  type="select"
+                  onChange={(e) => setCriteria(e.target.value)}
+                >
+                  <option value={''} hidden={true}>
+                    Select the employee status
+                  </option>
+                  {empStatus.map(({ emp_status_id, name, is_full_time }) => {
+                    return (
+                      <option value={emp_status_id}>
+                        {name}{' '}
+                        {/* {is_full_time == 0 ? 'part time' : 'full time'} */}
+                      </option>
+                    )
+                  })}
+                </Input>
               )}
 
               {criteriaId == 'job_type_id' && (
-                <Input type="select" onChange={(e) => setCriteria(e.target.value)}>
-                <option value={''} hidden={true}>
-                  Select the designation
-                </option>
-                {jobTypes.map(({ job_type_id , job_type_title }) => {
-                  return <option value={job_type_id}>{job_type_title}</option>
-                })}
-              </Input>
+                <Input
+                  type="select"
+                  onChange={(e) => setCriteria(e.target.value)}
+                >
+                  <option value={''} hidden={true}>
+                    Select the designation
+                  </option>
+                  {jobTypes.map(({ job_type_id, job_type_title }) => {
+                    return <option value={job_type_id}>{job_type_title}</option>
+                  })}
+                </Input>
               )}
-
-              </Modal.Body>
+            </Modal.Body>
 
             <Modal.Footer>
               <button
@@ -615,14 +657,18 @@ const Index = () => {
               >
                 Close
               </button>
-              <button type="submit" className="btn btn-light" onSubmit={loadGroupedEmployee}>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                onClick={loadGroupedEmployee}
+              >
                 Load
               </button>
             </Modal.Footer>
           </form>
         </Modal>
-
       </div>
+      )}
     </div>
   )
 }

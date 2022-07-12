@@ -275,8 +275,6 @@ function EditProfile(props) {
       values: formData,
     }
 
-    console.log(formData, Object.keys(props.employeeFull))
-
     Axios.post(
       'http://localhost:3001/api/hrManager/updateEmployee',
       formValues,
