@@ -197,10 +197,12 @@ function AddNewComponent(props){
         const formValues = {
             keys: Object.keys(props.employeeFull),
             values: formData,
-            supervisor: supervisor
+            supervisor: supervisor,
+            emp_id: empID,
+            supervisor_id: supervisor
         };
         Axios.post(
-            "http://localhost:3001/api/hrManager/addEmployee",
+            "http://localhost:3001/api/hrManager/addEmployeeTransaction",
             formValues, {
                 headers: { "x-auth-token": authService.getUserToken() },
             }
@@ -221,41 +223,11 @@ function AddNewComponent(props){
                     if (!res.data.success) {
                         console.log(res);
                     } else {
-                        const formValues2 = {
-                            emp_id: empID,
-                            supervisor_id: supervisor
-                        };
-                        Axios.post(
-                            "http://localhost:3001/api/hrManager/addSupervisor",
-                            formValues2, {
-                                headers: { "x-auth-token": authService.getUserToken() },
-                            }
-                        ).then(async (res) => {
-                            if (!res.data.success) {
-                                alert("Error occured !!");
-                            } else{
-                                window.open(`/hrmanager/employee/view/${empID}`);
-                            }
-                        });
+                        window.open(`/hrmanager/employee/view/${empID}`);
                     }
                 });
             } else {
-                const formValues2 = {
-                    emp_id: empID,
-                    supervisor_id: supervisor
-                };
-                Axios.post(
-                    "http://localhost:3001/api/hrManager/addSupervisor",
-                    formValues2, {
-                        headers: { "x-auth-token": authService.getUserToken() },
-                    }
-                ).then(async (res) => {
-                    if (!res.data.success) {
-                        alert("Error occured !!");
-                    } else{
-                        window.open(`/hrmanager/employee/view/${empID}`);
-                    }
-            });
+                window.open(`/hrmanager/employee/view/${empID}`);
         }});
     }
 

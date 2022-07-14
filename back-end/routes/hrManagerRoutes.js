@@ -36,6 +36,9 @@ router.post("/addSupervisor",hrManagerController.addSupervisor);
 router.post("/addColumn",hrManagerController.addColumn);
 router.post("/dpUpload",hrManagerController.dpUpload);
 router.post("/updateleaveConfig",hrManagerController.updateleaveConfig);
+router.post("/editEmployee",hrManagerController.editEmployee);
+router.post("/addEmployeeTransaction",hrManagerController.addEmployeeTransaction);
+
 
 
 

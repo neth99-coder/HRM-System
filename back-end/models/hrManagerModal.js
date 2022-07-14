@@ -2,6 +2,7 @@ const { json } = require('express')
 const db = require('../config/db')
 const arrayOrganizer = require('../helpers/arrayOrganizer')
 const { reject } = require('bcrypt/promises')
+const bcrypt = require("bcrypt");
 
 //function to get all details of all departments
 function getDepartments() {
@@ -248,7 +249,6 @@ function updateEmployee(data){
             values,
             (err,result) => {
                 if(result){
-                    //console.log(result+ "SUCCESS")
                     return resolve(result);
                 }else{
                     console.log(err)
@@ -465,8 +465,6 @@ function getWorkingToday() {
       if (err) {
         return reject(err)
       } else {
-        //console.log(arrayOrganizer.todayWorkingArray(result));
-        // console.log(result)
         return resolve(arrayOrganizer.todayWorkingArray(result))
       }
     })
@@ -497,7 +495,6 @@ function getAttendanceNotMarked(){
             if (err) {
                 return reject(err);
             } else {
-                //console.log(result)
                 return resolve(arrayOrganizer.attendanceArray(result));
             }
         });
@@ -512,12 +509,9 @@ function getAttendanceNotMarked(){
             if (err) {
                 return reject(err);
             } else {
-                //console.log(result)
                 return resolve(result);
             }
         });
-        //console.log(arrayOrganizer.insertQuery(data))
-        //console.log(sql)
     });
 }
 
@@ -552,7 +546,6 @@ function addColumn(data){
             );
         }else{
             const sql = "ALTER TABLE employee ADD COLUMN (`" + data.fieldName+ "` " + data.dataType + ")";
-            //console.log(sql);
             db.query(
                 sql,
                 [data.fieldName,data.dataType],
@@ -581,6 +574,117 @@ function getDataTypes() {
                 return resolve(result);
             }
         });
+    });
+}
+
+function editEmployee(data){
+    return new Promise((resolve,reject)=>{
+        const keys = data.keys;
+        const values = data.values;
+
+        try {
+            db.beginTransaction((err)=>{
+                if(err){
+                    throw err;
+                }
+
+                let sql1 = "UPDATE employee SET ";
+                for(let i = 1; i < keys.length; i++){
+                    if(i !== 1){
+                        sql1 += ","
+                    }
+                    sql1 += "`" + keys[i] + "` = " + "?"
+                }
+                sql1 += " WHERE emp_id = ?";
+
+                db.query(sql1, values, (err,result) => {
+                        if(result){
+
+                            let sql2 = "UPDATE supervisor SET supervisor_id = ? WHERE emp_id = ?";
+                            db.query(sql2, [data.supervisor_id,data.emp_id], (err,result) => {
+                                    if(err){
+                                        console.log(err)
+                                        return reject(err);
+                                    }else{
+                                        db.commit((err)=>{
+                                            if(err){
+                                                throw err;
+                                            } else {
+                                                return resolve(result);
+                                            }
+                                        });
+                                    }
+                                });
+                        }else{
+                            console.log(err)
+                            return reject(err);
+                        }
+                    }
+                );
+            })
+        }catch (err){
+            db.rollback();
+            return reject(err);
+        }
+    });
+}
+
+function addEmployeeTransaction(data){
+    return new Promise((resolve, reject) => {
+        const keys = data.keys
+        const values = data.values
+
+        try{
+            db.beginTransaction((err)=>{
+                if(err){
+                    throw err;
+                }
+
+                let sql1 = 'INSERT INTO employee ('
+                for (let i = 0; i < keys.length; i++) {
+                    if (i !== 0) {
+                        sql1 += ','
+                    }
+                    sql1 += ' `' + keys[i] + '` ';
+                }
+                sql1 += ') VALUES ('
+                for (let i = 0; i < keys.length; i++) {
+                    if (i !== 0) {
+                        sql1 += ',';
+                    }
+                    sql1 += '?';
+                }
+                sql1 += ')';
+
+                db.query(sql1, values, (err, result) => {
+                    if (result) {
+
+                        const sql2 = "INSERT INTO supervisor (emp_id,supervisor_id) VALUES(?,?)";
+                        db.query(sql2, [data.emp_id,data.supervisor_id], (err,result) => {
+                                if(err){
+                                    console.log(err)
+                                    return reject(err);
+                                }else{
+                                    db.commit((err)=>{
+                                        if(err){
+                                            throw err;
+                                        } else {
+                                            return resolve(result);
+                                        }
+                                    });
+                                }
+                            });
+
+                    } else {
+                        console.log(err)
+                        return reject(err)
+                    }
+                });
+            });
+        }catch (err){
+            db.rollback();
+            return reject(err);
+        }
     });
 }
 
@@ -618,6 +722,8 @@ module.exports = {
     addSupervisor,
     updateSupervisor,
     deleteColumns,
-    updateleaveConfig
+    updateleaveConfig,
+    editEmployee,
+    addEmployeeTransaction
 }
 

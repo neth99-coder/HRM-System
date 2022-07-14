@@ -233,14 +233,15 @@ function EditProfile(props){
         formData.push(empID);
         const formValues = {
             keys: Object.keys(props.employeeFull),
-            values: formData
+            values: formData,
+            emp_id: empID,
+            supervisor_id: supervisor
         };
 
 
-        console.log(formData, Object.keys(props.employeeFull));
-
+        //console.log(formData, Object.keys(props.employeeFull));
         Axios.post(
-            "http://localhost:3001/api/hrManager/updateEmployee",
+            "http://localhost:3001/api/hrManager/editEmployee",
             formValues,        {
                 headers: { "x-auth-token": authService.getUserToken() },
             }
@@ -259,41 +260,12 @@ function EditProfile(props){
                     if (!res.data.success) {
                         console.log(res);
                     } else {
-                        const formValues2 = {
-                            emp_id: empID,
-                            supervisor_id: supervisor
-                        };
-                        Axios.post(
-                            "http://localhost:3001/api/hrManager/updateSupervisor",
-                            formValues2, {
-                                headers: { "x-auth-token": authService.getUserToken() },
-                            }
-                        ).then(async (res) => {
-                            if (!res.data.success) {
-                                alert("Error occured !!");
-                            } else{
-                                window.open(`/hrmanager/employee/view/${empID}`);
-                            }
-                        });
-                    }
-                });
-            }else{
-                const formValues2 = {
-                    emp_id: empID,
-                    supervisor_id: supervisor
-                };
-                Axios.post(
-                    "http://localhost:3001/api/hrManager/updateSupervisor",
-                    formValues2, {
-                        headers: { "x-auth-token": authService.getUserToken() },
-                    }
-                ).then(async (res) => {
-                    if (!res.data.success) {
-                        alert("Error occured !!");
-                    } else{
+
                         window.open(`/hrmanager/employee/view/${empID}`);
                     }
                 });
+            }else{
+                window.open(`/hrmanager/employee/view/${empID}`);
             }
         });
     }
