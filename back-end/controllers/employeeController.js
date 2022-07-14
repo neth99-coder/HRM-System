@@ -73,15 +73,18 @@ const getLeaveRequests = async (req, res) => {
 
 const addLeaveRequest = async (req, res) => {
 
-  const file = req.files.file;
-  file.mv(`${__dirname}/../public/attachments/${file.name}`, (err) => {
-    if (err) {
-      console.error(err)
-    }
-  })
+  if(req.files){
+    const file = req.files.file;
+    file.mv(`${__dirname}/../public/attachments/${file.name}`, (err) => {
+      if (err) {
+        console.error(err)
+      }
+    })
+  }
+  
 
   await employeeModal
-    .addLeaveRequest({ ...req.body, attachment: req.files.file.name })
+    .addLeaveRequest({ ...req.body, attachment: req.files ?req.files.file.name : '' })
     .then((result) => {
       res.json({ success: true, result })
     })

@@ -6,7 +6,7 @@ const fs = require('fs')
 function getEmployee(empId) {
   return new Promise((resolve, reject) => {
     var sql =
-      "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture,job_type_id FROM employee WHERE emp_id = ? "
+      "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture,job_type_id,bank_account_num FROM employee WHERE emp_id = ? "
     db.query(sql, [empId], (err, result) => {
       if (err) {
         return reject(err)
@@ -57,7 +57,7 @@ function getJobTypes() {
       }
     })
   })
-}
+} 
 
 //function to get all details of all employee types
 function getTypes() {
@@ -71,7 +71,7 @@ function getTypes() {
       }
     })
   })
-}
+} 
 
 //function to get all details of all employee status
 function getStatus() {
@@ -85,7 +85,7 @@ function getStatus() {
       }
     })
   })
-}
+} 
 
 //function to get all details of all paygrades
 function getPaygrades() {
