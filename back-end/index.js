@@ -4,11 +4,16 @@ require('dotenv').config();
 const app = express();
 const cors = require("cors");
 const fileUpload = require("express-fileupload")
+const adminRoutes = require("./routes/adminRoutes");
 const employeeRoutes = require("./routes/employeeRoutes");
 const supervisorRoutes = require("./routes/supervisorRoutes");
 const hrmanagerRoutes = require("./routes/hrManagerRoutes");
 const authRoutes = require("./routes/authRoutes");
 const authToken = require('./middleware/authToken');
+const adminAuthToken = require("./middleware/adminAuthToekn");
+const hrmAuthToken = require("./middleware/hrAuthToken");
+const supervisorAuthToken = require("./middleware/supervisorAuthToken");
+const employeeAuthToken = require("./middleware/employeeAuthToken");
 
 
 app.use(express.json());
@@ -17,9 +22,10 @@ require('dotenv').config();
 app.use(express.static('public'));
 app.use(fileUpload());
 
-app.use("/api/employee", authToken,employeeRoutes);
-app.use("/api/supervisor", authToken,supervisorRoutes);
-app.use("/api/hrManager", authToken, hrmanagerRoutes);
+app.use("/api/admin", adminAuthToken,adminRoutes);
+app.use("/api/employee", employeeAuthToken,employeeRoutes);
+app.use("/api/supervisor", supervisorAuthToken,supervisorRoutes);
+app.use("/api/hrManager", hrmAuthToken, hrmanagerRoutes);
 app.use("/api/auth",authRoutes);
 
 // app.use("/api/employee",employeeRoutes);

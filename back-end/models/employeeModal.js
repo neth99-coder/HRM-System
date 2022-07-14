@@ -40,7 +40,7 @@ function getEmployees() {
 //returns all the details of the employees along with the job title
 function getEmployeewithUserType() {
   return new Promise((resolve, reject) => {
-    var sql = "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,job_type_title,profile_picture FROM employee natural join job_type";
+    var sql = "SELECT * FROM employee natural join job_type";
     db.query(sql, (err, result) => {
       if (err) {
         return reject(err);
@@ -66,11 +66,12 @@ function getLeaveTypes() {
 
 //inserts a new employee
 function addEmployee(data) {
+  console.log(Object.values(data).slice(1))
   return new Promise((resolve, reject) => {
     var sql =
       `INSERT INTO employee (emp_id , first_name ,middle_name, last_name,address,nic,bday,is_married,` +
-      `contact_num,emergency_contact,email,dept_id,paygrade_id,emp_status_id,type_id,profile_picture) ` +
-      `VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+      `contact_num,emergency_contact,email,dept_id,paygrade_id,emp_status_id,type_id,profile_picture,job_type_id) ` +
+      `VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
     db.query(
       sql,
       [
@@ -90,6 +91,7 @@ function addEmployee(data) {
         data.emp_status_id,
         data.type_id,
         data.profile_picture,
+        data.job_type_id
       ],
       (err, result) => {
         if (err) {
@@ -104,7 +106,7 @@ function addEmployee(data) {
 
 //deletes an employee
 function deleteEmployee(data) {
-  fs.unlinkSync(`${__dirname}/../public/images/${data.profile_picture}`);
+  fs.unlinkSync(`${__dirname}/../public/profilePictures/${data.profile_picture}`);
   return new Promise((resolve, reject) => {
     var sql = "DELETE FROM EMPLOYEE WHERE emp_id = ?";
     db.query(sql, [data.emp_id], (err, result) => {

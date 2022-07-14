@@ -1,12 +1,38 @@
-.form-control {
-    border: 1px solid #cfd1d8;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    font-size: 1rem;
-    padding: 2pt;
-    padding-left: 5pt;
-    background: #ffffff;
-    color: #2e323c;
+.main{
+  margin-top: 30px;
+    padding: 50px 50px 30px 30px;
+    background-color: rgba(131, 190, 245, 0.404);
+  }
+
+
+  .form-field {
+   
+    margin: 40px 0;
+  }
+  
+  .input-text {
+    display: block;
     width: 100%;
-}
+    height: 36px;
+    border-width: 0 0 1px 0;
+    background-color:rgba(131, 190, 245, 0.03) ;
+    color: rgba(34, 31, 31,0.8);
+    font-weight: 400;
+  }
+  
+  .input-text:focus {
+    outline: none;
+  }
+  
+  .label {
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin-top: 10px;
+    left: 0px;
+    line-height: 10px;
+    font-size: 1em;
+    color: rgba(2, 2, 2,0.8);
+    cursor: text;
+    text-transform: capitalize;
+  }
+  

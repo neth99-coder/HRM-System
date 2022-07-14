@@ -59,7 +59,6 @@ export function SignupForm(props) {
               "http://localhost:3001/api/auth/signupUser",
               formValues
           ).then((res) =>{
-              console.log(res.data.result);
               if(res.data.result === "employee not found"){
                   setIsError(true);
                   setError("Employee not Found!");

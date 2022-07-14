@@ -1,4 +1,5 @@
 const employeeModal = require('../models/employeeModal')
+const fs = require('fs');
 
 const getEmployee = async (req, res) => {
   await employeeModal
@@ -122,7 +123,7 @@ const existingLeaveCount = async (req, res) => {
 
 const addEmployee = async (req, res) => {
   const file = req.files.file
-  file.mv(`${__dirname}/../public/images/${file.name}`, (err) => {
+  file.mv(`${__dirname}/../public/profilePictures/${file.name}`, (err) => {
     if (err) {
       console.error(err)
     }
@@ -137,6 +138,7 @@ const addEmployee = async (req, res) => {
       })
     })
     .catch((err) => {
+      console.log(err)
       res.json({
         success: false,
         err,
@@ -165,6 +167,7 @@ const updateEmployee = async (req, res) => {
       res.json({ success: true, result })
     })
     .catch((err) => {
+      console.log(err)
       res.json({
         success: false,
         err,
@@ -223,6 +226,25 @@ const getEmployeeByEmpIdDeptId = async (req, res) => {
     })
 }
 
+const getCompanydetails = (req, res) => {
+
+  try {
+    const data =  fs.readFileSync(`${__dirname}/../company.json`, 'utf8')
+
+    // parse JSON string to JSON object
+    const result = JSON.parse(data)
+    res.json({
+      success: true,
+      result,
+    })
+  } catch (err) {
+    res.json({
+      success: false, 
+      err,
+    })
+  }
+}
+
 module.exports = {
   addEmployee,
   deleteEmployee,
@@ -237,4 +259,5 @@ module.exports = {
   existingLeaveCount,
   loadLeaveChart,
   getEmployeeByEmpIdDeptId,
+  getCompanydetails
 }

@@ -1,0 +1,26 @@
+.profile-dp {
+  object-fit: cover;
+
+  width: 100px;
+  height: 100px;
+}
+
+.card {
+  width: 70%;
+  margin-left: 15%;
+
+  margin-bottom: 2%;
+}
+
+.percentage-box {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.tags {
+  margin-bottom: 5px;
+}
+
+.result {
+  margin-left: 150px;
+}

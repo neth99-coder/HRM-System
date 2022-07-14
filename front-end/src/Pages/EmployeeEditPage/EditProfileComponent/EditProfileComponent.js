@@ -86,8 +86,8 @@ function EditProfile(props){
         findEmployee();
 
     const findDepartments = async () => {
-      await Axios.get("http://localhost:3001/api/hrManager/getDepartments", {
-        headers: { "x-auth-token": authService.getUserToken() },
+      await Axios.get('http://localhost:3001/api/hrManager/getDepartments', {
+        headers: { 'x-auth-token': authService.getUserToken() },
       }).then((res) => {
         setDepartments(res.data.result);
       });
@@ -174,47 +174,46 @@ function EditProfile(props){
       };
       findSupervisor();
 
-    setIsLoading(false);
-  }, []);
+    setIsLoading(false)
+  }, [])
 
+  function handleInputChange(event) {
+    const target = event.target
+    const value = target.value
+    const name = target.name
 
-    function handleInputChange(event){
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-
-    if (name === "firstName") {
-      setFirstName(value);
-    } else if (name === "middleName") {
-      setMiddleName(value);
-    } else if (name === "lastName") {
-      setLastName(value);
-    } else if (name === "address") {
-      setAddress(value);
-    } else if (name === "email") {
-      setEmail(value);
-    } else if (name === "contactNum") {
-      setContactNum(value);
-    } else if (name === "emergencyNum") {
-      setEmergencyNum(value);
-    } else if (name === "nic") {
-      setNic(value);
-    } else if (name === "bday") {
-      setBday(value);
-    } else if (name === "isMarried") {
-      setIsMarried(value);
-    } else if (name === "deptID") {
-      setDeptID(value);
-    } else if (name === "typeID") {
-      setTypeID(value);
-    } else if (name === "empStatusId") {
-      setEmpStatusId(value);
-    } else if (name === "paygradeID") {
-      setPaygradeID(value);
-    }else if(name == "supervisorId"){
-        setSupervisor(value);
-    }else if(name == "jobID"){
-        setJobType(value);
+    if (name === 'firstName') {
+      setFirstName(value)
+    } else if (name === 'middleName') {
+      setMiddleName(value)
+    } else if (name === 'lastName') {
+      setLastName(value)
+    } else if (name === 'address') {
+      setAddress(value)
+    } else if (name === 'email') {
+      setEmail(value)
+    } else if (name === 'contactNum') {
+      setContactNum(value)
+    } else if (name === 'emergencyNum') {
+      setEmergencyNum(value)
+    } else if (name === 'nic') {
+      setNic(value)
+    } else if (name === 'bday') {
+      setBday(value)
+    } else if (name === 'isMarried') {
+      setIsMarried(value)
+    } else if (name === 'deptID') {
+      setDeptID(value)
+    } else if (name === 'typeID') {
+      setTypeID(value)
+    } else if (name === 'empStatusId') {
+      setEmpStatusId(value)
+    } else if (name === 'paygradeID') {
+      setPaygradeID(value)
+    } else if (name == 'supervisorId') {
+      setSupervisor(value)
+    } else if (name == 'jobID') {
+      setJobType(value)
     }
   }
 

@@ -32,7 +32,6 @@ function AttendancePage() {
           headers: { "x-auth-token": authService.getUserToken() },
         }
       ).then((res) => {
-        //console.log(res.data.result );
         setEmployees(res.data.result[0]);
         setMarking(res.data.result[1]);
       });
@@ -56,7 +55,7 @@ function AttendancePage() {
   function handleFilter(e) {
     const value = e.target.name;
     const id = e.target.id;
-    // console.log(value);
+    console.log(value);
     setEmployeeFilter(value);
 
     if (value !== "All") {
@@ -68,6 +67,7 @@ function AttendancePage() {
       );
     } else {
       setTempEmployees(employees);
+      console.log(employees)
     }
 
     Object.keys(marking).forEach((key) => {

@@ -335,12 +335,10 @@ const addEmployee = async (req,res)=>{
 
 const dpUpload = async (req,res)=>{
     try{
-        console.log(req.body.fileName);
         await hrManagerModal
             .dpUpload(req.files.file,req.body.fileName);
         res.json({ success: true });
     }catch (err){
-        console.log(err);
         res.json({
             success: false,
             err,
@@ -386,7 +384,6 @@ const addSupervisor = async (req,res)=>{
             res.json({ success: true, result });
         })
         .catch((err) => {
-            console.log(err)
             res.json({
                 success: false,
                 err,
@@ -401,7 +398,6 @@ const updateleaveConfig = async (req,res)=>{
             res.json({ success: true, result });
         })
         .catch((err) => {
-            console.log(err)
             res.json({
                 success: false,
                 err,
@@ -412,6 +408,45 @@ const updateleaveConfig = async (req,res)=>{
 const getleaveConfig = async (req,res)=>{
     await hrManagerModal
         .getleaveConfig(req.params.paygrade_id)
+        .then((result) => {
+            res.json({ success: true, result });
+        }).catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
+const getAttendace = async (req,res)=>{
+    await hrManagerModal
+        .getAttendace(req.body)
+        .then((result) => {
+            res.json({ success: true, result });
+        }).catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
+const getEmployeesByIDs = async (req,res)=>{
+    await hrManagerModal
+        .getEmployeesByIDs(req.body)
+        .then((result) => {
+            res.json({ success: true, result });
+        }).catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
+const getLeaves = async (req,res)=>{
+    await hrManagerModal
+        .getLeaves(req.body)
         .then((result) => {
             res.json({ success: true, result });
         }).catch((err) => {
@@ -592,6 +627,9 @@ module.exports = {
     getOneEmployeesFull,
     getJobTypes,
     getleaveConfig,
+    getAttendace,
+    getLeaves,
+    getEmployeesByIDs,
 
     updateEmployee,
     addEmployee,
