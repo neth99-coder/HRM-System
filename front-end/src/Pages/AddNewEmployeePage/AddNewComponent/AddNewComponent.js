@@ -47,6 +47,7 @@ function AddNewComponent(props){
     const [changeList,setChangeList] = useState([]);
     const [supervisor,setSupervisor] = useState();
     const [supervisorsList,setSupervisorList] = useState([]);
+    const [accountID,setAccountId] = useState();
 
   useEffect(() => {
     setIsLoading(true);
@@ -182,6 +183,8 @@ function AddNewComponent(props){
         setSupervisor(value);
     }else if(name == "jobID"){
         setJobType(value);
+    }else if(name === 'accountID'){
+        setAccountId(value);
     }
   }
 
@@ -189,9 +192,9 @@ function AddNewComponent(props){
 
     async function handleSubmit(event) {
         event.preventDefault();
-        const formData = [empID,firstName,middleName,lastName,address,nic,bday,isMarried,contactNum,emergencyNum,email,deptID,paygradeID,empStatusId,typeID,imageName,jobType];
-        for(let j = 0; j < Object.keys(props.employeeFull).length - 17 ; j++){
-            const col_name = Object.keys(props.employeeFull)[17+j];
+        const formData = [empID,firstName,middleName,lastName,address,nic,bday,isMarried,contactNum,emergencyNum,email,deptID,paygradeID,empStatusId,typeID,imageName,jobType,accountID];
+        for(let j = 0; j < Object.keys(props.employeeFull).length - 18 ; j++){
+            const col_name = Object.keys(props.employeeFull)[18+j];
             formData.push(employeeNew[col_name]);
         };
         const formValues = {
@@ -716,12 +719,41 @@ function AddNewComponent(props){
                                     </select>
                                 </FormGroup>
                             </div>
+                        </div>
 
+                          <div className="row gutters">
+                              <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                  <h6 className="mt-3 mb-2 text-primary">
+                                      Payment Details
+                                  </h6>
+                              </div>
 
-                            {Object.keys(props.employeeFull).slice(17).map(showExtraAttributes)}
+                              <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                  <FormGroup>
+                                      <label htmlFor="accountID">Bank Account Number</label>
+                                      <input
+                                          type="text"
+                                          className={Styles["form-control"]}
+                                          id="accountID"
+                                          name="accountID"
+                                          required={true}
+                                          value={accountID}
+                                          placeholder="Enter Bank Account ID"
+                                          onChange={handleInputChange}
+                                      />
+                                  </FormGroup>
+                              </div>
 
+                          </div>
 
-                                                </div>
+                          <div className="row gutters">
+                              <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                  <h6 className="mt-3 mb-2 text-primary">
+                                      Additional Details
+                                  </h6>
+                              </div>
+                              {Object.keys(props.employeeFull).slice(18).map(showExtraAttributes)}
+                          </div>
 
                         <div className="row gutters">
                           <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
