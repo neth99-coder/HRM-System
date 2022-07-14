@@ -346,9 +346,19 @@ function ProfileView(props) {
                   </div>
                 </div>
 
+                <hr />
+                <div className="row">
+                  <div className="col-sm-3">
+                    <h6 className="mb-6">Bank Account Number</h6>
+                  </div>
+                  <div className="col-sm-9 text-secondary">
+                    {hrmanager.bank_account_num}
+                  </div>
+                </div>
+
                 <div>
                   <p>
-                    {Object.keys(hrmanager).slice(17).map(showExtraAttributes)}
+                    {Object.keys(hrmanager).slice(18).map(showExtraAttributes)}
                   </p>
                 </div>
               </CardBody>
