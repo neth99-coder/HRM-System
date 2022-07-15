@@ -303,7 +303,7 @@ function ProfileView(props) {
                             props.employee.last_name}
                         </h4>
                         <p className="text-secondary mb-1">
-                          {findTypeById(props.employee.type_id)}
+                          {findJobById(props.employee.job_type_id)}
                         </p>
                         <p className="text-muted font-size-sm">
                           {findDepartmentById(props.employee.dept_id) +

@@ -10,6 +10,14 @@ import ReactImageUploading from "react-images-uploading";
 import authService from "../../../services/auth.service";
 import defaultPic from "../../../assets/profile_picture/default.jpg";
 
+function formatDate(n){
+    if(n< 10){
+        return "0" + n;
+    }else{
+        return n;
+    }
+}
+
 function EditProfile(props){
 
     const [isLoading,setIsLoading] = useState(true);
@@ -38,8 +46,6 @@ function EditProfile(props){
     const [payGrades,setPayGrades] = useState([]);
     const [orginalFirstName,setOrginalFirstName] = useState();
     const [orginalLastName,setOrginalLastName] = useState();
-    const [employeeDepartment,setEmployeeDepartment] = useState({dept_id:'',name:'',building:'',description:''});
-    const [employeeType,setEmployeeType] = useState({type_id:'',type_name:''});
     const [Image,setImage] = useState({});
     const [imageName,setImageName] = useState();
     const [isDpChanged,setIsDpChanged] = useState(false);
@@ -132,32 +138,6 @@ function EditProfile(props){
     };
     findPaygrades();
 
-    const findEmployeeDepartment = async () => {
-      await Axios.get(
-        "http://localhost:3001/api/hrManager/getemployeeDepartment/" +
-          authService.getUserID(),
-        {
-          headers: { "x-auth-token": authService.getUserToken() },
-        }
-      ).then((res) => {
-        setEmployeeDepartment(res.data.result[0]);
-      });
-    };
-    findEmployeeDepartment();
-
-    const findEmployeeType = async () => {
-      await Axios.get(
-        "http://localhost:3001/api/hrManager/getemployeeType/" +
-          authService.getUserID(),
-        {
-          headers: { "x-auth-token": authService.getUserToken() },
-        }
-      ).then((res) => {
-        setEmployeeType(res.data.result[0]);
-      });
-    };
-    findEmployeeType();
-
       const findSupervisorID = async () => {
           await Axios.get("http://localhost:3001/api/hrManager/getSupervisorId", {
               headers: { "x-auth-token": authService.getUserToken() },
@@ -178,6 +158,24 @@ function EditProfile(props){
 
     setIsLoading(false)
   }, [])
+
+    function findDepartmentById(dept_id) {
+        let department = departments.filter((dept) => dept.dept_id === dept_id)
+        if (department.length === 0) {
+            return ''
+        } else {
+            return department[0].name
+        }
+    }
+
+    function findJobById(job_type_id) {
+        let job = jobs.filter((job) => job.job_type_id === job_type_id)
+        if (job.length === 0) {
+            return ''
+        } else {
+            return job[0].job_type_title
+        }
+    }
 
   function handleInputChange(event) {
     const target = event.target
@@ -534,7 +532,8 @@ function EditProfile(props){
                         <div className={Styles["about"]}>
                           <h3>About</h3>
                           <h5>
-                            {employeeType.type_name} - {employeeDepartment.name}
+                              {findJobById(jobType)} - {findDepartmentById(deptID) +
+                              ' Department'}
                           </h5>
                         </div>
                       </div>
@@ -692,8 +691,8 @@ function EditProfile(props){
                                 className={Styles["form-control"]}
                                 id="bday"
                                 name="bday"
-                                min="1999-05-10"
-                                max={Date()}
+                                min={(new Date().getFullYear()-80)+ "-" + formatDate(new Date().getMonth() +1) +"-" + formatDate(new Date().getDate())}
+                                max={(new Date().getFullYear()-16)+ "-" + formatDate(new Date().getMonth() +1) +"-" + formatDate(new Date().getDate())}
                                 required={true}
                                 value={bday}
                                 placeholder="Select Birthday"
@@ -845,6 +844,7 @@ function EditProfile(props){
                                           className={Styles["form-control"]}
                                           id="accountID"
                                           name="accountID"
+                                          pattern="[0-9]{7,16}"
                                           required={true}
                                           value={accountID}
                                           placeholder="Enter Bank Account ID"

@@ -177,7 +177,7 @@ function Profile(props){
                                             {showProfilePicture()}
                                             <div className="mt-3">
                                                 <h4>{props.employee.first_name + " " + props.employee.middle_name + " " + props.employee.last_name}</h4>
-                                                <p className="text-secondary mb-1">{findTypeById(props.employee.type_id)}</p>
+                                                <p className="text-secondary mb-1">{findJobById(props.employee.job_type_id)}</p>
                                                 <p className="text-muted font-size-sm">{findDepartmentById(props.employee.dept_id) + " Department"}</p>
                                             </div>
                                         </div>

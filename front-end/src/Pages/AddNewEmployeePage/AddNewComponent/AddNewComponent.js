@@ -12,6 +12,14 @@ import authService from "../../../services/auth.service";
 import defaultPic from "../../../assets/profile_picture/default.jpg";
 
 
+function formatDate(n){
+    if(n< 10){
+        return "0" + n;
+    }else{
+        return n;
+    }
+}
+
 function AddNewComponent(props){
 
     const [isLoading,setIsLoading] = useState(true);
@@ -531,6 +539,8 @@ function AddNewComponent(props){
                                 id="bday"
                                 name="bday"
                                 required={true}
+                                min={(new Date().getFullYear()-80)+ "-" + formatDate(new Date().getMonth() +1) +"-" + formatDate(new Date().getDate())}
+                                max={(new Date().getFullYear()-16)+ "-" + formatDate(new Date().getMonth() +1) +"-" + formatDate(new Date().getDate())}
                                 value={bday}
                                 placeholder="Select Birthday"
                                 onChange={handleInputChange}
