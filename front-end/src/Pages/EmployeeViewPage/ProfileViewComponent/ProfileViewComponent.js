@@ -156,7 +156,7 @@ function ProfileView(props) {
       if (!res.data.success) {
         alert('Error occured w!!')
       } else {
-        window.open(`/hrmanager/employee`)
+        window.location.replace(`/hrmanager/employee`);
       }
     })
   }

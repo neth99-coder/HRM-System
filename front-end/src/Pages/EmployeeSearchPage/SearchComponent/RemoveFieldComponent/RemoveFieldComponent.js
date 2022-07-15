@@ -21,7 +21,7 @@ function RemoveField(props){
                 headers: { "x-auth-token": authService.getUserToken() },
             }).then(
                 (res) => {
-                    setFieldNames(res.data.result.slice(17));
+                    setFieldNames(res.data.result.slice(18));
                 }
             );
         };

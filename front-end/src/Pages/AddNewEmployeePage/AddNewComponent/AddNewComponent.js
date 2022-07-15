@@ -234,11 +234,11 @@ function AddNewComponent(props){
                     if (!res.data.success) {
                         console.log(res);
                     } else {
-                        window.open(`/hrmanager/employee/view/${empID}`);
+                        window.location.assign(`/hrmanager/employee/view/${empID}`);
                     }
                 });
             } else {
-                window.open(`/hrmanager/employee/view/${empID}`);
+                window.location.assign(`/hrmanager/employee/view/${empID}`);
         }});
     }
 
