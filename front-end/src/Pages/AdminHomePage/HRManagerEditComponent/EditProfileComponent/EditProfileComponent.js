@@ -156,6 +156,14 @@ function EditProfile(props) {
     setIsDpChanged(true)
   }
 
+  function formatDate(n){
+    if(n< 10){
+        return "0" + n;
+    }else{
+        return n;
+    }
+}
+
   function showExtraAttributes(col_name) {
     const result = props.dataTypes.filter(
       (dataType) => dataType.COLUMN_NAME === col_name,
@@ -488,8 +496,8 @@ function EditProfile(props) {
                                 className={Styles['form-control']}
                                 id="bday"
                                 name="bday"
-                                min="1999-05-10"
-                                max={Date()}
+                                min={(new Date().getFullYear()-80)+ "-" + formatDate(new Date().getMonth() +1) +"-" + formatDate(new Date().getDate())}
+                                max={(new Date().getFullYear()-16)+ "-" + formatDate(new Date().getMonth() +1) +"-" + formatDate(new Date().getDate())}
                                 required={true}
                                 value={employee.bday}
                                 placeholder="Select Birthday"

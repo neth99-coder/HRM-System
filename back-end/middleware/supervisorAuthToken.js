@@ -35,7 +35,7 @@ const authToken = async (req, res, next) => {
     req.tokenUserType = user.type;
 
     
-    if(user.type !== 2){
+    if(user.type !== 2 && user.type !== 3){
         
 
         return res.status(403).json({

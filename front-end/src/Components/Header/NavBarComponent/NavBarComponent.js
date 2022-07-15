@@ -124,14 +124,6 @@ class NavBar extends Component {
                     </NavLink>
                 </NavItem>
             );
-        }else if(this.state.employeeLevel === 3){
-            return(
-                <NavItem>
-                    <NavLink className="nav-link" href="/hrmanager/requests">
-                        <span className="fa fa-2x fa-envelope fa-lg"></span> Apply Leave
-                    </NavLink>
-                </NavItem>
-            );
         }
     }
 
@@ -144,7 +136,16 @@ class NavBar extends Component {
                     </NavLink>
                 </NavItem>
             );
+        }else if(this.state.employeeLevel === 3){
+            return(
+                <NavItem>
+                    <NavLink className="nav-link" href="/hrmanager/handle-leaves">
+                        <span className={"fa fa-2x fa-envelope-open fa-lg "}></span> Leave Requests
+                    </NavLink>
+                </NavItem>
+            );
         }
+        
     }
 
     editCompanyDetailsNav(){

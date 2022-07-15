@@ -417,7 +417,7 @@ function addSupervisor(data){
 function getAbsentToday() {
   return new Promise((resolve, reject) => {
     var sql =
-      'SELECT emp_id,profile_picture FROM `leave_request` NATURAL JOIN employee WHERE (CURDATE() >= leave_begin AND CURDATE() <= leave_end) AND state_id = 1'
+      '(SELECT emp_id,profile_picture FROM `leave_request` NATURAL JOIN employee WHERE (CURDATE() >= leave_begin AND CURDATE() <= leave_end) AND state_id = 1) UNION (SELECT emp_id,profile_picture FROM `attendance` NATURAL JOIN employee WHERE date = CURDATE() AND is_present = 0)'
     db.query(sql, (err, result) => {
       if (err) {
         return reject(err)

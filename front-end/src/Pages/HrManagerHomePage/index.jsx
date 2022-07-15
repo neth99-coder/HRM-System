@@ -172,7 +172,7 @@ function HrManagerHomePage() {
                 <div key={profile.emp_id} className={styled["avatar"]}>
                   <img
                     className={styled["avatar-img"]}
-                    src={(profile.profile_picture)?(`http://localhost:3001/profilePictures/${profile.profile_picture}`):(defaultDp)}
+                    src={(profile['profile_picture'] !== null && profile['profile_picture'] !== undefined && profile['profile_picture'] !== '')?(`http://localhost:3001/profilePictures/${profile.profile_picture}`):(defaultDp)}
                     alt={profile.emp_id}
                   />
                 </div>
@@ -194,7 +194,7 @@ function HrManagerHomePage() {
                   <div key={profile.emp_id} className={styled["avatar"]}>
                     <img
                       className={styled["avatar-img"]}
-                      src={(profile.profile_picture !== '')?(`http://localhost:3001/profilePictures/${profile.profile_picture}`):(defaultDp)}
+                      src={(profile['profile_picture'] !== null && profile['profile_picture'] !== undefined && profile['profile_picture'] !== '')?(`http://localhost:3001/profilePictures/${profile.profile_picture}`):(defaultDp)}
                       alt={profile["emp_id"]}
                     />
                   </div>

@@ -175,7 +175,8 @@ function ProfileView(props) {
   function showProfilePicture() {
     if (
       props.employee.profile_picture === undefined ||
-      props.employee.profile_picture === ''
+      props.employee.profile_picture === '' ||
+      props.employee.profile_picture === null
     ) {
       return (
         <img

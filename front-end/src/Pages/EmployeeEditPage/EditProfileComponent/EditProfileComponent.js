@@ -82,7 +82,7 @@ function EditProfile(props){
                     setPaygradeID(res.data.result[0].paygrade_id);
                     setEmpStatusId(res.data.result[0].emp_status_id);
                     setImageName(res.data.result[0].profile_picture);
-                    if(res.data.result[0].profile_picture !== undefined && res.data.result[0].profile_picture !== ""){
+                    if(res.data.result[0].profile_picture !== undefined && res.data.result[0].profile_picture !== "" && res.data.result[0].profile_picture !== null){
                         setProfilePicture("http://localhost:3001/profilePictures/" + res.data.result[0].profile_picture);
                     }else{
                         setProfilePicture(defaultPic);

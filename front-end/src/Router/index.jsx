@@ -88,7 +88,6 @@ export default function AppRouter() {
             <Route >
               <Route exact path="hrmanager" element={<HeaderPage  companyDetails={companyDetails}  type={3}/> } >
                 <Route path="" element={<HrManagerHomePage/>} />
-                <Route path="requests" element={<RequestPage/>} />
                 <Route exact path="employee" element={<EmployeeSearch companyDetails={companyDetails} />}/>
                 <Route exact path="reports" element={<Reports companyDetails={companyDetails} />}/>
                 <Route path="employee/view/:emp_id" element={<EmployeeView companyDetails={companyDetails}  />} />
