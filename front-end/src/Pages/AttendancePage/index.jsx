@@ -105,7 +105,7 @@ const handleSubmit = async(e)=>{
     headers: { "x-auth-token": authService.getUserToken() },
   }).then((res) => {
     if (!res.data.success) {
-      alert("Error occured !!");
+      alert("Invalid Attempt!!");
     } else {
       handleClose();
       window.location.reload(false);
