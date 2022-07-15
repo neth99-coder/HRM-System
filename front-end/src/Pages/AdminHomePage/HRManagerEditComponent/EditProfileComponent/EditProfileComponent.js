@@ -104,9 +104,10 @@ function EditProfile(props) {
       employee.type_id,
       imageName,
       employee.job_type_id,
+      employee.bank_account_num,
     ]
-    for (let j = 0; j < Object.keys(props.employeeFull).length - 17; j++) {
-      const col_name = Object.keys(props.employeeFull)[17 + j]
+    for (let j = 0; j < Object.keys(props.employeeFull).length - 18; j++) {
+      const col_name = Object.keys(props.employeeFull)[18 + j]
       if (changeList.includes(col_name)) {
         formData.push(employeeNew[col_name])
       } else {
@@ -567,6 +568,22 @@ function EditProfile(props) {
                             </FormGroup>
                           </div>
 
+                          
+                          <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <FormGroup>
+                              <label htmlFor="paygradeID">Bank Account Num</label>
+                              <input
+                                type='text'
+                                className={Styles['form-control']}
+                                id="bank_account_num"
+                                name="bank_account_num"
+                                required={true}
+                                value={employee.bank_account_num}
+                                onChange={(e)=>setEmployee({...employee,bank_account_num:e.target.value})}
+                              />
+                            </FormGroup>
+                          </div>
+
                           <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <FormGroup>
                               <label htmlFor="paygradeID">Pay-Grade</label>
@@ -589,7 +606,7 @@ function EditProfile(props) {
                           </div>
 
                           {Object.keys(props.employeeFull)
-                            .slice(17)
+                            .slice(18)
                             .map(showExtraAttributes)}
                         </div>
 

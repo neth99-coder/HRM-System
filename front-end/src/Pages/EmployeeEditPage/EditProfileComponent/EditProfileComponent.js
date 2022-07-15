@@ -1,202 +1,180 @@
-import React, { Component, useState } from 'react'
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  Card,
-  CardBody,
-  Form,
-  FormGroup,
-} from 'reactstrap'
-import { Link } from 'react-router-dom'
-import Styles from './EditProfie.module.css'
-import { Spinner } from 'react-bootstrap'
-import styles from '../../RequestPage/RequestPage.module.css'
-import { useEffect } from 'react'
-import Axios from 'axios'
-import ReactImageUploading from 'react-images-uploading'
-import authService from '../../../services/auth.service'
-import defaultPic from '../../../assets/profile_picture/default.jpg'
+import React, {Component, useState} from "react";
+import {Breadcrumb, BreadcrumbItem,Card, CardBody, Form,FormGroup} from "reactstrap";
+import {Link} from "react-router-dom";
+import Styles from "./EditProfie.module.css";
+import { Spinner } from "react-bootstrap";
+import styles from "../../RequestPage/RequestPage.module.css";
+import { useEffect } from "react";
+import Axios from "axios";
+import ReactImageUploading from "react-images-uploading";
+import authService from "../../../services/auth.service";
+import defaultPic from "../../../assets/profile_picture/default.jpg";
 
-function EditProfile(props) {
-  const [isLoading, setIsLoading] = useState(true)
-  const [employee, setEmployee] = useState()
-  const [firstName, setFirstName] = useState()
-  const [middleName, setMiddleName] = useState()
-  const [lastName, setLastName] = useState()
-  const [email, setEmail] = useState()
-  const [deptID, setDeptID] = useState()
-  const [typeID, setTypeID] = useState()
-  const [address, setAddress] = useState()
-  const [nic, setNic] = useState()
-  const [bday, setBday] = useState()
-  const [isMarried, setIsMarried] = useState()
-  const [contactNum, setContactNum] = useState()
-  const [emergencyNum, setEmergencyNum] = useState()
-  const [jobType, setJobType] = useState()
-  const [paygradeID, setPaygradeID] = useState()
-  const [empStatusId, setEmpStatusId] = useState()
-  const [empID, setEmpID] = useState(props.empID)
-  const [departments, setDepartments] = useState([])
-  const [types, setTypes] = useState([])
-  const [profilePicture, setProfilePicture] = useState()
-  const [status, setStatus] = useState([])
-  const [jobs, setJobs] = useState([])
-  const [payGrades, setPayGrades] = useState([])
-  const [orginalFirstName, setOrginalFirstName] = useState()
-  const [orginalLastName, setOrginalLastName] = useState()
-  const [employeeDepartment, setEmployeeDepartment] = useState({
-    dept_id: '',
-    name: '',
-    building: '',
-    description: '',
-  })
-  const [employeeType, setEmployeeType] = useState({
-    type_id: '',
-    type_name: '',
-  })
-  const [Image, setImage] = useState({})
-  const [imageName, setImageName] = useState()
-  const [isDpChanged, setIsDpChanged] = useState(false)
-  const [employeeNew, setEmployeeNew] = useState({})
-  const [changeList, setChangeList] = useState([])
-  const [supervisor, setSupervisor] = useState()
-  const [supervisorsList, setSupervisorList] = useState([])
+function EditProfile(props){
+
+    const [isLoading,setIsLoading] = useState(true);
+    const [employee,setEmployee] = useState();
+    const [firstName,setFirstName] = useState();
+    const [middleName,setMiddleName] = useState();
+    const [lastName,setLastName] = useState();
+    const [email,setEmail] = useState();
+    const [deptID,setDeptID] = useState();
+    const [typeID,setTypeID] = useState();
+    const [address,setAddress] = useState();
+    const [nic,setNic] = useState();
+    const [bday,setBday] = useState();
+    const [isMarried,setIsMarried] = useState();
+    const [contactNum,setContactNum] = useState();
+    const [emergencyNum,setEmergencyNum] = useState();
+    const [jobType,setJobType] = useState();
+    const [paygradeID,setPaygradeID] = useState();
+    const [empStatusId,setEmpStatusId] = useState();
+    const [empID,setEmpID] = useState(props.empID);
+    const [departments,setDepartments] = useState([]);
+    const [types,setTypes] = useState([]);
+    const [profilePicture,setProfilePicture] = useState();
+    const [status,setStatus] = useState([]);
+    const [jobs,setJobs] = useState([]);
+    const [payGrades,setPayGrades] = useState([]);
+    const [orginalFirstName,setOrginalFirstName] = useState();
+    const [orginalLastName,setOrginalLastName] = useState();
+    const [employeeDepartment,setEmployeeDepartment] = useState({dept_id:'',name:'',building:'',description:''});
+    const [employeeType,setEmployeeType] = useState({type_id:'',type_name:''});
+    const [Image,setImage] = useState({});
+    const [imageName,setImageName] = useState();
+    const [isDpChanged,setIsDpChanged] = useState(false);
+    const [employeeNew,setEmployeeNew] = useState({});
+    const [changeList,setChangeList] = useState([]);
+    const [supervisor,setSupervisor] = useState();
+    const [supervisorsList,setSupervisorList] = useState([]);
+    const [accountID,setAccountId] = useState();
 
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
 
-    const findEmployee = async () => {
-      await Axios.get(
-        'http://localhost:3001/api/hrManager/getemployee/' + empID,
-        {
-          headers: { 'x-auth-token': authService.getUserToken() },
-        },
-      ).then((res) => {
-        setEmployee(res.data.result[0])
-        setFirstName(res.data.result[0].first_name)
-        setLastName(res.data.result[0].last_name)
-        setOrginalFirstName(res.data.result[0].first_name)
-        setOrginalLastName(res.data.result[0].last_name)
-        setMiddleName(res.data.result[0].middle_name)
-        setEmail(res.data.result[0].email)
-        setDeptID(res.data.result[0].dept_id)
-        setTypeID(res.data.result[0].type_id)
-        setAddress(res.data.result[0].address)
-        setJobType(res.data.result[0].job_type_id)
-        setNic(res.data.result[0].nic)
-        setBday(res.data.result[0].bday.substring(0, 10))
-        setIsMarried(res.data.result[0].is_married)
-        setContactNum(res.data.result[0].contact_num)
-        setEmergencyNum(res.data.result[0].emergency_contact)
-        setPaygradeID(res.data.result[0].paygrade_id)
-        setEmpStatusId(res.data.result[0].emp_status_id)
-        setImageName(res.data.result[0].profile_picture)
-        if (
-          res.data.result[0].profile_picture !== undefined &&
-          res.data.result[0].profile_picture !== ''
-        ) {
-          setProfilePicture(
-            'http://localhost:3001/profilePictures/' +
-              res.data.result[0].profile_picture,
-          )
-        } else {
-          setProfilePicture(defaultPic)
-        }
-      })
-    }
-    findEmployee()
+        const findEmployee = async () => {
+            await Axios.get("http://localhost:3001/api/hrManager/getemployee/"+ empID,{
+                headers: { "x-auth-token": authService.getUserToken() },
+            }).then(
+                (res) => {
+                    setEmployee(res.data.result[0]);
+                    setFirstName(res.data.result[0].first_name);
+                    setLastName(res.data.result[0].last_name);
+                    setOrginalFirstName(res.data.result[0].first_name);
+                    setOrginalLastName(res.data.result[0].last_name);
+                    setMiddleName(res.data.result[0].middle_name);
+                    setEmail(res.data.result[0].email);
+                    setDeptID(res.data.result[0].dept_id);
+                    setTypeID(res.data.result[0].type_id);
+                    setAddress(res.data.result[0].address);
+                    setJobType(res.data.result[0].job_type_id);
+                    setNic(res.data.result[0].nic);
+                    setBday(res.data.result[0].bday.substring(0,10));
+                    setIsMarried(res.data.result[0].is_married);
+                    setContactNum(res.data.result[0].contact_num);
+                    setEmergencyNum(res.data.result[0].emergency_contact);
+                    setPaygradeID(res.data.result[0].paygrade_id);
+                    setEmpStatusId(res.data.result[0].emp_status_id);
+                    setImageName(res.data.result[0].profile_picture);
+                    if(res.data.result[0].profile_picture !== undefined && res.data.result[0].profile_picture !== ""){
+                        setProfilePicture("http://localhost:3001/profilePictures/" + res.data.result[0].profile_picture);
+                    }else{
+                        setProfilePicture(defaultPic);
+                    }
+                    setAccountId(res.data.result[0].bank_account_num);
+                }
+            );
+        };
+        findEmployee();
 
     const findDepartments = async () => {
       await Axios.get('http://localhost:3001/api/hrManager/getDepartments', {
         headers: { 'x-auth-token': authService.getUserToken() },
       }).then((res) => {
-        setDepartments(res.data.result)
-      })
-    }
-    findDepartments()
+        setDepartments(res.data.result);
+      });
+    };
+    findDepartments();
 
-    const findJobs = async () => {
-      await Axios.get('http://localhost:3001/api/hrManager/getJobTypes', {
-        headers: { 'x-auth-token': authService.getUserToken() },
-      }).then((res) => {
-        setJobs(res.data.result)
-      })
-    }
-    findJobs()
+      const findJobs = async () => {
+          await Axios.get("http://localhost:3001/api/hrManager/getJobTypes", {
+              headers: { "x-auth-token": authService.getUserToken() },
+          }).then((res) => {
+              setJobs(res.data.result);
+          });
+      };
+      findJobs();
 
     const findTypes = async () => {
-      await Axios.get('http://localhost:3001/api/hrManager/getTypes', {
-        headers: { 'x-auth-token': authService.getUserToken() },
+      await Axios.get("http://localhost:3001/api/hrManager/getTypes", {
+        headers: { "x-auth-token": authService.getUserToken() },
       }).then((res) => {
-        setTypes(res.data.result)
-      })
-    }
-    findTypes()
+        setTypes(res.data.result);
+      });
+    };
+    findTypes();
 
     const findStatus = async () => {
-      await Axios.get('http://localhost:3001/api/hrManager/getStatus', {
-        headers: { 'x-auth-token': authService.getUserToken() },
+      await Axios.get("http://localhost:3001/api/hrManager/getStatus", {
+        headers: { "x-auth-token": authService.getUserToken() },
       }).then((res) => {
-        setStatus(res.data.result)
-      })
-    }
-    findStatus()
+        setStatus(res.data.result);
+      });
+    };
+    findStatus();
 
     const findPaygrades = async () => {
-      await Axios.get('http://localhost:3001/api/hrManager/getPaygrades', {
-        headers: { 'x-auth-token': authService.getUserToken() },
+      await Axios.get("http://localhost:3001/api/hrManager/getPaygrades", {
+        headers: { "x-auth-token": authService.getUserToken() },
       }).then((res) => {
-        setPayGrades(res.data.result)
-      })
-    }
-    findPaygrades()
+        setPayGrades(res.data.result);
+      });
+    };
+    findPaygrades();
 
     const findEmployeeDepartment = async () => {
       await Axios.get(
-        'http://localhost:3001/api/hrManager/getemployeeDepartment/' +
+        "http://localhost:3001/api/hrManager/getemployeeDepartment/" +
           authService.getUserID(),
         {
-          headers: { 'x-auth-token': authService.getUserToken() },
-        },
+          headers: { "x-auth-token": authService.getUserToken() },
+        }
       ).then((res) => {
-        setEmployeeDepartment(res.data.result[0])
-      })
-    }
-    findEmployeeDepartment()
+        setEmployeeDepartment(res.data.result[0]);
+      });
+    };
+    findEmployeeDepartment();
 
     const findEmployeeType = async () => {
       await Axios.get(
-        'http://localhost:3001/api/hrManager/getemployeeType/' +
+        "http://localhost:3001/api/hrManager/getemployeeType/" +
           authService.getUserID(),
         {
-          headers: { 'x-auth-token': authService.getUserToken() },
-        },
+          headers: { "x-auth-token": authService.getUserToken() },
+        }
       ).then((res) => {
-        setEmployeeType(res.data.result[0])
-      })
-    }
-    findEmployeeType()
+        setEmployeeType(res.data.result[0]);
+      });
+    };
+    findEmployeeType();
 
-    const findSupervisorID = async () => {
-      await Axios.get('http://localhost:3001/api/hrManager/getSupervisorId', {
-        headers: { 'x-auth-token': authService.getUserToken() },
-      }).then((res) => {
-        setSupervisorList(res.data.result)
-      })
-    }
-    findSupervisorID()
+      const findSupervisorID = async () => {
+          await Axios.get("http://localhost:3001/api/hrManager/getSupervisorId", {
+              headers: { "x-auth-token": authService.getUserToken() },
+          }).then((res) => {
+              setSupervisorList(res.data.result);
+          });
+      };
+      findSupervisorID();
 
-    const findSupervisor = async () => {
-      await Axios.get(
-        'http://localhost:3001/api/hrManager/getSupervisorByEmpId/' + empID,
-        {
-          headers: { 'x-auth-token': authService.getUserToken() },
-        },
-      ).then((res) => {
-        setSupervisor(res.data.result[0].supervisor_id)
-      })
-    }
-    findSupervisor()
+      const findSupervisor = async () => {
+          await Axios.get("http://localhost:3001/api/hrManager/getSupervisorByEmpId/" + empID, {
+              headers: { "x-auth-token": authService.getUserToken() },
+          }).then((res) => {
+              setSupervisor(res.data.result[0].supervisor_id);
+          });
+      };
+      findSupervisor();
 
     setIsLoading(false)
   }, [])
@@ -234,279 +212,222 @@ function EditProfile(props) {
       setEmpStatusId(value)
     } else if (name === 'paygradeID') {
       setPaygradeID(value)
-    } else if (name == 'supervisorId') {
+    } else if (name === 'supervisorId') {
       setSupervisor(value)
-    } else if (name == 'jobID') {
+    } else if (name === 'jobID') {
       setJobType(value)
+    }else if(name === 'accountID'){
+        setAccountId(value);
     }
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault()
-    const formData = [
-      firstName,
-      middleName,
-      lastName,
-      address,
-      nic,
-      bday,
-      isMarried,
-      contactNum,
-      emergencyNum,
-      email,
-      deptID,
-      paygradeID,
-      empStatusId,
-      typeID,
-      imageName,
-      jobType,
-    ]
-    for (let j = 0; j < Object.keys(props.employeeFull).length - 17; j++) {
-      const col_name = Object.keys(props.employeeFull)[17 + j]
-      if (changeList.includes(col_name)) {
-        formData.push(employeeNew[col_name])
-      } else {
-        formData.push(props.employeeFull[col_name])
-      }
-    }
-    formData.push(empID)
-    const formValues = {
-      keys: Object.keys(props.employeeFull),
-      values: formData,
-    }
 
-    Axios.post(
-      'http://localhost:3001/api/hrManager/updateEmployee',
-      formValues,
-      {
-        headers: { 'x-auth-token': authService.getUserToken() },
-      },
-    ).then(async (res) => {
-      if (!res.data.success) {
-        alert('Error occured!!')
-      } else if (isDpChanged) {
-        const formData = new FormData()
-        formData.append('file', Image)
-        formData.append('fileName', imageName)
-        await Axios.post(
-          'http://localhost:3001/api/hrManager/dpUpload',
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              'x-auth-token': authService.getUserToken(),
-            },
-          },
-        ).then((res) => {
-          if (!res.data.success) {
-            console.log(res)
-          } else {
-            const formValues2 = {
-              emp_id: empID,
-              supervisor_id: supervisor,
+    async function handleSubmit(event) {
+        event.preventDefault();
+        const formData = [firstName,middleName,lastName,address,nic,bday,isMarried,contactNum,emergencyNum,email,deptID,paygradeID,empStatusId,typeID,imageName,jobType,accountID];
+        for(let j = 0; j < Object.keys(props.employeeFull).length - 18 ; j++){
+            const col_name = Object.keys(props.employeeFull)[18+j];
+            if(changeList.includes(col_name)){
+                formData.push(employeeNew[col_name]);
+            }else{
+                formData.push(props.employeeFull[col_name]);
             }
-            Axios.post(
-              'http://localhost:3001/api/hrManager/updateSupervisor',
-              formValues2,
-              {
-                headers: { 'x-auth-token': authService.getUserToken() },
-              },
-            ).then(async (res) => {
-              if (!res.data.success) {
-                alert('Error occured !!')
-              } else {
-                window.open(`/hrmanager/employee/view/${empID}`)
-              }
-            })
-          }
-        })
-      } else {
-        const formValues2 = {
-          emp_id: empID,
-          supervisor_id: supervisor,
-        }
+        };
+        formData.push(empID);
+        const formValues = {
+            keys: Object.keys(props.employeeFull),
+            values: formData,
+            emp_id: empID,
+            supervisor_id: supervisor
+        };
+
+
+        //console.log(formData, Object.keys(props.employeeFull));
         Axios.post(
-          'http://localhost:3001/api/hrManager/updateSupervisor',
-          formValues2,
-          {
-            headers: { 'x-auth-token': authService.getUserToken() },
-          },
+            "http://localhost:3001/api/hrManager/editEmployee",
+            formValues,        {
+                headers: { "x-auth-token": authService.getUserToken() },
+            }
         ).then(async (res) => {
-          if (!res.data.success) {
-            alert('Error occured !!')
-          } else {
-            window.open(`/hrmanager/employee/view/${empID}`)
-          }
-        })
-      }
-    })
-  }
+            if (!res.data.success) {
+                alert("Error occured!!");
+            } else if(isDpChanged) {
+                const formData = new FormData();
+                formData.append("file", Image);
+                formData.append("fileName", imageName);
+                await Axios.post("http://localhost:3001/api/hrManager/dpUpload",
+                    formData,{headers: {
+                    'Content-Type': 'multipart/form-data',
+                            "x-auth-token": authService.getUserToken()
+                }}).then((res)=>{
+                    if (!res.data.success) {
+                        console.log(res);
+                    } else {
 
-  function onImgUpload(imageList, addUpdateIndex) {
-    setProfilePicture(imageList[0].dataURL)
-    setImage(imageList[0].file)
-    setImageName(empID + imageList[0].file.name)
-    setIsDpChanged(true)
-  }
-
-  function showType(typeId) {
-    if (typeId === 3 || typeId === 4) {
-      return (
-        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-          <FormGroup>
-            <label htmlFor="typeID">Employee Type</label>
-            <select
-              className={Styles['form-control']}
-              id="typeID"
-              name="typeID"
-              placeholder="Select Employee Type"
-              required={true}
-              value={typeID}
-            >
-              {types
-                .filter((type) => type.type_id === typeId)
-                .map(({ type_id, type_name }, index) => (
-                  <option value={type_id}>{type_name}</option>
-                ))}
-            </select>
-          </FormGroup>
-        </div>
-      )
-    } else {
-      return (
-        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-          <FormGroup>
-            <label htmlFor="typeID">Employee Type</label>
-            <select
-              className={Styles['form-control']}
-              id="typeID"
-              name="typeID"
-              placeholder="Select Employee Type"
-              required={true}
-              value={typeID}
-              onChange={handleInputChange}
-            >
-              {types
-                .filter((type) => type.type_id !== 3 && type.type_id !== 4)
-                .map(({ type_id, type_name }, index) => (
-                  <option value={type_id}>{type_name}</option>
-                ))}
-            </select>
-          </FormGroup>
-        </div>
-      )
+                        window.open(`/hrmanager/employee/view/${empID}`);
+                    }
+                });
+            }else{
+                window.open(`/hrmanager/employee/view/${empID}`);
+            }
+        });
     }
-  }
 
-  function showDesignation(typeId, jobId) {
-    if (typeId === 3) {
-      return (
-        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-          <FormGroup>
-            <label htmlFor="jobID">Designation</label>
-            <select
-              className={Styles['form-control']}
-              id="jobID"
-              name="jobID"
-              placeholder="Select Designation"
-              required={true}
-              value={jobId}
-            >
-              {jobs
-                .filter((job) => job.job_type_title === 'HR Manager')
-                .map(({ job_type_id, job_type_title }, index) => (
-                  <option value={job_type_id}>{job_type_title}</option>
-                ))}
-            </select>
-          </FormGroup>
-        </div>
-      )
-    } else {
-      return (
-        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-          <FormGroup>
-            <label htmlFor="jobID">Designation</label>
-            <select
-              className={Styles['form-control']}
-              id="jobID"
-              name="jobID"
-              placeholder="Select Designation"
-              required={true}
-              value={jobId}
-              onChange={handleInputChange}
-            >
-              {jobs
-                .filter((job) => job.job_type_title !== 'HR Manager')
-                .map(({ job_type_id, job_type_title }, index) => (
-                  <option value={job_type_id}>{job_type_title}</option>
-                ))}
-            </select>
-          </FormGroup>
-        </div>
-      )
-    }
-  }
+    function onImgUpload(imageList,addUpdateIndex){
+        setProfilePicture(imageList[0].dataURL);
+        setImage(imageList[0].file);
+        setImageName(empID + imageList[0].file.name);
+        setIsDpChanged(true);
+    };
 
-  function showExtraAttributes(col_name) {
-    const result = props.dataTypes.filter(
-      (dataType) => dataType.COLUMN_NAME === col_name,
-    )[0].DATA_TYPE
-    let type = 'number'
-    if (result === 'varchar') {
-      type = 'text'
+    function showType(typeId){
+        if(typeId === 3 || typeId === 4){
+            return(
+                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <FormGroup>
+                        <label htmlFor="typeID">Employee Type</label>
+                        <select
+                            className={Styles["form-control"]}
+                            id="typeID"
+                            name="typeID"
+                            placeholder="Select Employee Type"
+                            required={true}
+                            value={typeID}
+                        >
+                            {types.filter((type) => type.type_id === typeId).map(({ type_id, type_name }, index) => (
+                                <option value={type_id}>{type_name}</option>
+                            ))}
+                        </select>
+                    </FormGroup>
+                </div>
+            )
+        }else{
+            return (
+                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <FormGroup>
+                        <label htmlFor="typeID">Employee Type</label>
+                        <select
+                            className={Styles["form-control"]}
+                            id="typeID"
+                            name="typeID"
+                            placeholder="Select Employee Type"
+                            required={true}
+                            value={typeID}
+                            onChange={handleInputChange}
+                        >
+                            {types.filter((type) => type.type_id !== 3 && type.type_id !== 4).map(({ type_id, type_name }, index) => (
+                                <option value={type_id}>{type_name}</option>
+                            ))}
+                        </select>
+                    </FormGroup>
+                </div>
+            )
+        }
     }
-    if (!changeList.includes(col_name)) {
-      return (
-        <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-          <FormGroup>
-            <label htmlFor={col_name}>{col_name}</label>
-            <input
-              type={type}
-              className={Styles['form-control']}
-              id={col_name}
-              name={col_name}
-              required={true}
-              value={props.employeeFull[col_name]}
-              placeholder={'Enter ' + col_name}
-              onChange={handleInputChangeExtra}
-            />
-          </FormGroup>
-        </div>
-      )
-    } else {
-      return (
-        <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-          <FormGroup>
-            <label htmlFor={col_name}>{col_name}</label>
-            <input
-              type={type}
-              className={Styles['form-control']}
-              id={col_name}
-              name={col_name}
-              required={true}
-              value={employeeNew[col_name]}
-              placeholder={'Enter ' + col_name}
-              onChange={handleInputChangeExtra}
-            />
-          </FormGroup>
-        </div>
-      )
-    }
-  }
 
-  function handleInputChangeExtra(event) {
-    const name = event.target.name
-    const value = event.target.value
-    const employeeTemp = JSON.parse(JSON.stringify(employeeNew))
-    employeeTemp[name] = value
-    setEmployeeNew(JSON.parse(JSON.stringify(employeeTemp)))
-    changeList.push(name)
-  }
+    function showDesignation(typeId,jobId){
+        if(typeId === 3){
+            return (
+                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <FormGroup>
+                        <label htmlFor="jobID">Designation</label>
+                        <select
+                            className={Styles["form-control"]}
+                            id="jobID"
+                            name="jobID"
+                            placeholder="Select Designation"
+                            required={true}
+                            value={jobId}
+                        >
+                            {jobs.filter((job) => job.job_type_title === "HR Manager").map(({ job_type_id, job_type_title }, index) => (
+                                <option value={job_type_id}>{job_type_title}</option>
+                            ))}
+                        </select>
+                    </FormGroup>
+                </div>
+            )
+
+        }else{
+            return(
+                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <FormGroup>
+                        <label htmlFor="jobID">Designation</label>
+                        <select
+                            className={Styles["form-control"]}
+                            id="jobID"
+                            name="jobID"
+                            placeholder="Select Designation"
+                            required={true}
+                            value={jobId}
+                            onChange={handleInputChange}
+                        >
+                            {jobs.filter((job) => job.job_type_title !== "HR Manager").map(({ job_type_id, job_type_title }, index) => (
+                                <option value={job_type_id}>{job_type_title}</option>
+                            ))}
+                        </select>
+                    </FormGroup>
+                </div>
+            )
+        }
+    }
+
+
+    function showExtraAttributes(col_name){
+        const result = props.dataTypes.filter((dataType)=> dataType.COLUMN_NAME === col_name)[0].DATA_TYPE;
+        let type = "number";
+        if(result === "varchar"){
+            type = "text";
+        }
+        if(!changeList.includes(col_name)){
+            return(
+                <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                    <FormGroup>
+                        <label htmlFor={col_name}>{col_name}</label>
+                        <input type={type}
+                               className={Styles["form-control"]}
+                               id={col_name}
+                               name={col_name}
+                               required={true}
+                               value={props.employeeFull[col_name]}
+                               placeholder={"Enter " + col_name}
+                               onChange={handleInputChangeExtra}/>
+                    </FormGroup>
+                </div>
+            )
+        }else{
+            return(
+                <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                    <FormGroup>
+                        <label htmlFor={col_name}>{col_name}</label>
+                        <input type={type}
+                               className={Styles["form-control"]}
+                               id={col_name}
+                               name={col_name}
+                               required={true}
+                               value={employeeNew[col_name]}
+                               placeholder={"Enter " + col_name}
+                               onChange={handleInputChangeExtra}/>
+                    </FormGroup>
+                </div>
+            )
+        }
+    }
+
+    function handleInputChangeExtra(event){
+        const name = event.target.name;
+        const value = event.target.value;
+        const employeeTemp = JSON.parse(JSON.stringify(employeeNew));
+        employeeTemp[name] = value;
+        setEmployeeNew(JSON.parse(JSON.stringify(employeeTemp)));
+        changeList.push(name);
+    }
+
+
 
   return (
     <div>
       {isLoading ? (
-        <Spinner animation="border" role="status" className={styles['spinner']}>
+        <Spinner animation="border" role="status" className={styles["spinner"]}>
           <span className="visually-hidden">Loading...</span>
         </Spinner>
       ) : (
@@ -517,7 +438,7 @@ function EditProfile(props) {
                 <BreadcrumbItem>
                   <Link
                     to="/hrmanager/employee"
-                    className={Styles['breadcrumb-link']}
+                    className={Styles["breadcrumb-link"]}
                   >
                     Employee
                   </Link>
@@ -525,9 +446,9 @@ function EditProfile(props) {
                 <BreadcrumbItem>
                   <Link
                     to={`/hrmanager/employee/view/${empID}`}
-                    className={Styles['breadcrumb-link']}
+                    className={Styles["breadcrumb-link"]}
                   >
-                    {orginalFirstName + ' ' + orginalLastName}
+                    {orginalFirstName + " " + orginalLastName}
                   </Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem active>Edit</BreadcrumbItem>
@@ -539,14 +460,14 @@ function EditProfile(props) {
                 <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
                   <div className="card h-100">
                     <div className="card-body">
-                      <div className={Styles['account-settings']}>
-                        <div className={Styles['user-profile']}>
-                          <div className={Styles['user-avatar']}>
+                      <div className={Styles["account-settings"]}>
+                        <div className={Styles["user-profile"]}>
+                          <div className={Styles["user-avatar"]}>
                             {/*{"../../../public"+this.state.employee.profile_picture}*/}
                             <img
-                              className={Styles['profile-dp']}
+                              className={Styles["profile-dp"]}
                               src={profilePicture}
-                              alt={orginalFirstName + ' ' + orginalLastName}
+                              alt={orginalFirstName + " " + orginalLastName}
                             />
                           </div>
 
@@ -555,7 +476,7 @@ function EditProfile(props) {
                               value={[]}
                               onChange={onImgUpload}
                               maxNumber={1}
-                              acceptType={['jpg', 'png']}
+                              acceptType={["jpg", "png"]}
                             >
                               {({
                                 imageList,
@@ -571,7 +492,7 @@ function EditProfile(props) {
                                   <button
                                     className="btn btn-primary"
                                     style={
-                                      isDragging ? { color: 'red' } : undefined
+                                      isDragging ? { color: "red" } : undefined
                                     }
                                     onClick={onImageUpload}
                                     {...dragProps}
@@ -582,7 +503,7 @@ function EditProfile(props) {
                                   {imageList.map((image, index) => (
                                     <div key={index} className="image-item">
                                       <img
-                                        src={image['data_url']}
+                                        src={image["data_url"]}
                                         alt=""
                                         width="100"
                                       />
@@ -606,11 +527,11 @@ function EditProfile(props) {
                           </div>
 
                           <h5 className="user-name">
-                            {orginalFirstName + ' ' + orginalLastName}
+                            {orginalFirstName + " " + orginalLastName}
                           </h5>
                           <h6 className="user-email">{email}</h6>
                         </div>
-                        <div className={Styles['about']}>
+                        <div className={Styles["about"]}>
                           <h3>About</h3>
                           <h5>
                             {employeeType.type_name} - {employeeDepartment.name}
@@ -636,7 +557,7 @@ function EditProfile(props) {
                               <label htmlFor="firstName">First Name</label>
                               <input
                                 type="text"
-                                className={Styles['form-control']}
+                                className={Styles["form-control"]}
                                 id="firstName"
                                 name="firstName"
                                 required={true}
@@ -652,7 +573,7 @@ function EditProfile(props) {
                               <label htmlFor="middleName">Middle Name</label>
                               <input
                                 type="text"
-                                className={Styles['form-control']}
+                                className={Styles["form-control"]}
                                 id="middleName"
                                 name="middleName"
                                 required={true}
@@ -668,7 +589,7 @@ function EditProfile(props) {
                               <label htmlFor="lastName">Last Name</label>
                               <input
                                 type="text"
-                                className={Styles['form-control']}
+                                className={Styles["form-control"]}
                                 id="lastName"
                                 name="lastName"
                                 required={true}
@@ -684,7 +605,7 @@ function EditProfile(props) {
                               <label htmlFor="address">Address</label>
                               <input
                                 type="text"
-                                className={Styles['form-control']}
+                                className={Styles["form-control"]}
                                 id="address"
                                 name="address"
                                 required={true}
@@ -700,7 +621,7 @@ function EditProfile(props) {
                               <label htmlFor="email">Email</label>
                               <input
                                 type="email"
-                                className={Styles['form-control']}
+                                className={Styles["form-control"]}
                                 id="email"
                                 name="email"
                                 required={true}
@@ -716,7 +637,7 @@ function EditProfile(props) {
                               <label htmlFor="contactNum">Contact Number</label>
                               <input
                                 type="tel"
-                                className={Styles['form-control']}
+                                className={Styles["form-control"]}
                                 id="contactNum"
                                 name="contactNum"
                                 pattern="[0-9]{9,11}"
@@ -735,7 +656,7 @@ function EditProfile(props) {
                               </label>
                               <input
                                 type="tel"
-                                className={Styles['form-control']}
+                                className={Styles["form-control"]}
                                 id="emergencyNum"
                                 name="emergencyNum"
                                 pattern="[0-9]{9,11}"
@@ -752,7 +673,7 @@ function EditProfile(props) {
                               <label htmlFor="nic">NIC</label>
                               <input
                                 type="text"
-                                className={Styles['form-control']}
+                                className={Styles["form-control"]}
                                 id="nic"
                                 name="nic"
                                 required={true}
@@ -768,7 +689,7 @@ function EditProfile(props) {
                               <label htmlFor="bday">Birthday</label>
                               <input
                                 type="date"
-                                className={Styles['form-control']}
+                                className={Styles["form-control"]}
                                 id="bday"
                                 name="bday"
                                 min="1999-05-10"
@@ -785,7 +706,7 @@ function EditProfile(props) {
                             <FormGroup>
                               <label htmlFor="isMarried">Marital Status</label>
                               <select
-                                className={Styles['form-control']}
+                                className={Styles["form-control"]}
                                 id="isMarried"
                                 name="isMarried"
                                 placeholder="Select Marital Status"
@@ -814,7 +735,7 @@ function EditProfile(props) {
                               <label htmlFor="emergencyNum">Employee ID</label>
                               <input
                                 type="text"
-                                className={Styles['form-control']}
+                                className={Styles["form-control"]}
                                 id="empID"
                                 name="empID"
                                 required={true}
@@ -830,7 +751,7 @@ function EditProfile(props) {
                             <FormGroup>
                               <label htmlFor="deptID">Department</label>
                               <select
-                                className={Styles['form-control']}
+                                className={Styles["form-control"]}
                                 id="deptID"
                                 name="deptID"
                                 placeholder="Select Department"
@@ -845,9 +766,9 @@ function EditProfile(props) {
                             </FormGroup>
                           </div>
 
-                          {showType(typeID)}
+                            {showType(typeID)}
 
-                          {showDesignation(typeID, jobType)}
+                            {showDesignation(typeID,jobType)}
 
                           <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <FormGroup>
@@ -855,7 +776,7 @@ function EditProfile(props) {
                                 Employee status
                               </label>
                               <select
-                                className={Styles['form-control']}
+                                className={Styles["form-control"]}
                                 id="empStatusId"
                                 name="empStatusId"
                                 placeholder="Select Status"
@@ -868,62 +789,27 @@ function EditProfile(props) {
                                     <option value={emp_status_id}>
                                       {name}
                                     </option>
-                                  ),
+                                  )
                                 )}
                               </select>
                             </FormGroup>
                           </div>
 
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <FormGroup>
-                              <label htmlFor="supervisorId">Supervisor</label>
-                              <select
-                                className={Styles['form-control']}
-                                id="supervisorId"
-                                name="supervisorId"
-                                placeholder="Select Supervisor"
-                                required={true}
-                                value={supervisor}
-                                onChange={handleInputChange}
-                              >
-                                {supervisorsList.map(
-                                  (
-                                    { emp_id, first_name, last_name },
-                                    index,
-                                  ) => (
-                                    <option value={emp_id}>
-                                      {emp_id +
-                                        ' - ' +
-                                        first_name +
-                                        ' ' +
-                                        last_name}
-                                    </option>
-                                  ),
-                                )}
-                              </select>
-                            </FormGroup>
-                          </div>
-
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <FormGroup>
-                              <label htmlFor="paygradeID">Pay-Grade</label>
-                              <select
-                                className={Styles['form-control']}
-                                id="paygradeID"
-                                name="paygradeID"
-                                placeholder="Select pay-grade"
-                                required={true}
-                                value={paygradeID}
-                                onChange={handleInputChange}
-                              >
-                                {payGrades.map(
-                                  ({ paygrade_id, name }, index) => (
-                                    <option value={paygrade_id}>{name}</option>
-                                  ),
-                                )}
-                              </select>
-                            </FormGroup>
-                          </div>
+                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <FormGroup>
+                                    <label htmlFor="supervisorId">Supervisor</label>
+                                    <select
+                                        className={Styles["form-control"]}
+                                        id="supervisorId"
+                                        name="supervisorId"
+                                        placeholder="Select Supervisor"
+                                        required={true}
+                                        value={supervisor}
+                                        onChange={handleInputChange}>
+                                        {supervisorsList.map(({ emp_id,first_name,last_name }, index) => <option value={emp_id} >{emp_id + " - " + first_name + " " + last_name}</option>)}
+                                    </select>
+                                </FormGroup>
+                            </div>
 
                                                     <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                                         <FormGroup>
@@ -940,18 +826,48 @@ function EditProfile(props) {
                                                             </select>
                                                         </FormGroup>
                                                     </div>
+                        </div>
 
 
-                                                        {Object.keys(props.employeeFull).slice(17).map(showExtraAttributes)}
 
+                          <div className="row gutters">
+                              <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                  <h6 className="mt-3 mb-2 text-primary">
+                                      Payment Details
+                                  </h6>
+                              </div>
 
-                                                </div>
+                              <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                  <FormGroup>
+                                      <label htmlFor="accountID">Bank Account Number</label>
+                                      <input
+                                          type="text"
+                                          className={Styles["form-control"]}
+                                          id="accountID"
+                                          name="accountID"
+                                          required={true}
+                                          value={accountID}
+                                          placeholder="Enter Bank Account ID"
+                                          onChange={handleInputChange}
+                                      />
+                                  </FormGroup>
+                              </div>
 
+                          </div>
+
+                          <div className="row gutters">
+                              <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                  <h6 className="mt-3 mb-2 text-primary">
+                                      Additional Details
+                                  </h6>
+                              </div>
+                              {Object.keys(props.employeeFull).slice(18).map(showExtraAttributes)}
+                          </div>
 
                         <div className="row gutters">
                           <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div className="text-right">
-                              <Link to={'/hrmanager/employee/view/' + empID}>
+                              <Link to={"/hrmanager/employee/view/" + empID}>
                                 <button
                                   type="button"
                                   id="cancel"
@@ -982,7 +898,7 @@ function EditProfile(props) {
         </>
       )}
     </div>
-  )
+  );
 }
 
-export default EditProfile
+export default EditProfile;

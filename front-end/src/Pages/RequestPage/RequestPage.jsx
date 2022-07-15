@@ -416,7 +416,6 @@ const RequestPage = () => {
                       type="file"
                       className="form-control"
                       name="attachment"
-                      required
                       onChange={(e) => {
                         setNewRequest({
                           ...newRequest,

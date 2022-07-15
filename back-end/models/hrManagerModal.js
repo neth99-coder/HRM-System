@@ -2,6 +2,7 @@ const { json } = require('express')
 const db = require('../config/db')
 const arrayOrganizer = require('../helpers/arrayOrganizer')
 const { reject } = require('bcrypt/promises')
+const bcrypt = require("bcrypt");
 
 //function to get all details of all departments
 function getDepartments() {
@@ -105,7 +106,7 @@ function getEmployeeByDeptId(deptId) {
 //function to get all details of an employee for a given employee ID
 function getEmployee(empId){
     return new Promise((resolve, reject) => {
-        var sql = "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture,job_type_id FROM employee WHERE emp_id = ? ";
+        var sql = "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture,job_type_id,bank_account_num FROM employee WHERE emp_id = ? ";
         db.query(sql,[empId] ,(err, result) => {
             if (err) {
                 return reject(err);
@@ -250,6 +251,7 @@ function updateEmployee(data){
                 if(result){
                     return resolve(result);
                 }else{
+                    console.log(err)
                     return reject(err);
 
                 }
@@ -270,6 +272,7 @@ function updateSupervisor(data){
                 if(result){
                     return resolve(result);
                 }else{
+                    console.log(err)
                     return reject(err);
 
                 }
@@ -304,6 +307,7 @@ function addEmployee(data) {
       if (result) {
         return resolve(result)
       } else {
+        console.log(err)
         return reject(err)
       }
     })
@@ -328,6 +332,7 @@ function updateleaveConfig(data) {
     return new Promise((resolve, reject) => {
   
     const sql = `UPDATE paygrade_leave SET num_of_leaves = ${data.leaves} WHERE paygrade_id =${data.paygrade_id} and leave_id = ${data.leave_id}`
+        console.log(sql)
       db.query(sql, (err, result) => {
         if (result) {
           return resolve(result)
@@ -350,6 +355,7 @@ function deleteEmployee(data){
                 if(result){
                     return resolve(result);
                 }else{
+                    console.log(err);
                     return reject(err);
 
                 }
@@ -376,6 +382,7 @@ function deleteColumns(data){
                 if(result){
                     return resolve(result);
                 }else{
+                    console.log(err);
                     return reject(err);
 
                 }
@@ -395,6 +402,7 @@ function addSupervisor(data){
                 if(result){
                     return resolve(result);
                 }else{
+                    console.log(err);
                     return reject(err);
 
                 }
@@ -444,8 +452,6 @@ function getWorkingToday() {
       if (err) {
         return reject(err)
       } else {
-        //console.log(arrayOrganizer.todayWorkingArray(result));
-        // console.log(result)
         return resolve(arrayOrganizer.todayWorkingArray(result))
       }
     })
@@ -476,7 +482,6 @@ function getAttendanceNotMarked(){
             if (err) {
                 return reject(err);
             } else {
-                //console.log(result)
                 return resolve(arrayOrganizer.attendanceArray(result));
             }
         });
@@ -491,12 +496,9 @@ function getAttendanceNotMarked(){
             if (err) {
                 return reject(err);
             } else {
-                //console.log(result)
                 return resolve(result);
             }
         });
-        //console.log(arrayOrganizer.insertQuery(data))
-        //console.log(sql)
     });
 }
 
@@ -531,7 +533,6 @@ function addColumn(data){
             );
         }else{
             const sql = "ALTER TABLE employee ADD COLUMN (`" + data.fieldName+ "` " + data.dataType + ")";
-            //console.log(sql);
             db.query(
                 sql,
                 [data.fieldName,data.dataType],
@@ -564,6 +565,117 @@ function getDataTypes() {
     });
 }
 
+function editEmployee(data){
+    return new Promise((resolve,reject)=>{
+        const keys = data.keys;
+        const values = data.values;
+
+        try {
+            db.beginTransaction((err)=>{
+                if(err){
+                    throw err;
+                }
+
+                let sql1 = "UPDATE employee SET ";
+                for(let i = 1; i < keys.length; i++){
+                    if(i !== 1){
+                        sql1 += ","
+                    }
+                    sql1 += "`" + keys[i] + "` = " + "?"
+                }
+                sql1 += " WHERE emp_id = ?";
+
+                db.query(sql1, values, (err,result) => {
+                        if(result){
+
+                            let sql2 = "UPDATE supervisor SET supervisor_id = ? WHERE emp_id = ?";
+                            db.query(sql2, [data.supervisor_id,data.emp_id], (err,result) => {
+                                    if(err){
+                                        console.log(err)
+                                        return reject(err);
+                                    }else{
+                                        db.commit((err)=>{
+                                            if(err){
+                                                throw err;
+                                            } else {
+                                                return resolve(result);
+                                            }
+                                        });
+                                    }
+                                });
+                        }else{
+                            console.log(err)
+                            return reject(err);
+                        }
+                    }
+                );
+            })
+        }catch (err){
+            db.rollback();
+            return reject(err);
+        }
+    });
+}
+
+function addEmployeeTransaction(data){
+    return new Promise((resolve, reject) => {
+        const keys = data.keys
+        const values = data.values
+
+        try{
+            db.beginTransaction((err)=>{
+                if(err){
+                    throw err;
+                }
+
+                let sql1 = 'INSERT INTO employee ('
+                for (let i = 0; i < keys.length; i++) {
+                    if (i !== 0) {
+                        sql1 += ','
+                    }
+                    sql1 += ' `' + keys[i] + '` ';
+                }
+                sql1 += ') VALUES ('
+                for (let i = 0; i < keys.length; i++) {
+                    if (i !== 0) {
+                        sql1 += ',';
+                    }
+                    sql1 += '?';
+                }
+                sql1 += ')';
+
+                db.query(sql1, values, (err, result) => {
+                    if (result) {
+
+                        const sql2 = "INSERT INTO supervisor (emp_id,supervisor_id) VALUES(?,?)";
+                        db.query(sql2, [data.emp_id,data.supervisor_id], (err,result) => {
+                                if(err){
+                                    console.log(err)
+                                    return reject(err);
+                                }else{
+                                    db.commit((err)=>{
+                                        if(err){
+                                            throw err;
+                                        } else {
+                                            return resolve(result);
+                                        }
+                                    });
+                                }
+                            });
+
+                    } else {
+                        console.log(err)
+                        return reject(err)
+                    }
+                });
+            });
+        }catch (err){
+            db.rollback();
+            return reject(err);
+        }
+    });
+}
+
 //returns attendace of an employee
 function getAttendace(data) {
   return new Promise((resolve, reject) => {
@@ -571,7 +683,7 @@ function getAttendace(data) {
       "SELECT emp_id,DATE_FORMAT(date, '%Y-%m-%d') as date,is_present from attendance WHERE emp_id = ? and date BETWEEN ? AND ? "
     db.query(sql,[data.emp_id,data.from,data.to], (err, result) => {
       if (err) {
-        
+
         return reject(err)
       } else {
         return resolve(result)
@@ -594,7 +706,7 @@ function getLeaves(data){
       "and leave_request.leave_end < ?"
     db.query(sql,[data.emp_id,data.from,data.to], (err, result) => {
       if (err) {
-        
+
         return reject(err)
       } else {
         return resolve(result)
@@ -609,7 +721,7 @@ function getEmployeesByIDs(data){
       `Select emp_id,first_name,last_name,contact_num,email,job_type_title from employee natural join job_type where ${data.id} = ${data.value} `
     db.query(sql,(err, result) => {
       if (err) {
-        
+
         return reject(err)
       } else {
         return resolve(result)
@@ -655,7 +767,8 @@ module.exports = {
     addSupervisor,
     updateSupervisor,
     deleteColumns,
-    updateleaveConfig
-
+    updateleaveConfig,
+    editEmployee,
+    addEmployeeTransaction
 }
 

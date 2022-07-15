@@ -492,11 +492,21 @@ function ProfileView(props) {
                         {findPayGradeByID(props.employee.paygrade_id)}
                       </div>
                     </div>
+                    <hr />
+
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <h6 className="mb-6">Bank Account Number</h6>
+                      </div>
+                      <div className="col-sm-9 text-secondary">
+                        {props.employee.bank_account_num}
+                      </div>
+                    </div>
 
                     <div>
                       <p>
                         {Object.keys(props.employeeFull)
-                          .slice(17)
+                          .slice(18)
                           .map(showExtraAttributes)}
                       </p>
                     </div>

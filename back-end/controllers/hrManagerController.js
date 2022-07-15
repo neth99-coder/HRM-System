@@ -573,6 +573,34 @@ const addAttendance = async (req,res) =>{
         });  
 };
 
+const editEmployee = async (req,res)=>{
+    await hrManagerModal
+        .editEmployee(req.body)
+        .then((result) => {
+            res.json({ success: true, result });
+        })
+        .catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
+const addEmployeeTransaction = async (req,res)=>{
+    await hrManagerModal
+        .addEmployeeTransaction(req.body)
+        .then((result) => {
+            res.json({ success: true, result });
+        })
+        .catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
+
 
 
 module.exports = {
@@ -612,6 +640,8 @@ module.exports = {
     updateleaveConfig,
     addSupervisor,
     updateSupervisor,
-    deleteColumns
+    deleteColumns,
+    editEmployee,
+    addEmployeeTransaction
 
 }

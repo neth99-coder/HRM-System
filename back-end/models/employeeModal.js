@@ -10,7 +10,7 @@ function getEmployee(empId) {
   return new Promise((resolve, reject) => {
     
     var sql =
-      "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, employee.job_type_id AS job_type_id, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture,job_type_title FROM employee INNER JOIN job_type ON employee.job_type_id = job_type.job_type_id WHERE emp_id = ?";
+      "SELECT address,DATE_FORMAT(bday, '%Y-%m-%d') AS bday, contact_num, employee.job_type_id AS job_type_id, dept_id,email,emergency_contact,emp_id,emp_status_id,first_name,is_married,last_name,middle_name,nic,paygrade_id,type_id,profile_picture,job_type_title,bank_account_num FROM employee INNER JOIN job_type ON employee.job_type_id = job_type.job_type_id WHERE emp_id = ?";
     db.query(sql, [empId], (err, result) => {
       if (err) {
         
