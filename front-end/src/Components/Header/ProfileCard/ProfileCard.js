@@ -21,7 +21,7 @@ function ProfileCard(props) {
       ).then((res) => {
        setUserName(res.data.result[0]['first_name'] + " " + res.data.result[0]['last_name']);
        setUserPost(res.data.result[0]['job_type_title']);
-       setDp(res.data.result[0]['profile_picture']?res.data.result[0]['profile_picture']:"default.jpg");
+       setDp((res.data.result[0]['profile_picture'] && res.data.result[0]['profile_picture'] !== null)? res.data.result[0]['profile_picture']:"default.jpg");
         
       });
     };

@@ -146,6 +146,7 @@ function ProfileView(props) {
     const formValues = {
       emp_id: props.employee.emp_id,
     }
+
     Axios.post(
       'http://localhost:3001/api/hrManager/deleteEmployee',
       formValues,
@@ -226,13 +227,35 @@ function ProfileView(props) {
               <div className={styles['modal-header']}>
                 <h2>Delete Employee</h2>
               </div>
-              <div className={styles['modal-body']}>
-                <p>
-                  Are you sure you want to delete employee{' '}
-                  {props.employee.emp_id} ?
-                </p>
-                <p>This will permanently remove this record ..</p>
-              </div>
+
+                {(props.employee.type_id === 3 || props.employee.type_id === 4)? (
+                        <div className={styles['modal-body']}>
+                            <p>
+                              You can't delete HR Manager or Admin!
+                            </p>
+                          <p>Please contact system admin</p>
+                        </div>
+                ):(props.employee.type_id === 1 )?(
+                    <div className={styles['modal-body']}>
+                      <p>
+                        Are you sure you want to delete employee{' '}
+                        {props.employee.emp_id} ?
+                      </p>
+                      <p>This will permanently remove this record ..</p>
+                    </div>
+                ):(
+
+                    <div className={styles['modal-body']}>
+                      <p>
+                        Are you sure you want to delete employee{' '}
+                        {props.employee.emp_id} ?
+                      </p>
+                      <p>This will permanently remove this record ..</p>
+                      <p>You are removing a supervisor. make sure to assign new supervisors for the subordinates</p>
+                    </div>
+                  )}
+
+
               <div className={styles['modal-footer']}>
                 <div className="row">
                   <div className="col-4 col-sm-3 col-xl-2">
@@ -247,18 +270,22 @@ function ProfileView(props) {
                       </button>
                     </Form>
                   </div>
-                  <div className="col-4 col-sm-3 col-md-2">
-                    <Form onSubmit={handleDelete}>
-                      <button
-                        type="submit"
-                        id="submit"
-                        name="submit"
-                        className="btn btn-dark"
-                      >
-                        Delete
-                      </button>
-                    </Form>
-                  </div>
+                  {(props.employee.type_id === 3 || props.employee.type_id === 4)? (
+                      <></>
+                  ):(
+                      <div className="col-4 col-sm-3 col-md-2">
+                        <Form onSubmit={handleDelete}>
+                          <button
+                              type="submit"
+                              id="submit"
+                              name="submit"
+                              className="btn btn-dark"
+                          >
+                            Delete
+                          </button>
+                        </Form>
+                      </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -303,7 +330,7 @@ function ProfileView(props) {
                             props.employee.last_name}
                         </h4>
                         <p className="text-secondary mb-1">
-                          {findJobById(props.employee.job_type_id)}
+                          {findTypeById(props.employee.type_id)}
                         </p>
                         <p className="text-muted font-size-sm">
                           {findDepartmentById(props.employee.dept_id) +

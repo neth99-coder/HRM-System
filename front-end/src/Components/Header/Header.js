@@ -54,9 +54,14 @@ function Header(props) {
               <Link to="/supervisor/my-profile"><Option className={styles['option__sec-child']} icon={<FiUser/>}
                                                         name="My Profile"/></Link>
           );
-      }if(props.type === 3) {
+      }else if(props.type === 3) {
           return (
               <Link to="/hrmanager/my-profile"><Option className={styles['option__sec-child']} icon={<FiUser/>}
+                                                       name="My Profile"/></Link>
+          );
+      }else if(props.type === 4) {
+          return (
+              <Link to="/admin/my-profile"><Option className={styles['option__sec-child']} icon={<FiUser/>}
                                                        name="My Profile"/></Link>
           );
       }
@@ -70,7 +75,7 @@ function Header(props) {
             <h2>{empName}</h2>
             <h3>{empType}</h3>
           </div> */}
-          <Option className={styles['option__first-child']} icon={<FiSettings />} name="Settings" />
+          {/*<Option className={styles['option__first-child']} icon={<FiSettings />} name="Settings" />*/}
             {profileLink()}
           <Option icon={<FiLogOut />} name="Logout" handleClick={handleLogout}/>
         </Dropdown>

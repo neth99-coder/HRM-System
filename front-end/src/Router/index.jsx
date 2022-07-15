@@ -112,6 +112,7 @@ export default function AppRouter() {
                 <Route path="hr-profile/edit/:emp_id" element={<HRManagerEdit />} />
                 <Route path="companyDetails" element={<CompanyDetailsPage companyDetails={companyDetails}/>} />
                 <Route path="*" element={<NotFound/>} />
+                <Route path="my-profile" element={<ProfileView />} />
               </Route>
               <Route path="*" element={<Unauth/>} />
             </Route>
