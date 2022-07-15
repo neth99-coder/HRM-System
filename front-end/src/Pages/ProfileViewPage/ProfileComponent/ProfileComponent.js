@@ -134,7 +134,7 @@ function Profile(props){
   }
 
     function showProfilePicture(){
-        if(props.employee.profile_picture === undefined || props.employee.profile_picture === ""){
+        if(props.employee.profile_picture === undefined || props.employee.profile_picture === "" || props.employee.profile_picture === null ){
             return(<img src={defaultPic} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>)
         }else{
             return(<img src={`http://localhost:3001/profilePictures/${props.employee.profile_picture}`} alt={props.employee.first_name + " " + props.employee.last_name} className={profileStyleClass} width="150"/>);

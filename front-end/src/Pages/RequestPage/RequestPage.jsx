@@ -164,7 +164,7 @@ const RequestPage = () => {
             leave_id: '',
             state_id: 3,
             reason: '',
-            leave_begin: '',
+            leave_begin: new Date().toISOString(),
             leave_end: '',
           })
           handleClose()
@@ -403,7 +403,8 @@ const RequestPage = () => {
                       disabled={endActive}
                       value={newRequest.leave_end}
                       onChange={handleChange}
-                      min = {new Date((new Date(newRequest["leave_begin"])).setDate((new Date(newRequest["leave_begin"])).getDate() + 1)).toISOString().split("T")[0]}
+                      min = {newRequest["leave_begin"]}
+                    
                     />
                   </div>
                 </div>

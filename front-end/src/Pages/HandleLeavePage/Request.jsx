@@ -57,7 +57,7 @@ const Request = (props) => {
     >
       <div className="col text-center ">
         <div>
-          <img src={(props.cur.profile_picture !== '')?(`http://localhost:3001/profilePictures/${props.cur.profile_picture}`):(defaultDp)}
+          <img src={(props.cur['profile_picture'] !== null && props.cur['profile_picture'] !== undefined && props.cur['profile_picture'] !== '')?(`http://localhost:3001/profilePictures/${props.cur.profile_picture}`):(defaultDp)}
                alt="prof-pic" className={`${styles['dp']}`} />
           {props.cur.first_name + ' ' + props.cur.last_name}
         </div>
