@@ -376,7 +376,8 @@ function ProfileView(props) {
           <Modal.Body>
             <div className="row">
               <div className="col-11">
-                <h5>Are you sure you want to delete this record?</h5>
+                <h5>Are you sure you want to delete this record? </h5>
+                <h5>You are removing a supervisor. make sure to assign new supervisors for the subordinates</h5>
               </div>
             </div>
           </Modal.Body>
