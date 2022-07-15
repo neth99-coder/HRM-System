@@ -730,6 +730,21 @@ function getEmployeesByIDs(data){
   })
 }
 
+function getTodayAttendance(){
+  return new Promise((resolve, reject) => {
+    var sql =
+      `SELECT employee.emp_id, employee.first_name, employee.last_name, department.name,attendance.is_present FROM employee NATURAL JOIN department NATURAL JOIN attendance WHERE attendance.date = CURDATE()`
+    db.query(sql,(err, result) => {
+      if (err) {
+
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
+}
+
 module.exports = {
     getDepartments,
     getTypes,
@@ -757,6 +772,7 @@ module.exports = {
     getAttendace,
     getLeaves,
     getEmployeesByIDs,
+    getTodayAttendance,
 
     updateEmployee,
     addEmployee,
