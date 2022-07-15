@@ -117,7 +117,6 @@ export function LoginForm(props) {
         <div className={styles["error-msg"]} hidden={!isError}>
           <p>{error}</p>
         </div>
-        <MutedLink href="#">Forget your password?</MutedLink>
         <Marginer direction="vertical" margin="1.6em" />
 
         <SubmitButton id="submit" name="submit" type="submit">
