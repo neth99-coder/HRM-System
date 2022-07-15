@@ -164,6 +164,14 @@ const Index = (props) => {
     handleClose()
   }
 
+  function formatDate(n){
+    if(n< 10){
+        return "0" + n;
+    }else{
+        return n;
+    }
+}
+
   function showExtraAttributes(col_name) {
     try {
       const result = dataTypes.filter(
@@ -524,6 +532,8 @@ const Index = (props) => {
                           })
                         }
                         required
+                        min={(new Date().getFullYear()-80)+ "-" + formatDate(new Date().getMonth() +1) +"-" + formatDate(new Date().getDate())}
+                        max={(new Date().getFullYear()-16)+ "-" + formatDate(new Date().getMonth() +1) +"-" + formatDate(new Date().getDate())}
                       />
                       <label for="bday" className={`${styles['label']}`}>
                         BirthDay
