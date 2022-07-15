@@ -384,6 +384,7 @@ const RequestPage = () => {
                       disabled={startActive}
                       value={newRequest.leave_begin}
                       onChange={handleChange}
+                      min = {new Date().toISOString().slice(0, -14)}
                     />
                   </div>
                 </div>
@@ -402,6 +403,7 @@ const RequestPage = () => {
                       disabled={endActive}
                       value={newRequest.leave_end}
                       onChange={handleChange}
+                      min = {new Date((new Date(newRequest["leave_begin"])).setDate((new Date(newRequest["leave_begin"])).getDate() + 1)).toISOString().split("T")[0]}
                     />
                   </div>
                 </div>
@@ -416,7 +418,6 @@ const RequestPage = () => {
                       type="file"
                       className="form-control"
                       name="attachment"
-                      required
                       onChange={(e) => {
                         setNewRequest({
                           ...newRequest,

@@ -29,6 +29,7 @@ const Index = (props) => {
     email: '',
     paygrade_id: 1,
     emp_status_id: 1,
+    bank_account_num:'',
   })
   const [employeeIds, setEmployeeIds] = useState([])
   const [empStatus, setEmpStatus] = useState([])
@@ -112,7 +113,7 @@ const Index = (props) => {
   }
 
   const addRecord = (e) => {
-    // e.preventDefault()
+    e.preventDefault()
 
     const formData = new FormData()
 
@@ -133,13 +134,12 @@ const Index = (props) => {
     formData.append('dept_id', 2)
     formData.append('type_id', 3)
     formData.append('job_type_id', 1)
+    formData.append('bank_account_num', newEmployee.bank_account_num)
 
-    for (let i = 0; i < dataTypes.length - 17; i++) {
+    for (let i = 0; i < dataTypes.length - 18; i++) {
       let column = dataTypes[i + 17].COLUMN_NAME
       formData.append(column, newEmployee[column])
     }
-
-    console.log(formData)
 
     Axios.post('http://localhost:3001/api/admin/addemployee', formData, {
       headers: {
@@ -152,6 +152,7 @@ const Index = (props) => {
         alert('successfully added')
         handleCloseAdd()
         navigate('/admin')
+        window.location.reload(false)
       } else {
       }
     })
@@ -391,10 +392,31 @@ const Index = (props) => {
                         </label>
                       </div>
 
+                      <div className={`${styles['form-field']}`}>
+                      <input
+                        id="bank_account_num"
+                        type="text"
+                        className={`${styles['input-text']}`}
+                        value={newEmployee.bank_account_num}
+                        onChange={(e) =>
+                          setNewEmployee({
+                            ...newEmployee,
+                            bank_account_num: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                      <label for="bank_account_num" className={`${styles['label']}`}>
+                        Bank Account Num{' '}
+                      </label>
+                    </div>
+
                       {dataTypes
-                        .slice(17)
+                        .slice(18)
                         .map((field) => showExtraAttributes(field.COLUMN_NAME))}
                     </div>
+
+                    
                   </div>
                   <div className={`${styles['basic-info']} col`}>
                     <p style={{ fontWeight: 'bold' }}>Basic Information</p>

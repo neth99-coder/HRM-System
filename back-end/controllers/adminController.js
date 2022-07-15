@@ -135,15 +135,19 @@ const updateEmployee = async (req, res) => {
 }
 
 const addEmployee = async (req, res) => {
-  const file = req.files.file
-  file.mv(`${__dirname}/../public/profilePictures/${file.name}`, (err) => {
-    if (err) {
-      console.error(err)
-    }
-  })
+  if( req.files){
+    const file = req.files.file 
+    file.mv(`${__dirname}/../public/profilePictures/${file.name}`, (err) => {
+      if (err) {
+        console.error(err)
+      }
+    })
+  }else{
+    delete req.body.file  
+  }
 
   await adminModal
-    .addEmployee({ ...req.body, profile_picture: req.files.file.name })
+    .addEmployee({ ...req.body, profile_picture: req.files ?req.files.file.name:"default.jpg" })
     .then((result) => {
       res.json({ success: true, result })
     })
