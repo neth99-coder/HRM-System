@@ -601,6 +601,19 @@ const addEmployeeTransaction = async (req,res)=>{
         });
 }
 
+const getTodayAttendance = async (req,res)=>{
+    await hrManagerModal
+        .getTodayAttendance()
+        .then((result) => {
+            res.json({ success: true, result });
+        })
+        .catch((err) => {
+            res.json({
+                success: false,
+                err,
+            });
+        });
+}
 
 
 module.exports = {
@@ -630,6 +643,7 @@ module.exports = {
     getAttendace,
     getLeaves,
     getEmployeesByIDs,
+    getTodayAttendance,
 
     updateEmployee,
     addEmployee,

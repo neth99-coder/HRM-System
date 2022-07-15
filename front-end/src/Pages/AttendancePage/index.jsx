@@ -7,6 +7,7 @@ import authService from "../../services/auth.service";
 import { useEffect } from "react";
 import Axios from "axios";
 import Data from "./Data";
+import Attendance from "./Atteandance";
 
 function AttendancePage() {
   const [employeeFilter, setEmployeeFilter] = useState("Select Department");
@@ -15,6 +16,8 @@ function AttendancePage() {
 
   const [tempEmployess, setTempEmployees] = useState([]);
   const [departments, setDepartments] = useState([]);
+
+  const [attendanceArray, serAttendanceArray] = useState([]);
 
   const [marking, setMarking] = useState({});
   const [show, setShow] = useState(false); //maodal show
@@ -45,11 +48,23 @@ function AttendancePage() {
       }).then((res) => {
         //console.log(res.data.result);
         setDepartments(res.data.result);
-        setIsLoading(false)
+        //setIsLoading(false)
       });
     };
 
     getDepartments();
+
+    const getTodayAttendance = async () => {
+      await Axios.get("http://localhost:3001/api/hrManager/getTodayAttendance", {
+        headers: { "x-auth-token": authService.getUserToken() },
+      }).then((res) => {
+        console.log(res.data.result);
+        serAttendanceArray(res.data.result);
+        setIsLoading(false)
+      });
+    };
+
+    getTodayAttendance();
   }, []);
 
   function handleFilter(e) {
@@ -134,6 +149,33 @@ const handleSubmit = async(e)=>{
             })}
           </Dropdown.Menu>
         </Dropdown>
+        {(employeeFilter === "Select Department")?
+        <div>
+          <h1> Today's Attendance Sheet</h1>
+        <Table bordered hover className={styled["table"]}>
+        <thead>
+          <div className={`row border border-3 border-light`}>
+            <div className="col text-center">Employee ID</div>
+            <div className="col text-center">First Name</div>
+            <div className="col text-center">Last Name</div>
+            <div className="col text-center">Department</div>
+            <div className="col text-center">Status</div>
+          </div>
+        </thead>
+        <tbody>
+          {attendanceArray?.map((employee, index) => {
+            return (
+              <tr>
+                <Attendance
+                  employee={employee}
+                  key={employee.emp_id}
+                />
+              </tr>
+            );
+          })}
+        </tbody>
+      </Table> </div>: <div>
+        <h1> Mark Attendance</h1>
         <Table bordered hover className={styled["table"]}>
           <thead>
             <div className={`row border border-3 border-light`}>
@@ -162,6 +204,11 @@ const handleSubmit = async(e)=>{
           {"Save "} {employeeFilter !== "Select Department" && employeeFilter}{" "}
           {" Changes"}
         </Button>{" "}
+        </div> }
+        
+
+        
+        
 
         <Modal show={show} onHide={handleClose} size="lg" centered>
             <Modal.Header closeButton>
