@@ -566,9 +566,9 @@ function EditProfile(props) {
                                 onChange={(e)=>setEmployee({...employee,emp_status_id:e.target.value})}
                               >
                                 {status.map(
-                                  ({ emp_status_id, name }, index) => (
+                                  ({ emp_status_id, name ,is_full_time}, index) => (
                                     <option value={emp_status_id}>
-                                      {name}
+                                      {name}{' ' + is_full_time ?' - full time' : ' - part time'}
                                     </option>
                                   ),
                                 )}

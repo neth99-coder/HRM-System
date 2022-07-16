@@ -427,8 +427,8 @@ const Index = (props) => {
                           }
                           required
                         >
-                          {empStatus.map(({ emp_status_id, name }, index) => (
-                            <option value={emp_status_id}>{name}</option>
+                          {empStatus.map(({ emp_status_id, name , is_full_time }, index) => (
+                            <option value={emp_status_id}>{name}{' ' + is_full_time?' - full time' : ' - part time'}</option>
                           ))}
                         </select>
                         <label for="empstatus" className={`${styles['label']}`}>
