@@ -11,7 +11,7 @@ router.get("/getPaygrades",adminController.getPaygrades);
 router.get("/getemployee/:empId",adminController.getEmployee);
 router.get("/getemployeeFull/:empId",adminController.getEmployeeFull);
 router.get("/getDataTypes",adminController.getDataTypes);
-router.get('/getemployeetypes', adminController.getEmployeewithUserType)
+router.get('/getemployeetypes', adminController.getEmployeewithUserType);
 router.get("/getEmployeeIds",adminController.getEmployeeIds);
 
 

@@ -1,6 +1,58 @@
 const employeeModal = require('../models/employeeModal')
 const fs = require('fs');
 
+const getDepartments = async (req,res) => {
+  await employeeModal
+      .getDepartments()
+      .then((result) => {
+        res.json({
+          success: true,
+          result,
+        });
+      })
+      .catch((err) => {
+        res.json({
+          success: false,
+          err,
+        });
+      });
+}
+
+const getSupervisorByEmpId = async (req,res) =>{
+  await employeeModal
+      .getSupervisorByEmpId(req.params.empId)
+      .then((result)=>{
+        res.json({
+          success: true,
+          result,
+        });
+      })
+      .catch((err)=>{
+        res.json({
+          success: false,
+          err,
+        });
+      });
+};
+
+const getJobTypes = async (req,res) => {
+  await employeeModal
+      .getJobTypes()
+      .then((result) => {
+
+        res.json({
+          success: true,
+          result,
+        });
+      })
+      .catch((err) => {
+        res.json({
+          success: false,
+          err,
+        });
+      });
+}
+
 const getEmployee = async (req, res) => {
   await employeeModal
     .getEmployee(req.params.empId)
@@ -248,7 +300,63 @@ const getCompanydetails = (req, res) => {
   }
 }
 
+const getTypes = async (req,res) => {
+  await employeeModal
+      .getTypes()
+      .then((result) => {
+        res.json({
+          success: true,
+          result,
+        });
+      })
+      .catch((err) => {
+        res.json({
+          success: false,
+          err,
+        });
+      });
+}
+
+const getStauts = async (req,res) => {
+  await employeeModal
+      .getStatus()
+      .then((result) => {
+        res.json({
+          success: true,
+          result,
+        });
+      })
+      .catch((err) => {
+        res.json({
+          success: false,
+          err,
+        });
+      });
+}
+
+const getPaygrades = async (req,res) => {
+  await employeeModal
+      .getPaygrades()
+      .then((result) => {
+        res.json({
+          success: true,
+          result,
+        });
+      })
+      .catch((err) => {
+        res.json({
+          success: false,
+          err,
+        });
+      });
+}
+
 module.exports = {
+  getDepartments,
+  getPaygrades,
+  getStauts,
+  getTypes,
+  getJobTypes,
   addEmployee,
   deleteEmployee,
   updateEmployee,
@@ -262,5 +370,6 @@ module.exports = {
   existingLeaveCount,
   loadLeaveChart,
   getEmployeeByEmpIdDeptId,
-  getCompanydetails
+  getCompanydetails,
+  getSupervisorByEmpId
 }

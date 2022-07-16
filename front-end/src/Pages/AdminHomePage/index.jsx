@@ -116,46 +116,82 @@ const Index = (props) => {
     e.preventDefault()
 
     const formData = new FormData()
-
-    formData.append('emp_id', newEmployee.emp_id)
-    formData.append('file', newEmployee.file)
-    formData.append('first_name', newEmployee.fname)
-    formData.append('middle_name', newEmployee.mname)
-    formData.append('last_name', newEmployee.lname)
-    formData.append('address', newEmployee.address)
-    formData.append('nic', newEmployee.nic)
-    formData.append('bday', newEmployee.bday)
-    formData.append('is_married', newEmployee.is_married)
-    formData.append('contact_num', newEmployee.contact_num)
-    formData.append('emergency_contact', newEmployee.emergency_contact)
-    formData.append('email', newEmployee.email)
-    formData.append('paygrade_id', newEmployee.paygrade_id)
-    formData.append('emp_status_id', newEmployee.emp_status_id)
-    formData.append('dept_id', 2)
-    formData.append('type_id', 3)
-    formData.append('job_type_id', 1)
-    formData.append('bank_account_num', newEmployee.bank_account_num)
-
-    for (let i = 0; i < dataTypes.length - 18; i++) {
-      let column = dataTypes[i + 17].COLUMN_NAME
-      formData.append(column, newEmployee[column])
-    }
-
-    Axios.post('http://localhost:3001/api/admin/addemployee', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-
-        'x-auth-token': authService.getUserToken(),
-      },
-    }).then((res) => {
-      if (res.data.success) {
-        alert('successfully added')
-        handleCloseAdd()
-        navigate('/admin')
-        window.location.reload(false)
-      } else {
+    if(newEmployee.fname.length !== 0 &&
+      newEmployee.fname.length !== 0 &&
+      newEmployee.mname.length !== 0 &&
+      newEmployee.lname.length !== 0 &&
+      newEmployee.address.length !== 0 &&
+      newEmployee.nic.length !== 0 &&
+      newEmployee.bday.length !== 0 &&
+      newEmployee.is_married.length !== 0 &&
+      newEmployee.contact_num.length !== 0 &&
+      newEmployee.emergency_contact.length !== 0 &&
+      newEmployee.email.length !== 0 &&
+      newEmployee.paygrade_id.length !== 0 &&
+      newEmployee.emp_status_id.length !== 0 &&
+      newEmployee.bank_account_num.length !== 0){
+      formData.append('emp_id', newEmployee.emp_id)
+      formData.append('file', newEmployee.file)
+      formData.append('first_name', newEmployee.fname)
+      formData.append('middle_name', newEmployee.mname)
+      formData.append('last_name', newEmployee.lname)
+      formData.append('address', newEmployee.address)
+      formData.append('nic', newEmployee.nic)
+      formData.append('bday', newEmployee.bday)
+      formData.append('is_married', newEmployee.is_married)
+      formData.append('contact_num', newEmployee.contact_num)
+      formData.append('emergency_contact', newEmployee.emergency_contact)
+      formData.append('email', newEmployee.email)
+      formData.append('paygrade_id', newEmployee.paygrade_id)
+      formData.append('emp_status_id', newEmployee.emp_status_id)
+      formData.append('dept_id', 2)
+      formData.append('type_id', 3)
+      formData.append('job_type_id', 1)
+      formData.append('bank_account_num', newEmployee.bank_account_num)
+  
+      for (let i = 0; i < dataTypes.length - 18; i++) {
+        let column = dataTypes[i + 17].COLUMN_NAME
+        formData.append(column, newEmployee[column])
       }
-    })
+  
+      Axios.post('http://localhost:3001/api/admin/addemployee', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+  
+          'x-auth-token': authService.getUserToken(),
+        },
+      }).then((res) => {
+        if (res.data.success) {
+          alert('successfully added')
+          handleCloseAdd()
+          navigate('/admin')
+          window.location.reload(false)
+        } else {
+        }
+      })
+
+    }else{
+      alert('Empty fields are not allowed')
+      setNewEmployee({
+        emp_id:newEmployee.emp_id,
+        file: '',
+        fname: '',
+        mname: '',
+        lname: '',
+        address: '',
+        nic: '',
+        bday: '',
+        is_married: 0,
+        contact_num: '',
+        emergency_contact: '',
+        email: '',
+        paygrade_id: 1,
+        emp_status_id: 1,
+        bank_account_num:'',
+      })
+      handleCloseAdd()
+    }
+  
   }
 
   const addImage = (e) => {
@@ -310,7 +346,7 @@ const Index = (props) => {
                 </h5>
               </Modal.Title>
             </Modal.Header>
-            <form onSubmit={addRecord}>
+            <form >
               <Modal.Body>
                 <div className={`${styles['field-container']} row`}>
                   <div className="col">

@@ -330,8 +330,100 @@ function loadLeaveChart(empId) {
 //     ])
 // })}
 
+//function to get all details of all departments
+function getDepartments() {
+  return new Promise((resolve, reject) => {
+    var sql = 'SELECT * FROM department'
+    db.query(sql, (err, result) => {
+      if (err) {
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
+}
+
+//function to get all details of all job Types
+function getJobTypes() {
+  return new Promise((resolve, reject) => {
+    var sql = "SELECT * FROM job_type";
+    db.query(sql, (err, result) => {
+      if (err) {
+        return reject(err);
+      } else {
+
+        return resolve(result);
+      }
+    });
+  });
+}
+
+//function to get all details of all employee types
+function getTypes() {
+  return new Promise((resolve, reject) => {
+    var sql = 'SELECT * FROM user_type'
+    db.query(sql, (err, result) => {
+      if (err) {
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
+}
+
+//function to get all details of all employee status
+function getStatus() {
+  return new Promise((resolve, reject) => {
+    var sql = 'SELECT * FROM emp_status'
+    db.query(sql, (err, result) => {
+      if (err) {
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
+}
+
+//function to get supervisor by employee id
+function getSupervisorByEmpId(empId){
+  return new Promise((resolve, reject) => {
+    var sql = "SELECT supervisor_id, first_name, last_name FROM employee,supervisor WHERE supervisor.emp_id = ? AND supervisor.supervisor_id = employee.emp_id";
+    db.query(sql,[empId] ,(err, result) => {
+      if (err) {
+        return reject(err);
+      } else {
+        return resolve(result);
+      }
+    });
+  });
+}
+
+//function to get all details of all paygrades
+function getPaygrades() {
+  return new Promise((resolve, reject) => {
+    var sql = 'SELECT * FROM paygrade'
+    db.query(sql, (err, result) => {
+      if (err) {
+        return reject(err)
+      } else {
+        return resolve(result)
+      }
+    })
+  })
+}
+
+
 module.exports = {
+  getDepartments,
+  getSupervisorByEmpId,
+  getPaygrades,
+  getJobTypes,
+  getTypes,
   addEmployee,
+  getStatus,
   getEmployee,
   getEmployees,
   deleteEmployee,
