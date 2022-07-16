@@ -15,7 +15,7 @@ function getEmployee(empId) {
       }
     })
   })
-}
+} 
 
 //function to get all details of an employee for a given employee ID including new attributes
 function getEmployeeFull(empId) {
@@ -155,7 +155,6 @@ function addEmployee(data) {
       sql += '?'
     }
     sql += ')'
-    console.log(sql)
     db.query(sql, [...Object.values(data)], (err, result) => {
       if (result) {
         return resolve(result)
@@ -169,9 +168,12 @@ function addEmployee(data) {
 
 //deletes an employee
 function deleteEmployee(data) {
-  fs.unlinkSync(
-    `${__dirname}/../public/profilePictures/${data.profile_picture}`,
-  )
+  if(data.profile_picture.length !== 0){
+    fs.unlinkSync(
+      `${__dirname}/../public/profilePictures/${data.profile_picture}`,
+    )
+  }
+  
   return new Promise((resolve, reject) => {
     var sql = 'DELETE FROM EMPLOYEE WHERE emp_id = ?'
     db.query(sql, [data.emp_id], (err, result) => {

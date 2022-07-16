@@ -147,7 +147,7 @@ const addEmployee = async (req, res) => {
   }
 
   await adminModal
-    .addEmployee({ ...req.body, profile_picture: req.files ?req.files.file.name:"default.jpg" })
+    .addEmployee({ ...req.body, profile_picture: req.files ?req.files.file.name:"" })
     .then((result) => {
       res.json({ success: true, result })
     })
