@@ -333,7 +333,7 @@ const Index = (props) => {
           >
             <Modal.Header
               closeButton
-              style={{ border: '1px white solid', backgroundColor: 'black' }}
+              style={{ border: '1px white solid', backgroundColor: '#3261fa' }}
             >
               <Modal.Title>
                 {' '}
@@ -364,7 +364,7 @@ const Index = (props) => {
                           onClick={handleShow}
                         >
                           {' '}
-                          +{' '}
+                           Add Avatar +{' '}
                         </button>
                       )}
                     </div>
@@ -654,13 +654,13 @@ const Index = (props) => {
                 </div>
               </Modal.Body>
               <Modal.Footer
-                style={{ border: '1px white solid', backgroundColor: 'black' }}
+                style={{ border: '1px white solid', backgroundColor: '#3261fa' }}
               >
                 <button
                   type="button"
                   onClick={handleCloseAdd}
-                  className="btn btn-secondary"
-                  style={{ fontWeight: 'bold' }}
+                  className="btn btn-danger"
+                  style={{ fontWeight: 'bold'}}
                 >
                   Close
                 </button>
@@ -677,8 +677,8 @@ const Index = (props) => {
           </Modal>
 
           {/* modal for adding img */}
-          <Modal show={showI} onHide={handleClose} centered>
-            <Modal.Header style={{ backgroundColor: '#f5f6fa' }}>
+          <Modal show={showI} onHide={handleClose} backdrop="static" centered style={{'z-index': 100}}>
+            <Modal.Header style={{ backgroundColor: '#098dfa' }}>
               <Modal.Title>Upload your image here..</Modal.Title>
             </Modal.Header>
             <form
@@ -705,7 +705,7 @@ const Index = (props) => {
                 </button>
                 <button
                   type="submit"
-                  className="btn btn-light"
+                  className="btn btn-primary"
                   onClick={addImage}
                 >
                   Upload

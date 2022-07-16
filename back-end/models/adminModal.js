@@ -146,7 +146,6 @@ function addEmployee(data) {
       }
       sql += ' `' + Object.keys(data)[i] + '` '
     }
-    console.log(sql)
     sql += ') VALUES ('
     for (let i = 0; i < Object.keys(data).length; i++) {
       if (i !== 0) {

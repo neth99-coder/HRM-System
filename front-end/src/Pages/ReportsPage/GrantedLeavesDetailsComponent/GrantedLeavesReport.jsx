@@ -109,20 +109,6 @@ const GrantedAttendanceReport = React.forwardRef((props, ref) => {
           )}
           
         </CardBody>
-
-        {props.result.length !== 0 &&(
-          <CardFooter>
-          <div className={`${styles['percentage-box']}`}>
-            <div className={`${styles['tags']} row`}>
-              <div className="col">{'Total no of leaves : '}</div>
-              <div className={`${styles['result']} col`}>
-                {props.result.length}
-                {' leave/s'}
-              </div>
-            </div>
-          </div>
-        </CardFooter>
-        )}
       </Card>
         
         
