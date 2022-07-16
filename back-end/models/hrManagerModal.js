@@ -526,6 +526,7 @@ function addColumn(data){
                     if(result){
                         return resolve(result);
                     }else{
+                        console.log(err);
                         return reject(err);
 
                     }
@@ -540,6 +541,7 @@ function addColumn(data){
                     if(result){
                         return resolve(result);
                     }else{
+                        console.log(err);
                         console.log(err);
                         return reject(err);
 

@@ -783,9 +783,9 @@ function EditProfile(props){
                                 onChange={handleInputChange}
                               >
                                 {status.map(
-                                  ({ emp_status_id, name }, index) => (
+                                  ({ emp_status_id, name,  is_full_time}, index) => (
                                     <option value={emp_status_id}>
-                                      {name}
+                                      {name} - {is_full_time === 1? "Full time":"Half time"}
                                     </option>
                                   )
                                 )}
