@@ -12,9 +12,11 @@ const BoxContainer = styled.div`
   flex-direction: column;
   border-radius: 19px;
   background-color: #fff;
-  box-shadow: 0 0 2px rgba(15, 15, 15, 0.28);
+  box-shadow: 0 0 20px rgba(15, 15, 15, 0.28);
   position: relative;
   overflow: hidden;
+
+  background-color: #f2f3f5;
 `;
 
 const TopContainer = styled.div`
@@ -38,13 +40,16 @@ const BackDrop = styled(motion.div)`
   top: -290px;
   left: -70px;
   background: rgb(74,61,57);
-  background: linear-gradient(90deg, rgba(74,61,57,1) 0%, rgba(137,124,112,1) 69%, rgba(217,204,180,1) 100%);
+  background: linear-gradient(90deg, #00c6ff 0%, #4e9bff 69%, #0072ff 100%);
+  z-index: 100;
+  
 `;
 
 const HeaderContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  z-index: 100;
 `;
 
 const HeaderText = styled.h2`
@@ -130,8 +135,10 @@ export function AccountBox(props) {
             variants={backdropVariants}
             transition={expandingTransition}
           />
+          
           {active === "signin" && (
             <HeaderContainer>
+            
               <HeaderText>Welcome</HeaderText>
               <HeaderText>Back</HeaderText>
               <SmallText>Please sign-in to continue!</SmallText>

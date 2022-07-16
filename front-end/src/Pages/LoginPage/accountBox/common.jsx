@@ -65,7 +65,7 @@ export const SubmitButton = styled.button`
   cursor: pointer;
   transition: all, 240ms ease-in-out;
   background: rgb(74,61,57);
-  background: linear-gradient(160deg, rgba(74,61,57,1) 0%, rgba(137,124,112,1) 58%, rgba(217,204,180,1) 100%);
+  background: linear-gradient(160deg, #0072ff 0%, #4e9bff 58%, #00c6ff 100%);
     filter: brightness(1.03);
-  }
+  
 `;
