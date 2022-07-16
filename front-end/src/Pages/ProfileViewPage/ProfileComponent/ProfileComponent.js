@@ -32,7 +32,7 @@ function Profile(props){
     setIsLoading(true);
 
     const findDepartments = async () => {
-      await Axios.get("http://localhost:3001/api/hrmanager/getDepartments", {
+      await Axios.get("http://localhost:3001/api/employee/getDepartments", {
         headers: { "x-auth-token": authService.getUserToken() },
       }).then((res) => {
         setDepartments(res.data.result);
@@ -41,7 +41,7 @@ function Profile(props){
     findDepartments();
 
     const findJobs = async () => {
-      await Axios.get("http://localhost:3001/api/hrManager/getJobTypes", {
+      await Axios.get("http://localhost:3001/api/employee/getJobTypes", {
         headers: { "x-auth-token": authService.getUserToken() },
       }).then((res) => {
         setJobs(res.data.result);
@@ -50,7 +50,7 @@ function Profile(props){
     findJobs();
 
     const findTypes = async () => {
-      await Axios.get("http://localhost:3001/api/hrmanager/getTypes", {
+      await Axios.get("http://localhost:3001/api/employee/getTypes", {
         headers: { "x-auth-token": authService.getUserToken() },
       }).then((res) => {
         setTypes(res.data.result);
@@ -59,7 +59,7 @@ function Profile(props){
     findTypes();
 
     const findStatus = async () => {
-      await Axios.get("http://localhost:3001/api/hrmanager/getStatus", {
+      await Axios.get("http://localhost:3001/api/employee/getStatus", {
         headers: { "x-auth-token": authService.getUserToken() },
       }).then((res) => {
         setStatus(res.data.result);
@@ -68,7 +68,7 @@ function Profile(props){
     findStatus();
 
     const findPaygrades = async () => {
-      await Axios.get("http://localhost:3001/api/hrmanager/getPaygrades", {
+      await Axios.get("http://localhost:3001/api/employee/getPaygrades", {
         headers: { "x-auth-token": authService.getUserToken() },
       }).then((res) => {
         setPayGrades(res.data.result);
